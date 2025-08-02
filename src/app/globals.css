@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Body styling */
+body {
+  background-color: #0d0d0d;
+  color: #ffffff;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(93, 212, 203, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(93, 212, 203, 0.6); }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.8s ease-out;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.6s ease-out;
+}
+
+/* Gradient text utilities */
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #5dd4cb 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass morphism effect */
+.glass {
+  background: rgba(28, 28, 30, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(93, 212, 203, 0.1);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5dd4cb;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7dddd6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+/* Enhanced focus states for accessibility */
+.focus-ring:focus-visible {
+  outline: 2px solid #5dd4cb;
+  outline-offset: 2px;
+}
+
+/* Custom utility classes for better styling */
+.bg-dark-gray {
+  background-color: #1c1c1e;
+}
+
+.text-teal-400 {
+  color: #5dd4cb;
+}
+
+.text-teal-300 {
+  color: #7dddd6;
+}
+
+.bg-teal-400 {
+  background-color: #5dd4cb;
+}
+
+.bg-teal-600 {
+  background-color: #2fd0c7;
+}
+
+.border-teal-400\/20 {
+  border-color: rgba(93, 212, 203, 0.2);
+}
+
+.border-teal-400\/30 {
+  border-color: rgba(93, 212, 203, 0.3);
+}
+
+.border-teal-400\/40 {
+  border-color: rgba(93, 212, 203, 0.4);
+}
+
+.bg-teal-400\/10 {
+  background-color: rgba(93, 212, 203, 0.1);
+}
+
+.bg-teal-400\/20 {
+  background-color: rgba(93, 212, 203, 0.2);
+}
+
+.shadow-teal-400\/10 {
+  box-shadow: 0 4px 6px -1px rgba(93, 212, 203, 0.1), 0 2px 4px -1px rgba(93, 212, 203, 0.06);
+}
+
+.shadow-teal-400\/25 {
+  box-shadow: 0 25px 50px -12px rgba(93, 212, 203, 0.25);
+}
