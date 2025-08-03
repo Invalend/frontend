@@ -1,0 +1,305 @@
+# Borrowing (Leverage)
+
+Invalend's borrowing system allows users to create leveraged positions with minimal collateral. By depositing just 20% collateral, you can borrow up to 5x your deposit amount and use these funds for trading on Uniswap.
+
+## How Borrowing Works
+
+### The 20/80 Model
+
+Invalend uses an innovative funding model:
+
+- **You provide**: 20% collateral (your margin)
+- **Pool provides**: 80% funding (from liquidity providers)
+- **Total loan**: Up to 5x your collateral amount
+
+**Example**:
+- Your collateral: 200 USDC
+- Pool funding: 800 USDC  
+- Total loan: 1,000 USDC
+- **Leverage**: 5x your initial capital
+
+### Loan Lifecycle
+
+1. **Create Loan**: Deposit collateral and specify loan amount
+2. **Receive Funds**: Get borrowed USDC in your restricted wallet
+3. **Trade**: Use funds for leveraged trading on Uniswap
+4. **Monitor**: Track position performance and health
+5. **Repay**: Close position and repay loan + interest
+
+## Creating a Loan
+
+### Prerequisites
+
+- USDC for collateral (minimum 20% of desired loan)
+- ETH for gas fees
+- Connected wallet on Lisk Sepolia
+- Understanding of leverage risks
+
+### Step-by-Step Process
+
+**Step 1: Navigate to Borrow Tab**
+- Click "Borrow" in main navigation
+- Select "Borrow" tab (not "Repay")
+- View current loan parameters
+
+**Step 2: Calculate Your Loan**
+- Enter desired loan amount
+- System calculates required collateral (20%)
+- Pool provides remaining 80%
+- Review collateral requirements
+
+**Step 3: Approve USDC**
+- First time borrowers must approve USDC
+- Click "Approve USDC" button
+- Confirm transaction in wallet
+- Wait for confirmation
+
+**Step 4: Create Loan**  
+- Click "Create Loan" button
+- Review loan terms carefully
+- Confirm transaction
+- Loan funds sent to restricted wallet
+
+## Loan Parameters
+
+### Collateral Requirements
+
+**Minimum Collateral**: 20% of loan amount
+```
+Required Collateral = Loan Amount × 0.20
+```
+
+**Examples**:
+- 500 USDC loan = 100 USDC collateral
+- 1,000 USDC loan = 200 USDC collateral  
+- 2,500 USDC loan = 500 USDC collateral
+
+### Maximum Leverage
+
+**Leverage Ratio**: Up to 5x
+```
+Max Loan = Collateral × 5
+```
+
+**Position Size Calculation**:
+- Collateral: $1,000
+- Max Loan: $5,000
+- Total Position: $6,000 (collateral + loan)
+- Leverage: 6x total position size
+
+### Interest Rates
+
+**Current Rates**:
+- Base rate: 8% APR
+- Utilization adjustment: +0-4%
+- Total range: 8-12% APR
+
+**Interest Accrual**:
+- Calculated per block
+- Compounds continuously  
+- Added to repayment amount
+
+## Loan Management
+
+### Monitoring Your Position
+
+**Loan Status Widget**
+- Current loan amount
+- Accrued interest
+- Collateral posted
+- Loan start time
+- Restricted wallet address
+
+**Key Metrics to Track**:
+- **Loan Health**: Distance from liquidation
+- **Interest Accrued**: Growing repayment amount
+- **Trading P&L**: Performance in restricted wallet
+- **Time to Liquidation**: Based on current performance
+
+### Position Health
+
+**Health Factor Calculation**:
+```
+Health Factor = (Collateral Value + Trading P&L) / Loan Amount
+```
+
+**Health Levels**:
+- **Healthy**: Health Factor > 1.5
+- **Warning**: Health Factor 1.2-1.5  
+- **Risk**: Health Factor 1.0-1.2
+- **Liquidation**: Health Factor < 1.0
+
+### Automatic Monitoring
+
+The protocol continuously monitors:
+- Collateral value changes
+- Trading position performance
+- Interest accumulation
+- Market conditions
+
+## Repaying Loans
+
+### Full Repayment
+
+**Step 1: Check Repayment Amount**
+- Go to "Repay" tab
+- View total amount due (principal + interest)
+- Ensure sufficient USDC in wallet
+
+**Step 2: Approve & Repay**
+- Approve USDC if needed
+- Click "Repay Loan"
+- Confirm transaction
+- Loan closed, collateral returned
+
+### Partial Repayment
+
+**Coming Soon**: Partial repayments to reduce leverage and improve health factor.
+
+## Liquidation Mechanism
+
+### When Liquidation Occurs
+
+Liquidation is triggered when:
+- Health factor falls below 1.0
+- Trading losses exceed safe thresholds
+- Interest accumulation reduces health factor
+
+### Liquidation Process
+
+1. **Trigger**: Health factor < 1.0
+2. **Bot Detection**: Liquidation bots identify unhealthy positions
+3. **Execution**: Position liquidated at market prices
+4. **Settlement**: Loan repaid, remaining collateral returned
+5. **Penalty**: 5% liquidation fee to protocol
+
+### Liquidation Protection
+
+**User Protections**:
+- Real-time health monitoring
+- Warning notifications
+- Grace period for position improvement
+- Partial liquidation (when available)
+
+**Best Practices**:
+- Monitor positions regularly
+- Maintain health factor > 1.5
+- Set stop-losses on trading positions
+- Consider position sizing carefully
+
+## Risk Management
+
+### Understanding Leverage Risk
+
+**Amplified Gains and Losses**:
+- 5x leverage = 5x price movement impact
+- 10% gain = 50% return on collateral
+- 10% loss = 50% loss of collateral
+
+**Example Scenarios**:
+
+**Successful Trade**:
+- Collateral: 200 USDC
+- Loan: 800 USDC
+- Total: 1,000 USDC position
+- 20% gain = 200 USDC profit
+- Net: 400 USDC (200 collateral + 200 profit)
+- **Return**: 100% on collateral
+
+**Unsuccessful Trade**:
+- Same position
+- 15% loss = 150 USDC loss
+- Remaining: 850 USDC
+- After repaying 800 USDC loan: 50 USDC
+- **Loss**: 75% of collateral
+
+### Risk Mitigation Strategies
+
+**Position Sizing**
+- Start with smaller positions
+- Never risk more than you can afford to lose
+- Consider 2-3x leverage initially
+
+**Stop Losses**
+- Set mental stop-loss levels
+- Monitor positions actively
+- Close losing positions early
+
+**Diversification**
+- Don't put all collateral in one position
+- Consider multiple smaller positions
+- Balance with conservative lending
+
+## Advanced Features
+
+### Flash Loans Integration
+
+**Coming Soon**: Flash loan integration for:
+- Collateral swapping
+- Position unwinding
+- Arbitrage opportunities
+
+### Multiple Positions
+
+**Future Release**: Support for:
+- Multiple concurrent loans
+- Different collateral types
+- Cross-position netting
+
+### Automated Strategies
+
+**Planned Features**:
+- Automated rebalancing
+- Stop-loss automation
+- Take-profit orders
+
+## Interface Guide
+
+### Borrow Tab
+
+**Loan Creation Section**:
+- Amount input with validation
+- Collateral calculation display
+- Pool funding breakdown
+- Create loan button
+
+**Loan Status Section**:
+- Current loan details
+- Health factor display  
+- Restricted wallet link
+- Refresh button
+
+### Repay Tab
+
+**Repayment Section**:
+- Total amount due
+- Principal vs interest breakdown
+- Repay button
+- Transaction status
+
+## Best Practices
+
+### Before Borrowing
+
+1. **Understand the risks** - Leverage amplifies both gains and losses
+2. **Start small** - Begin with 2-3x leverage
+3. **Have a plan** - Know your entry and exit strategy
+4. **Monitor closely** - Check positions regularly
+
+### During the Loan
+
+1. **Track health factor** - Keep above 1.5
+2. **Monitor interest** - Accrual increases repayment
+3. **Set limits** - Know when to cut losses
+4. **Stay informed** - Watch market conditions
+
+### Risk Management
+
+1. **Position sizing** - Never risk more than you can lose
+2. **Diversification** - Don't put all funds in one trade
+3. **Stop losses** - Have exit plans ready
+4. **Regular monitoring** - Check positions daily
+
+---
+
+*Borrowing enables powerful leveraged strategies but requires careful risk management. Always understand the risks before creating leveraged positions.*

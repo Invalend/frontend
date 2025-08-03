@@ -8,10 +8,11 @@ export const PoolPage = () => {
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
 
   return (
-    <div className="space-y-8">
-      {/* Pool Actions */}
-      <div className="space-y-6">
-        <div className="bg-dark-gray rounded-xl border border-gray-700 p-0 max-w-md mx-auto">
+    <div className="w-full p-4 ">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* Pool Actions */}
+        <div className="space-y-6">
+          <div className="bg-black rounded-xl border border-gray-700 p-0 max-w-md mx-auto">
           <div className="flex border-b border-gray-700">
             <button
               className={`flex-1 py-3 text-center font-medium text-sm transition-colors rounded-tl-xl ${
@@ -36,6 +37,7 @@ export const PoolPage = () => {
           </div>
           <div className="p-6">
             {activeTab === "deposit" ? <DepositForm /> : <WithdrawForm />}
+          </div>
           </div>
         </div>
       </div>

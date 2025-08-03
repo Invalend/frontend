@@ -1,0 +1,530 @@
+# Configuration Guide
+
+This guide covers all configuration options for Invalend Protocol, including environment variables, contract addresses, network settings, and feature flags.
+
+## Environment Variables
+
+### Required Variables
+
+**Network Configuration**:
+```env
+# Chain Configuration
+NEXT_PUBLIC_CHAIN_ID=4202
+NEXT_PUBLIC_RPC_URL=https://rpc.sepolia-api.lisk.com
+NEXT_PUBLIC_CHAIN_NAME="Lisk Sepolia Testnet"
+
+# Block Explorer
+NEXT_PUBLIC_EXPLORER_URL=https://sepolia-blockscout.lisk.com
+NEXT_PUBLIC_EXPLORER_API_URL=https://sepolia-blockscout.lisk.com/api
+```
+
+**Contract Addresses**:
+```env
+# Core Protocol Contracts
+NEXT_PUBLIC_MOCK_USDC_ADDRESS=0xe61995e2728bd2d2b1abd9e089213b542db7916a
+NEXT_PUBLIC_LENDING_POOL_ADDRESS=0x752168dd102d1c4b9390ab6abf3ec39f2164ad11
+NEXT_PUBLIC_COLLATERAL_MANAGER_ADDRESS=0x23c369a4991a477e4b9dd13f179b2e68203abc1d
+NEXT_PUBLIC_LOAN_MANAGER_ADDRESS=0x8c0694ff8df07554c5a4b2d83992e1987733ba64
+NEXT_PUBLIC_RESTRICTED_WALLET_FACTORY_ADDRESS=0x7364eeb345989c757616988b70976bba163b7571
+
+# Trading Integration
+NEXT_PUBLIC_UNISWAP_V3_ROUTER_ADDRESS=0x94cC0AaC535CCDB3C01d6787D6413C739ae12bc4
+NEXT_PUBLIC_UNISWAP_V3_FACTORY_ADDRESS=0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24
+```
+
+**Wallet Configuration**:
+```env
+# WalletConnect
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_project_id_here
+
+# App Metadata
+NEXT_PUBLIC_APP_NAME="Invalend Protocol"
+NEXT_PUBLIC_APP_DESCRIPTION="DeFi Leverage Trading Platform"
+NEXT_PUBLIC_APP_URL=https://app.invalend.com
+NEXT_PUBLIC_APP_ICON=https://app.invalend.com/icon.png
+```
+
+### Optional Variables
+
+**Development Settings**:
+```env
+# Debug and Development
+NEXT_PUBLIC_DEBUG=false
+NEXT_PUBLIC_TESTNET=true
+NEXT_PUBLIC_MOCK_MODE=false
+
+# Analytics (Optional)
+NEXT_PUBLIC_ANALYTICS_ID=your_analytics_id
+NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
+
+# Feature Flags
+NEXT_PUBLIC_ENABLE_FLASH_LOANS=false
+NEXT_PUBLIC_ENABLE_MULTI_COLLATERAL=false
+NEXT_PUBLIC_ENABLE_GOVERNANCE=false
+```
+
+**Performance Settings**:
+```env
+# API Configuration
+NEXT_PUBLIC_API_TIMEOUT=30000
+NEXT_PUBLIC_WS_TIMEOUT=10000
+NEXT_PUBLIC_REFRESH_INTERVAL=30000
+
+# Caching
+NEXT_PUBLIC_CACHE_TTL=300
+NEXT_PUBLIC_ENABLE_CACHE=true
+```
+
+## Contract Configuration
+
+### Core Contracts
+
+**LendingPool Configuration**:
+```typescript
+export const LENDING_POOL_CONFIG = {
+  address: process.env.NEXT_PUBLIC_LENDING_POOL_ADDRESS,
+  baseAPY: 6, // 6% base APY
+  utilizationTarget: 80, // 80% target utilization
+  maxUtilization: 95, // 95% max utilization
+  reserveRatio: 5, // 5% reserve requirement
+};
+```
+
+**LoanManager Configuration**:
+```typescript
+export const LOAN_MANAGER_CONFIG = {
+  address: process.env.NEXT_PUBLIC_LOAN_MANAGER_ADDRESS,
+  maxLeverage: 5, // 5x maximum leverage
+  collateralRatio: 20, // 20% collateral requirement
+  liquidationThreshold: 110, // 110% liquidation threshold
+  liquidationPenalty: 5, // 5% liquidation penalty
+};
+```
+
+**CollateralManager Configuration**:
+```typescript
+export const COLLATERAL_MANAGER_CONFIG = {
+  address: process.env.NEXT_PUBLIC_COLLATERAL_MANAGER_ADDRESS,
+  supportedTokens: ['USDC', 'ETH', 'WBTC'],
+  priceUpdateInterval: 60, // 60 seconds
+  emergencyStop: false,
+};
+```
+
+### Token Configuration
+
+**Supported Tokens**:
+```typescript
+export const SUPPORTED_TOKENS = {
+  USDC: {
+    address: '0xe61995e2728bd2d2b1abd9e089213b542db7916a',
+    symbol: 'USDC',
+    name: 'USD Coin',
+    decimals: 6,
+    isCollateral: true,
+    isTrading: true,
+  },
+  ETH: {
+    address: '0x0000000000000000000000000000000000000000',
+    symbol: 'ETH',
+    name: 'Ethereum',
+    decimals: 18,
+    isCollateral: false,
+    isTrading: true,
+  },
+  WBTC: {
+    address: '0x03C7054BCB39f7b2e5B2c7AcB37583e32D70Cfa3',
+    symbol: 'WBTC',
+    name: 'Wrapped Bitcoin',
+    decimals: 8,
+    isCollateral: false,
+    isTrading: true,
+  },
+  LSK: {
+    address: '0xac485391EB2d7D88253a7F1eF18C37f4242D1A24',
+    symbol: 'LSK',
+    name: 'Lisk',
+    decimals: 18,
+    isCollateral: false,
+    isTrading: true,
+  },
+  UNI: {
+    address: '0x41E5E6045f91B61AACC99edca0967D518fB44CFB',
+    symbol: 'UNI',
+    name: 'Uniswap',
+    decimals: 18,
+    isCollateral: false,
+    isTrading: true,
+  },
+};
+```
+
+## Network Configuration
+
+### Lisk Sepolia Testnet
+
+**Network Details**:
+```typescript
+export const LISK_SEPOLIA = {
+  id: 4202,
+  name: 'Lisk Sepolia Testnet',
+  network: 'lisk-sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Sepolia Ether',
+    symbol: 'ETH',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.sepolia-api.lisk.com'],
+      webSocket: ['wss://ws.sepolia-api.lisk.com'],
+    },
+    public: {
+      http: ['https://rpc.sepolia-api.lisk.com'],
+      webSocket: ['wss://ws.sepolia-api.lisk.com'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Lisk Sepolia Blockscout',
+      url: 'https://sepolia-blockscout.lisk.com',
+    },
+  },
+  testnet: true,
+};
+```
+
+**Gas Configuration**:
+```typescript
+export const GAS_CONFIG = {
+  gasPrice: 'auto', // Let wallet handle gas price
+  gasLimit: {
+    deposit: 150000,
+    withdraw: 180000,
+    borrow: 250000,
+    repay: 200000,
+    swap: 300000,
+    approval: 80000,
+  },
+  maxFeePerGas: 20000000000, // 20 gwei
+  maxPriorityFeePerGas: 2000000000, // 2 gwei
+};
+```
+
+## Trading Configuration
+
+### Uniswap V3 Integration
+
+**Router Configuration**:
+```typescript
+export const UNISWAP_CONFIG = {
+  routerAddress: process.env.NEXT_PUBLIC_UNISWAP_V3_ROUTER_ADDRESS,
+  factoryAddress: process.env.NEXT_PUBLIC_UNISWAP_V3_FACTORY_ADDRESS,
+  defaultSlippage: 1, // 1% default slippage
+  maxSlippage: 5, // 5% maximum slippage
+  deadlineMinutes: 20, // 20 minute deadline
+  feeTiers: [500, 3000, 10000], // 0.05%, 0.3%, 1%
+};
+```
+
+**Trading Limits**:
+```typescript
+export const TRADING_LIMITS = {
+  minTradeAmount: 1, // $1 minimum trade
+  maxTradeAmount: 1000000, // $1M maximum trade
+  maxSlippageTolerance: 5, // 5% max slippage
+  defaultDeadline: 1200, // 20 minutes in seconds
+};
+```
+
+## UI Configuration
+
+### Theme Configuration
+
+**Colors**:
+```typescript
+export const THEME_CONFIG = {
+  primary: {
+    50: '#f0fdfa',
+    400: '#4fd1c7', // Main teal
+    500: '#14b8a6',
+    600: '#0d9488',
+  },
+  gray: {
+    700: '#374151',
+    800: '#1f2937',
+    900: '#111827',
+  },
+  status: {
+    success: '#10b981',
+    error: '#ef4444',
+    warning: '#f59e0b',
+    info: '#3b82f6',
+  },
+};
+```
+
+**Component Sizes**:
+```typescript
+export const SIZE_CONFIG = {
+  button: {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg',
+  },
+  input: {
+    sm: 'px-3 py-2 text-sm',
+    md: 'px-4 py-3 text-base',
+    lg: 'px-6 py-4 text-lg',
+  },
+};
+```
+
+### Layout Configuration
+
+**Responsive Breakpoints**:
+```typescript
+export const BREAKPOINTS = {
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+  '2xl': '1536px',
+};
+```
+
+**Container Widths**:
+```typescript
+export const CONTAINER_CONFIG = {
+  maxWidth: '7xl', // max-w-7xl
+  padding: {
+    mobile: 'px-4',
+    tablet: 'px-6',
+    desktop: 'px-8',
+  },
+};
+```
+
+## Feature Flags
+
+### Current Features
+
+**Stable Features**:
+```typescript
+export const STABLE_FEATURES = {
+  lending: true,
+  borrowing: true,
+  basicTrading: true,
+  walletManagement: true,
+  faucet: true,
+};
+```
+
+**Beta Features**:
+```typescript
+export const BETA_FEATURES = {
+  advancedTrading: false,
+  flashLoans: false,
+  governance: false,
+  multiCollateral: false,
+  crossChain: false,
+};
+```
+
+**Experimental Features**:
+```typescript
+export const EXPERIMENTAL_FEATURES = {
+  aiTrading: false,
+  socialTrading: false,
+  nftCollateral: false,
+  yieldFarming: false,
+};
+```
+
+## API Configuration
+
+### Rate Limiting
+
+**Request Limits**:
+```typescript
+export const RATE_LIMITS = {
+  standard: {
+    requests: 100,
+    window: 60000, // 1 minute
+  },
+  heavy: {
+    requests: 10,
+    window: 60000, // 1 minute
+  },
+  faucet: {
+    requests: 1,
+    window: 86400000, // 24 hours
+  },
+};
+```
+
+### Caching Strategy
+
+**Cache Configuration**:
+```typescript
+export const CACHE_CONFIG = {
+  balances: {
+    ttl: 30000, // 30 seconds
+    key: 'user_balances',
+  },
+  poolStats: {
+    ttl: 60000, // 1 minute
+    key: 'pool_statistics',
+  },
+  tokenPrices: {
+    ttl: 30000, // 30 seconds
+    key: 'token_prices',
+  },
+};
+```
+
+## Security Configuration
+
+### Security Headers
+
+**Content Security Policy**:
+```typescript
+export const CSP_CONFIG = {
+  'default-src': ["'self'"],
+  'script-src': ["'self'", "'unsafe-eval'", "'unsafe-inline'"],
+  'style-src': ["'self'", "'unsafe-inline'"],
+  'img-src': ["'self'", 'data:', 'https:'],
+  'connect-src': [
+    "'self'",
+    'https://rpc.sepolia-api.lisk.com',
+    'https://api.walletconnect.com',
+  ],
+};
+```
+
+**CORS Configuration**:
+```typescript
+export const CORS_CONFIG = {
+  origin: [
+    'http://localhost:3000',
+    'https://app.invalend.com',
+    'https://invalend.vercel.app',
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+```
+
+## Environment-Specific Configurations
+
+### Development
+
+```typescript
+export const DEV_CONFIG = {
+  enableDebugLogs: true,
+  mockContracts: false,
+  skipWalletChecks: false,
+  enableHotReload: true,
+  showTestnetWarnings: true,
+};
+```
+
+### Production
+
+```typescript
+export const PROD_CONFIG = {
+  enableDebugLogs: false,
+  mockContracts: false,
+  skipWalletChecks: false,
+  enableHotReload: false,
+  showTestnetWarnings: false,
+};
+```
+
+### Testing
+
+```typescript
+export const TEST_CONFIG = {
+  enableDebugLogs: true,
+  mockContracts: true,
+  skipWalletChecks: true,
+  enableHotReload: false,
+  showTestnetWarnings: false,
+};
+```
+
+## Validation and Types
+
+### Configuration Validation
+
+```typescript
+import { z } from 'zod';
+
+export const ConfigSchema = z.object({
+  chainId: z.number(),
+  rpcUrl: z.string().url(),
+  contracts: z.object({
+    lendingPool: z.string(),
+    loanManager: z.string(),
+    collateralManager: z.string(),
+  }),
+  walletConnect: z.object({
+    projectId: z.string(),
+  }),
+});
+
+export type Config = z.infer<typeof ConfigSchema>;
+```
+
+### Runtime Validation
+
+```typescript
+export function validateConfig(): Config {
+  const config = {
+    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+    rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
+    contracts: {
+      lendingPool: process.env.NEXT_PUBLIC_LENDING_POOL_ADDRESS,
+      loanManager: process.env.NEXT_PUBLIC_LOAN_MANAGER_ADDRESS,
+      collateralManager: process.env.NEXT_PUBLIC_COLLATERAL_MANAGER_ADDRESS,
+    },
+    walletConnect: {
+      projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+    },
+  };
+
+  return ConfigSchema.parse(config);
+}
+```
+
+## Troubleshooting Configuration
+
+### Common Issues
+
+**Missing Environment Variables**:
+- Check .env.local file exists
+- Verify variable names start with NEXT_PUBLIC_
+- Restart development server after changes
+
+**Contract Address Errors**:
+- Verify addresses are checksummed
+- Confirm contracts are deployed on target network
+- Check contract ABI compatibility
+
+**Network Connection Issues**:
+- Test RPC URL accessibility
+- Verify chain ID matches network
+- Check for network congestion
+
+### Configuration Validation
+
+**Pre-deployment Checklist**:
+- [ ] All required environment variables set
+- [ ] Contract addresses verified on block explorer
+- [ ] Network configuration tested
+- [ ] Wallet connection working
+- [ ] Rate limits configured appropriately
+
+---
+
+*Proper configuration is crucial for Invalend Protocol functionality. Review all settings carefully before deployment.*

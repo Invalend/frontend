@@ -56,24 +56,21 @@ export const PoolStats = () => {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Pool Overview</h2>
-        <p className="text-gray-300">
-          Deposit USDC to earn fixed 6% APY and provide liquidity for leverage loans
-        </p>
-      </div>
+    <div className="space-y-4">
+      {/* Pool Description */}
+      <p className="text-gray-400 text-sm mb-4">
+        Deposit USDC to earn fixed 6% APY and provide liquidity for leverage loans
+      </p>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className={`bg-black rounded-lg p-4 border ${
+            className={`rounded-lg p-4 border transition-all duration-300 ${
               stat.highlight 
-                ? 'border-teal-400 bg-gradient-to-br from-teal-400/10 to-transparent' 
-                : 'border-gray-700'
+                ? 'bg-gradient-to-br from-teal-500/10 to-teal-600/5 border-teal-500/30 hover:border-teal-400/50' 
+                : 'bg-gray-800/50 border-gray-700/50 hover:border-gray-600/60'
             }`}
           >
             <div className="space-y-2">
@@ -81,7 +78,7 @@ export const PoolStats = () => {
                 {stat.label}
               </div>
               <div className="flex items-baseline gap-1">
-                <span className={`text-2xl font-bold ${
+                <span className={`text-xl font-bold ${
                   stat.highlight ? 'text-teal-400' : 'text-white'
                 }`}>
                   {stat.value}
@@ -101,7 +98,7 @@ export const PoolStats = () => {
       </div>
 
       {/* Pool Status */}
-      <div className="bg-dark-gray rounded-lg p-4">
+      <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-white font-medium">Pool Status</h3>

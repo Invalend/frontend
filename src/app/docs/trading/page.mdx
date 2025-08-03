@@ -1,0 +1,355 @@
+# Trading (Uniswap Integration)
+
+Invalend's trading system provides seamless integration with Uniswap V3, allowing users to execute leveraged trades directly from their borrowed funds. All trading happens through secure restricted wallets that ensure safety while maintaining full functionality.
+
+## Overview
+
+### How Trading Works
+
+1. **Create a leveraged loan** to get trading capital
+2. **Funds are deposited** into your restricted wallet
+3. **Execute trades** directly on Uniswap V3
+4. **Monitor positions** and manage risk
+5. **Repay loan** and keep profits
+
+### Supported Tokens
+
+| Token | Symbol | Decimals | Purpose |
+|-------|--------|----------|---------|
+| Ethereum | ETH | 18 | Primary trading pair |
+| USD Coin | USDC | 6 | Base currency/collateral |
+| Wrapped Bitcoin | WBTC | 8 | BTC exposure |
+| Lisk | LSK | 18 | Native Lisk token |
+| Uniswap | UNI | 18 | Governance token |
+
+### Trading Features
+
+- **Leverage up to 5x** your collateral
+- **Real-time price feeds** from Uniswap
+- **Slippage protection** with custom tolerance
+- **Direct DEX integration** - no intermediaries
+- **Secure execution** through restricted wallets
+
+## Trading Interface
+
+### Token Selection
+
+**From Token (Sell)**
+- Select token you want to sell
+- Shows your current balance
+- Automatically calculates maximum tradeable amount
+
+**To Token (Buy)**  
+- Choose token you want to purchase
+- View real-time exchange rates
+- See expected output amount
+
+### Amount Input
+
+**Trade Amount**
+- Enter amount in "From" token
+- Real-time conversion to "To" token
+- Balance validation and limits
+
+**Max Button**
+- Uses maximum available balance
+- Accounts for gas fees
+- Ensures sufficient funds remain
+
+### Slippage Settings
+
+**Default Slippage: 1%**
+- Suitable for most trades
+- Balances execution certainty vs cost
+
+**Custom Slippage**
+- 0.1% - 5% range available
+- Lower slippage = higher chance of revert
+- Higher slippage = higher cost tolerance
+
+## Trading Process
+
+### Step 1: Prepare for Trading
+
+**Prerequisites**:
+- Active loan with funds in restricted wallet
+- Connected wallet on Lisk Sepolia  
+- Understanding of trading risks
+
+**Check Your Position**:
+- View restricted wallet balance
+- Confirm available trading funds
+- Review current market conditions
+
+### Step 2: Set Up Trade
+
+**Select Trading Pair**:
+- Choose "From" token (what you're selling)
+- Choose "To" token (what you're buying)
+- Review current exchange rate
+
+**Enter Trade Details**:
+- Input trade amount
+- Set slippage tolerance
+- Review estimated output
+
+### Step 3: Execute Trade
+
+**Review Trade Summary**:
+- Input amount and token
+- Output amount and token  
+- Exchange rate and price impact
+- Estimated gas fees
+
+**Confirm Transaction**:
+- Click "Swap Tokens"
+- Review transaction in wallet
+- Confirm and wait for execution
+
+### Step 4: Monitor Results
+
+**Transaction Confirmation**:
+- View transaction hash
+- Check on block explorer
+- Verify balance updates
+
+**Position Updates**:
+- New token balances
+- Updated position value
+- P&L calculation updates
+
+## Advanced Trading Features
+
+### Price Impact Analysis
+
+**Understanding Price Impact**:
+```
+Price Impact = (Expected Rate - Actual Rate) / Expected Rate × 100
+```
+
+**Impact Levels**:
+- **< 0.1%**: Minimal impact, good liquidity
+- **0.1% - 1%**: Moderate impact, acceptable
+- **1% - 3%**: High impact, consider smaller size
+- **> 3%**: Very high impact, reconsider trade
+
+### MEV Protection
+
+**Sandwich Attack Protection**:
+- Restricted wallet architecture prevents exploitation
+- Private mempool submission when available
+- Optimal routing through Uniswap V3
+
+### Gas Optimization
+
+**Gas Estimation**:
+- Real-time gas price feeds
+- Optimal gas limit calculation
+- Priority fee recommendations
+
+**Gas Saving Tips**:
+- Trade during low congestion periods
+- Batch multiple operations when possible
+- Use appropriate slippage settings
+
+## Trading Strategies
+
+### Long Positions
+
+**Setup**:
+1. Borrow USDC with collateral
+2. Buy target token (ETH, WBTC, LSK, UNI)
+3. Hold position for appreciation
+4. Sell back to USDC when profitable
+
+**Example - Long ETH**:
+- Collateral: 200 USDC
+- Borrow: 800 USDC (4x leverage)
+- Buy: ETH with 1000 USDC
+- Target: 20% ETH price increase
+- Profit: 200 USDC (100% return on collateral)
+
+### Short Positions
+
+**Note**: Direct shorting not currently supported. Consider:
+- Reducing long exposure
+- Taking profits on existing positions
+- Using inverse correlation assets
+
+### Swing Trading
+
+**Strategy**:
+- Use moderate leverage (2-3x)
+- Target 10-30% moves
+- Set clear entry/exit points
+- Monitor positions closely
+
+### Arbitrage
+
+**Opportunity Identification**:
+- Price differences between DEXs
+- Temporary market inefficiencies
+- Flash loan opportunities (future feature)
+
+## Risk Management
+
+### Position Sizing
+
+**Conservative Approach**:
+- Use 2-3x maximum leverage
+- Risk only 1-2% of total capital per trade
+- Maintain diversified positions
+
+**Aggressive Approach**:
+- Use up to 5x leverage
+- Risk 5-10% of capital per trade
+- Focus on high-conviction trades
+
+### Stop Loss Management
+
+**Mental Stop Losses**:
+- Set loss limits before entering
+- Stick to predetermined exit points
+- Don't average down on losing positions
+
+**Example Stop Loss Strategy**:
+- Entry: 1000 USDC → ETH
+- Stop Loss: 15% loss (850 USDC value)
+- Take Profit: 25% gain (1250 USDC value)
+
+### Health Factor Monitoring
+
+**Critical Levels**:
+- **Healthy**: Health Factor > 1.5
+- **Warning**: Health Factor 1.2-1.5
+- **Danger**: Health Factor < 1.2
+
+**Actions by Health Level**:
+- **Above 1.5**: Normal trading allowed
+- **1.2-1.5**: Consider reducing leverage
+- **Below 1.2**: Close positions immediately
+
+## Trading Interface Guide
+
+### Token Selector
+
+**Features**:
+- Search functionality for tokens
+- Balance display for each token
+- Token logos and symbols
+- Price information
+
+### Trade Input
+
+**Amount Field**:
+- Numeric input with validation
+- "Max" button for full balance
+- Real-time USD value display
+- Error messages for invalid amounts
+
+### Settings Panel
+
+**Slippage Tolerance**:
+- Preset options: 0.1%, 0.5%, 1%
+- Custom input field
+- Impact on execution probability
+
+**Transaction Deadline**:
+- Default: 20 minutes
+- Adjustable for market conditions
+- Prevents old transaction execution
+
+### Transaction Status
+
+**Pending State**:
+- Loading animation
+- Transaction hash display
+- Estimated completion time
+
+**Success State**:
+- Confirmation message
+- Updated balances
+- Explorer link
+
+**Error State**:
+- Error message explanation
+- Retry button
+- Troubleshooting suggestions
+
+## Common Trading Patterns
+
+### Entry Strategies
+
+**Market Entry**:
+- Execute trades immediately at current prices
+- Suitable for liquid markets
+- Higher slippage tolerance
+
+**Limit Entry** (Future Feature):
+- Set target entry prices
+- Wait for favorable conditions
+- Lower slippage, better prices
+
+### Exit Strategies
+
+**Take Profit**:
+- Set target profit levels
+- Scale out positions gradually
+- Lock in gains systematically
+
+**Stop Loss**:
+- Limit downside risk
+- Protect capital for future trades
+- Maintain discipline
+
+## Best Practices
+
+### Before Trading
+
+1. **Research thoroughly** - Understand tokens and markets
+2. **Plan your strategy** - Know entry and exit points
+3. **Check liquidity** - Ensure sufficient market depth
+4. **Verify balances** - Confirm available funds
+
+### During Trading
+
+1. **Monitor positions** - Check health factor regularly
+2. **Stay disciplined** - Stick to your plan
+3. **Manage emotions** - Don't panic or get greedy
+4. **Watch the market** - Stay informed about news/events
+
+### After Trading
+
+1. **Review performance** - Analyze what worked/didn't work
+2. **Update strategy** - Learn from each trade
+3. **Maintain records** - Track P&L and patterns
+4. **Plan next moves** - Prepare for future opportunities
+
+## Troubleshooting
+
+### Common Issues
+
+**Trade Fails**:
+- Check slippage tolerance
+- Verify sufficient balance
+- Ensure gas fee coverage
+- Try smaller trade size
+
+**High Gas Fees**:
+- Wait for lower network congestion
+- Adjust gas price settings
+- Consider trade timing
+
+**Price Impact Too High**:
+- Reduce trade size
+- Split into multiple trades
+- Check for sufficient liquidity
+
+**Transaction Stuck**:
+- Check network status
+- Wait for confirmation
+- Contact support if needed
+
+---
+
+*Trading with leverage amplifies both gains and losses. Always understand the risks and trade responsibly.*

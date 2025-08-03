@@ -1,0 +1,252 @@
+# Liquidity Pool (Earn)
+
+The Invalend Liquidity Pool allows users to deposit USDC and earn passive income through lending. By providing liquidity, you enable leveraged trading and earn a share of the protocol fees and borrowing interest.
+
+## How It Works
+
+### The Lending Model
+
+When you deposit USDC into the Invalend pool:
+
+1. **Your funds become available for lending** to leveraged traders
+2. **You receive pool shares** representing your portion of the total pool
+3. **You earn yield** from borrowing fees and protocol revenue  
+4. **Interest compounds** automatically over time
+
+### Key Benefits
+
+- **Fixed 6% APY** (current rate)
+- **No impermanent loss** (single asset deposit)
+- **Instant deposits** with immediate yield generation
+- **Flexible withdrawals** when liquidity is available
+- **Auto-compounding** interest
+
+## Pool Mechanics
+
+### Deposit Process
+
+**Step 1: Connect Wallet**
+- Ensure you're connected to Lisk Sepolia
+- Have USDC balance in your wallet
+- Have ETH for gas fees
+
+**Step 2: Navigate to Earn Tab**
+- Click "Earn" in the main navigation
+- Select "Deposit" tab
+- View current pool statistics
+
+**Step 3: Enter Amount**  
+- Input USDC amount to deposit
+- Use "Max" button for full balance
+- See real-time deposit calculation
+
+**Step 4: Approve & Deposit**
+- First time: Approve USDC spending
+- Click "Deposit" to complete
+- Confirm transaction in wallet
+
+### Withdrawal Process
+
+**Step 1: Go to Withdraw Tab**
+- Switch to "Withdraw" tab
+- View your current position
+
+**Step 2: Enter Withdrawal Amount**
+- Input shares to withdraw
+- Use "Max" for full withdrawal  
+- See USDC equivalent amount
+
+**Step 3: Execute Withdrawal**
+- Click "Withdraw" button
+- Confirm transaction
+- Receive USDC in wallet
+
+## Pool Statistics
+
+### Current Metrics
+- **Total Pool Size**: Total USDC deposited
+- **Available Liquidity**: USDC available for new loans
+- **Utilization Rate**: Percentage of pool currently lent out
+- **Current APY**: Annual percentage yield for depositors
+
+### Your Position
+- **Shares Owned**: Your portion of the pool
+- **USDC Value**: Current value of your shares
+- **Earned Interest**: Accrued yield since deposit
+- **Entry Date**: When you first deposited
+
+## Understanding APY
+
+### How Yield is Generated
+
+**Borrowing Fees (Primary)**
+- Borrowers pay interest on loans
+- Interest rates adjust based on utilization
+- Higher utilization = higher rates
+
+**Protocol Fees**
+- Fees from trading activity
+- Liquidation penalties
+- Flash loan fees
+
+**Revenue Distribution**
+```
+Total Revenue → Pool Depositors (90%) + Protocol Treasury (10%)
+```
+
+### APY Calculation
+```
+Current APY = (Annual Revenue / Total Pool Deposits) × 100
+```
+
+The 6% APY is maintained through:
+- Minimum borrowing rate floors
+- Protocol revenue sharing
+- Dynamic interest rate models
+
+## Pool Utilization
+
+### Understanding Utilization Rate
+
+**Low Utilization (0-50%)**
+- High liquidity available
+- Instant withdrawals possible
+- Lower APY potential
+
+**Medium Utilization (50-80%)**  
+- Balanced liquidity and yield
+- Normal withdrawal times
+- Target utilization range
+
+**High Utilization (80-95%)**
+- Higher APY potential
+- Possible withdrawal queues
+- Maximum capital efficiency
+
+**Critical Utilization (95%+)**
+- Emergency borrowing rates kick in
+- Withdrawal restrictions possible
+- Incentivizes repayments
+
+## Withdrawal Mechanisms
+
+### Instant Withdrawals
+Available when pool has sufficient liquidity:
+```
+Available Liquidity = Total Pool - Active Loans - Reserve
+```
+
+### Withdrawal Queue
+When liquidity is limited:
+1. Withdrawals are queued in order
+2. Processed as loans are repaid
+3. Users can cancel queued withdrawals
+4. Priority based on timestamp
+
+### Reserve Requirements
+Pool maintains minimum reserves:
+- **Base Reserve**: 5% of total pool
+- **Emergency Reserve**: Additional 2-5% during high utilization
+- **Flash Loan Reserve**: Temporary reserves for flash loans
+
+## Risk Factors
+
+### Protocol Risks
+
+**Smart Contract Risk**
+- Audited contracts reduce but don't eliminate risk
+- Consider only depositing funds you can afford to lose
+- Regular security monitoring and updates
+
+**Liquidation Risk**
+- Borrower defaults are covered by over-collateralization
+- Pool funds are protected by 20% borrower collateral
+- Multiple liquidation mechanisms ensure solvency
+
+### Market Risks
+
+**Interest Rate Risk**  
+- APY can fluctuate based on demand
+- Market conditions affect borrowing rates
+- Protocol adjusts rates to maintain stability
+
+**Liquidity Risk**
+- High utilization may delay withdrawals
+- Plan for potential withdrawal queues
+- Monitor pool utilization trends
+
+## Strategies
+
+### Conservative Strategy
+- Deposit stable amounts for steady yield
+- Plan for 3-6 month holding periods
+- Focus on compound interest benefits
+
+### Active Strategy  
+- Monitor utilization for optimal entry/exit
+- Adjust position size based on market conditions
+- Combine with other DeFi strategies
+
+### Dollar Cost Averaging
+- Make regular deposits over time
+- Smooth out timing risks
+- Build position gradually
+
+## Pool Interface Guide
+
+### Deposit Tab Features
+- **Amount Input**: Enter USDC deposit amount
+- **Max Button**: Use full wallet balance
+- **Pool Stats**: Current APY, utilization, TVL
+- **Transaction History**: Your past deposits
+
+### Withdraw Tab Features
+- **Share Calculator**: Convert shares to USDC
+- **Available Balance**: Withdrawable amount
+- **Estimated Time**: Expected withdrawal processing
+- **Queue Position**: If withdrawal is queued
+
+## Best Practices
+
+### Timing Your Deposits
+- Monitor pool utilization trends
+- Consider market cycle timing
+- Plan for holding periods
+
+### Managing Your Position
+- Track accrued interest regularly
+- Consider compounding frequency
+- Plan withdrawal timing carefully
+
+### Risk Management
+- Don't deposit more than you can afford to lose
+- Diversify across multiple protocols
+- Stay informed about protocol updates
+
+## Troubleshooting
+
+### Common Issues
+
+**Transaction Fails**
+- Check USDC balance and allowance
+- Ensure sufficient ETH for gas
+- Verify network connection
+
+**Incorrect Balance Display**
+- Wait for block confirmation
+- Refresh page or clear cache
+- Check transaction on explorer
+
+**Can't Withdraw**
+- Check available pool liquidity
+- Verify you have shares to withdraw
+- Consider withdrawal queue status
+
+### Getting Help
+- Check [Troubleshooting Guide](/docs/advanced/troubleshooting)
+- Join [Discord community](https://discord.gg/invalend)
+- Contact support team
+
+---
+
+*The Liquidity Pool is the foundation of Invalend Protocol. By providing liquidity, you earn steady returns while enabling the broader DeFi ecosystem.*

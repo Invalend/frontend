@@ -17,7 +17,8 @@ export const LoanPage = () => {
 
   return (
     <div className="min-h-screen bg-dark-bg p-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full bg-dark-bg p-4 rounded-lg border border-gray-800/50">
+        <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Loan Management</h1>
@@ -70,6 +71,7 @@ export const LoanPage = () => {
             {/* Information Card */}
             <LoanInfoCard />
           </div>
+        </div>
         </div>
       </div>
     </div>

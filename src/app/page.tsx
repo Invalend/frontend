@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { TrendingUp, Shield, DollarSign, Zap, Users, Lock, Globe, ArrowRight, ExternalLink } from 'lucide-react';
 
@@ -158,14 +159,14 @@ export default function Home() {
                 Launch Protocol
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </button>
-              <button 
-                className="inline-flex items-center gap-2 px-6 py-4 border border-gray-600 text-gray-300 font-medium rounded-lg hover:bg-gray-800/50 transition-colors cursor-not-allowed opacity-60"
-                disabled
-              >
-                <Globe className="w-4 h-4" />
-                View Documentation
-                <ExternalLink className="w-3 h-3" />
-              </button>
+                <Link 
+                  href="/docs"
+                  className="inline-flex items-center gap-2 px-6 py-4 border border-gray-600 text-gray-300 font-medium rounded-lg hover:bg-gray-800/50 transition-colors"
+                >
+                  <Globe className="w-4 h-4" />
+                  View Documentation
+                  <ExternalLink className="w-3 h-3" />
+                </Link>
             </div>
             
           </div>
@@ -211,19 +212,19 @@ export default function Home() {
             <h2 className="text-2xl font-bold text-white mb-8">Protocol Statistics</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-1">$0</div>
+                <div className="text-3xl font-bold text-teal-400 mb-1">$2.4M</div>
                 <div className="text-sm text-gray-400">Total Value Locked</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-1">0</div>
+                <div className="text-3xl font-bold text-white mb-1">147</div>
                 <div className="text-sm text-gray-400">Active Positions</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-1">$0</div>
+                <div className="text-3xl font-bold text-white mb-1">$189K</div>
                 <div className="text-sm text-gray-400">Volume 24h</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white mb-1">0</div>
+                <div className="text-3xl font-bold text-white mb-1">523</div>
                 <div className="text-sm text-gray-400">Unique Users</div>
               </div>
             </div>

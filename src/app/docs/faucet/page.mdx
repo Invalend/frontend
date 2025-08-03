@@ -1,0 +1,355 @@
+# Faucet (Testnet)
+
+The Invalend Faucet provides test USDC tokens for users to explore the protocol without using real funds. This is essential for testing, development, and getting familiar with Invalend's features on the Lisk Sepolia testnet.
+
+## Overview
+
+### What is the Faucet?
+
+The faucet is a smart contract that:
+
+- **Distributes test USDC** for protocol testing
+- **Provides 1000 USDC per request** (sufficient for multiple tests)
+- **Has reasonable rate limits** to prevent abuse
+- **Works only on testnet** - no real value tokens
+
+### Purpose
+
+**For New Users**:
+- Get familiar with DeFi concepts
+- Test deposit and withdrawal flows
+- Practice leveraged trading
+- Understand protocol mechanics
+
+**For Developers**:
+- Test integrations and implementations
+- Verify smart contract interactions
+- Debug frontend applications
+- Conduct security testing
+
+**For Advanced Users**:
+- Experiment with strategies
+- Test edge cases and scenarios
+- Provide protocol feedback
+- Contribute to development
+
+## Using the Faucet
+
+### Prerequisites
+
+- Wallet connected to Lisk Sepolia testnet
+- Some test ETH for gas fees
+- Understanding that tokens have no real value
+
+### Step-by-Step Process
+
+**Step 1: Navigate to Faucet**
+- Click "Faucet" tab in main navigation
+- View current USDC balance
+- Check faucet availability
+
+**Step 2: Request Tokens**
+- Click "Mint 1000 USDC" button
+- Confirm transaction in wallet
+- Wait for transaction confirmation
+
+**Step 3: Verify Receipt**
+- Check updated USDC balance
+- View transaction on block explorer
+- Confirm tokens in wallet
+
+### Faucet Interface
+
+**Current Balance Display**:
+- Shows your current USDC balance
+- Updates in real-time after minting
+- Formatted for easy reading
+
+**Faucet Information**:
+- Amount per request (1000 USDC)
+- Rate limiting information
+- Last request timestamp
+- Next available request time
+
+**Transaction Status**:
+- Real-time minting progress
+- Transaction hash display
+- Success/error notifications
+- Explorer link for verification
+
+## Rate Limiting
+
+### Current Limits
+
+**Per Address**:
+- 1000 USDC per request
+- 1 request per 24 hours
+- Maximum 5000 USDC per week
+- No lifetime limits
+
+**Global Limits**:
+- Fair distribution across users
+- Anti-spam protection
+- Resource conservation
+- Sustainable operation
+
+### Why Rate Limits Exist
+
+**Prevent Abuse**:
+- Stop automated farming
+- Ensure fair distribution
+- Protect faucet resources
+- Maintain availability
+
+**Educational Purpose**:
+- Encourage thoughtful testing
+- Promote learning over accumulation
+- Support legitimate use cases
+- Build responsible community
+
+## Test Token Information
+
+### MockUSDC Details
+
+**Contract Information**:
+- Symbol: USDC
+- Decimals: 6
+- Total Supply: Unlimited (for testing)
+- Contract Address: `0xe61995e2728bd2d2b1abd9e089213b542db7916a`
+
+**Key Properties**:
+- ERC20 compliant
+- Mintable by faucet contract
+- Same interface as real USDC
+- No real monetary value
+
+### Token Features
+
+**Standard ERC20**:
+- Transfer functionality
+- Approval mechanisms
+- Balance queries
+- Event emissions
+
+**Testnet Specific**:
+- Unlimited minting capability
+- No bridging to mainnet
+- Reset with network upgrades
+- Educational use only
+
+## Getting Test ETH
+
+### For Gas Fees
+
+Since you need ETH for transaction fees:
+
+**Lisk Sepolia Faucet**:
+- Visit: https://sepolia-faucet.lisk.com
+- Request test ETH
+- Wait for distribution
+- Use for gas fees
+
+**Alternative Sources**:
+- Community faucets
+- Developer Discord channels
+- Testnet ETH exchanges
+- Friend/colleague sharing
+
+### ETH Management
+
+**Recommended Amount**: 0.01-0.02 ETH
+- Sufficient for 50-100 transactions
+- Covers all protocol interactions
+- Buffer for gas price spikes
+- Good for extended testing
+
+## Testing Strategies
+
+### Beginner Testing
+
+**Basic Flow Testing**:
+1. Get 1000 USDC from faucet
+2. Deposit 500 USDC to earn yield
+3. Withdraw 100 USDC to test withdrawal
+4. Create small loan (100 USDC collateral)
+5. Try basic token swap
+6. Repay loan and close position
+
+### Intermediate Testing
+
+**Strategy Testing**:
+1. Get maximum USDC allocation
+2. Test different deposit amounts
+3. Create multiple loans
+4. Test various trading pairs
+5. Monitor health factors
+6. Practice risk management
+
+### Advanced Testing
+
+**Edge Case Testing**:
+1. Test maximum leverage scenarios
+2. Attempt liquidation scenarios
+3. Test error conditions
+4. Verify security restrictions
+5. Performance testing
+6. Integration testing
+
+## Common Use Cases
+
+### Educational Scenarios
+
+**Learning DeFi Basics**:
+- Understand yield farming
+- Practice wallet connections
+- Learn transaction flows
+- Explore protocol features
+
+**Risk-Free Experimentation**:
+- Test trading strategies
+- Practice position management
+- Learn from mistakes
+- Build confidence
+
+### Development Testing
+
+**Frontend Development**:
+- Test UI components
+- Verify transaction flows
+- Debug user interactions
+- Performance optimization
+
+**Smart Contract Testing**:
+- Verify contract integrations
+- Test edge cases
+- Security testing
+- Gas optimization
+
+### Community Contribution
+
+**Bug Reporting**:
+- Find and report issues
+- Test new features
+- Provide user feedback
+- Improve documentation
+
+**Strategy Development**:
+- Create educational content
+- Share best practices
+- Mentor new users
+- Build community tools
+
+## Best Practices
+
+### Responsible Usage
+
+1. **Use Only What You Need**: Don't hoard tokens unnecessarily
+2. **Test Systematically**: Plan your testing approach
+3. **Share Knowledge**: Help others learn from your experience
+4. **Report Issues**: Contribute to protocol improvement
+
+### Effective Testing
+
+1. **Start Small**: Begin with small amounts
+2. **Document Results**: Keep track of what works/doesn't work
+3. **Test Edge Cases**: Try unusual scenarios
+4. **Learn Continuously**: Use each test as a learning opportunity
+
+### Resource Management
+
+1. **Monitor ETH Balance**: Keep sufficient gas fees
+2. **Plan Test Sequences**: Batch related tests together
+3. **Reset When Needed**: Don't be afraid to start fresh
+4. **Stay Organized**: Track different testing scenarios
+
+## Troubleshooting
+
+### Common Issues
+
+**Faucet Not Working**:
+- Check rate limiting status
+- Verify network connection
+- Ensure sufficient gas fees
+- Try again after cooldown period
+
+**Tokens Not Received**:
+- Wait for transaction confirmation
+- Check transaction on explorer
+- Verify wallet address
+- Contact support if needed
+
+**Rate Limit Errors**:
+- Check last request time
+- Wait for cooldown period
+- Verify you haven't exceeded limits
+- Use alternative testing accounts
+
+### Getting Help
+
+**Self-Service**:
+- Check faucet status page
+- Review transaction history
+- Verify network settings
+- Try browser refresh
+
+**Community Support**:
+- Join Discord community
+- Ask questions in testing channels
+- Share experiences with others
+- Get help from experienced users
+
+**Technical Support**:
+- Report bugs through proper channels
+- Provide detailed error information
+- Include transaction hashes
+- Be patient for responses
+
+## Faucet Maintenance
+
+### Regular Operations
+
+**Monitoring**:
+- Faucet balance tracking
+- Rate limit enforcement
+- Abuse detection
+- Performance monitoring
+
+**Maintenance Windows**:
+- Scheduled refills
+- Smart contract upgrades
+- Security updates
+- Feature additions
+
+### Future Enhancements
+
+**Planned Features**:
+- Multi-token support (ETH, WBTC, etc.)
+- Gamified distribution
+- Educational challenges
+- Community rewards
+
+**Improvements**:
+- Better rate limiting
+- Enhanced UI/UX
+- Mobile optimization
+- Integration APIs
+
+## Important Reminders
+
+### Testnet Nature
+
+⚠️ **No Real Value**: All tokens are for testing only
+⚠️ **Network Resets**: Testnet may reset, losing all tokens
+⚠️ **Educational Purpose**: Focus on learning, not accumulating
+⚠️ **Limited Support**: Best effort support for testnet issues
+
+### Responsible Testing
+
+✅ **Test Thoroughly**: Explore all features systematically
+✅ **Report Issues**: Help improve the protocol
+✅ **Share Knowledge**: Educate others about your findings
+✅ **Be Patient**: Understand this is experimental technology
+
+---
+
+*The faucet is your gateway to exploring Invalend Protocol risk-free. Use it wisely to learn, test, and contribute to the ecosystem.*

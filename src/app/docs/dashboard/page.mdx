@@ -1,0 +1,192 @@
+# Dashboard Overview
+
+The Invalend Dashboard provides a comprehensive view of your DeFi portfolio, positions, and opportunities. This central hub displays all your lending, borrowing, and trading activities in one place.
+
+## Dashboard Layout
+
+The dashboard is organized into several key sections:
+
+### Welcome Section
+- Protocol introduction and current status
+- Key metrics: Total Value Locked (TVL), Active Loans, Current APY
+- Real-time updates and announcements
+
+### Pool Overview
+- Current pool statistics and health
+- Available liquidity for borrowing
+- Interest rates and utilization metrics
+- Historical performance data
+
+### Your Portfolio
+Split into two main areas:
+
+#### Lending Position
+- **USDC Deposited**: Your total deposits in the lending pool
+- **Asset Value**: Current value including earned interest
+- **Current APY**: Real-time annual percentage yield
+- **Withdraw Section**: Quick access to withdraw funds
+
+#### Trading Position  
+- **Active Loan**: Current borrowed amount
+- **Collateral**: Your margin/collateral provided
+- **P&L**: Profit and Loss from trading positions
+- **Position Status**: Health and liquidation risk
+
+## Key Metrics Explained
+
+### Total Value Locked (TVL)
+The total amount of assets deposited across all Invalend pools. This indicates protocol adoption and trust.
+
+### Active Loans
+Number of currently active borrowing positions across all users. Shows protocol utilization.
+
+### Current APY
+The annualized yield you earn on deposits. This rate adjusts based on:
+- Pool utilization rate
+- Borrowing demand
+- Protocol fees
+- Market conditions
+
+## Portfolio Sections
+
+### Lending Position Details
+
+**USDC Deposited**
+- Shows your principal deposit amount
+- Updates in real-time as you deposit/withdraw
+- Displayed in USDC with 6 decimal precision
+
+**Asset Value**  
+- Your deposit + accrued interest
+- Grows continuously as you earn yield
+- Can be higher than deposits due to compound interest
+
+**Withdraw Functionality**
+- Enter amount to withdraw
+- "Max" button for full withdrawal
+- Shows available shares for withdrawal
+- Real-time validation of withdrawal limits
+
+### Trading Position Details
+
+**Active Loan**
+- Current borrowed amount from loan creation
+- Used as leverage for trading positions
+- Must be repaid to close position
+
+**Collateral**
+- Your 20% margin requirement
+- Acts as security for the loan
+- At risk if position goes against you
+
+**P&L (Profit & Loss)**
+- Real-time calculation of trading performance
+- Based on current token prices vs entry prices
+- Includes both realized and unrealized gains/losses
+
+## Interactive Features
+
+### Quick Actions
+- **Deposit More**: Add funds to existing position
+- **Withdraw**: Remove funds from pool
+- **Create Loan**: Start new leveraged position
+- **View Wallet**: Check restricted wallet status
+
+### Real-time Updates
+All data refreshes automatically:
+- Every 30 seconds for balances
+- Every block for critical metrics
+- Immediately after transactions
+
+### Status Indicators
+Color-coded status for quick assessment:
+- 🟢 **Green**: Healthy positions
+- 🟡 **Yellow**: Warning states  
+- 🔴 **Red**: Risk or action required
+
+## Understanding Your Returns
+
+### How APY is Calculated
+```
+APY = (Pool Revenue / Total Deposits) × 365 days
+Pool Revenue = Borrowing Fees + Trading Fees + Protocol Revenue
+```
+
+### Compound Interest
+Interest compounds continuously, meaning:
+- You earn yield on your principal
+- You earn yield on your earned interest
+- Higher frequency = better returns
+
+### Withdrawal Timing
+- **Instant**: When pool has available liquidity
+- **Delayed**: When pool utilization is high
+- **Queue System**: Fair first-come, first-served basis
+
+## Portfolio Health Indicators
+
+### For Lenders
+- **Pool Utilization**: Higher utilization = higher yields
+- **Available Liquidity**: Affects withdrawal speed
+- **Default Risk**: Extremely low due to over-collateralization
+
+### For Borrowers  
+- **Loan-to-Value Ratio**: Current leverage level
+- **Liquidation Risk**: Distance from liquidation threshold
+- **Position Performance**: Current P&L status
+
+## Dashboard Navigation
+
+### Tab Structure
+- **Dashboard**: Main overview (current page)
+- **Earn**: Deposit/withdraw from lending pool
+- **Borrow**: Create/manage loans
+- **Trade**: Execute swaps and manage positions  
+- **Wallet**: Restricted wallet management
+- **Faucet**: Get test tokens (testnet only)
+
+### Quick Access
+- Header wallet connection status
+- Balance display for connected wallet
+- Network status and health indicators
+
+## Best Practices
+
+### Regular Monitoring
+- Check dashboard daily for position updates
+- Monitor P&L for trading positions
+- Track APY changes and market conditions
+
+### Risk Management
+- Don't overleverage your positions
+- Maintain awareness of liquidation risks
+- Diversify across different strategies
+
+### Portfolio Optimization
+- Rebalance between lending and trading
+- Take profits on successful trades
+- Compound your lending returns
+
+## Troubleshooting
+
+### Data Not Loading
+1. Check wallet connection
+2. Verify network (Lisk Sepolia)
+3. Refresh the page
+4. Clear browser cache
+
+### Incorrect Balances
+1. Wait for block confirmation
+2. Check recent transactions
+3. Verify on block explorer
+4. Contact support if persistent
+
+### Performance Issues
+1. Use updated browser
+2. Disable ad blockers
+3. Check internet connection
+4. Try incognito mode
+
+---
+
+*The Dashboard is your command center for all Invalend activities. Familiarize yourself with each section to maximize your DeFi experience.*

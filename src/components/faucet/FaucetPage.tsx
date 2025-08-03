@@ -25,9 +25,10 @@ export const FaucetPage = () => {
   }, [mintHash, refetchBalance, resetStates]);
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
+    <div className="w-full ">
+      <div className="max-w-6xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="text-center">
         <h1 className="text-3xl font-bold text-white mb-4">MockUSDC Faucet</h1>
         <p className="text-gray-400 max-w-2xl mx-auto">
           Get test USDC tokens for the Invalend protocol. This faucet allows you to mint 
@@ -118,6 +119,7 @@ export const FaucetPage = () => {
         <p className="text-xs text-gray-500 mt-1">
           Make sure your wallet is connected to the correct network
         </p>
+      </div>
       </div>
     </div>
   );

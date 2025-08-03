@@ -154,6 +154,10 @@ html {
   background-color: #1c1c1e;
 }
 
+.bg-dark-bg {
+  background-color: #0d0d0d;
+}
+
 .text-teal-400 {
   color: #5dd4cb;
 }
@@ -196,4 +200,19 @@ html {
 
 .shadow-teal-400\/25 {
   box-shadow: 0 25px 50px -12px rgba(93, 212, 203, 0.25);
+}
+
+/* Custom glow effects for enhanced borders */
+.shadow-glow {
+  box-shadow: 
+    0 0 20px rgba(93, 212, 203, 0.3),
+    0 0 40px rgba(93, 212, 203, 0.2),
+    0 0 60px rgba(93, 212, 203, 0.1);
+}
+
+.hover\:shadow-glow:hover {
+  box-shadow: 
+    0 0 25px rgba(93, 212, 203, 0.4),
+    0 0 50px rgba(93, 212, 203, 0.3),
+    0 0 75px rgba(93, 212, 203, 0.2);
 }

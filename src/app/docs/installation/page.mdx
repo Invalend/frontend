@@ -1,0 +1,456 @@
+# Installation & Setup
+
+Get your development environment ready for Invalend Protocol. This guide covers everything from initial setup to deployment, whether you're building integrations, contributing to the protocol, or creating custom implementations.
+
+## System Requirements
+
+### Minimum Requirements
+- **Node.js**: Version 18+ (20+ recommended)
+- **npm/yarn**: npm 9+ or yarn 1.22+
+- **Git**: Latest version
+- **Browser**: Chrome/Firefox with MetaMask
+- **Memory**: 4GB RAM minimum
+- **Storage**: 2GB free space
+
+### Recommended Setup
+- **OS**: macOS, Linux, or Windows with WSL2
+- **IDE**: VS Code with Solidity extensions
+- **Node.js**: Version 20 LTS
+- **Package Manager**: yarn for better dependency management
+- **Terminal**: iTerm2 (Mac) or Windows Terminal
+
+## Development Environment Setup
+
+### 1. Install Node.js and Package Manager
+
+**Using Node Version Manager (Recommended)**:
+```bash
+# Install nvm (macOS/Linux)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Install and use Node.js 20
+nvm install 20
+nvm use 20
+nvm alias default 20
+
+# Verify installation
+node --version  # Should show v20.x.x
+npm --version   # Should show 10.x.x
+```
+
+**Direct Installation**:
+- Download from [nodejs.org](https://nodejs.org/)
+- Choose LTS version (20.x.x)
+- Follow installation wizard
+
+**Install Yarn (Optional but Recommended)**:
+```bash
+npm install -g yarn
+yarn --version  # Verify installation
+```
+
+### 2. Install Git and Configure
+
+**Install Git**:
+```bash
+# macOS (using Homebrew)
+brew install git
+
+# Ubuntu/Debian
+sudo apt update && sudo apt install git
+
+# Windows
+# Download from git-scm.com
+```
+
+**Configure Git**:
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+git config --global init.defaultBranch main
+```
+
+### 3. Clone the Repository
+
+**Clone Invalend Frontend**:
+```bash
+# HTTPS
+git clone https://github.com/Invalend/frontend.git
+
+# SSH (if you have SSH keys set up)
+git clone git@github.com:Invalend/frontend.git
+
+# Navigate to project
+cd frontend
+```
+
+**Verify Repository**:
+```bash
+ls -la  # Should show package.json and other project files
+git status  # Should show "On branch main"
+```
+
+## Project Setup
+
+### 1. Install Dependencies
+
+**Using npm**:
+```bash
+npm install
+```
+
+**Using yarn**:
+```bash
+yarn install
+```
+
+**Verify Installation**:
+```bash
+# Check if node_modules exists
+ls node_modules
+
+# Check package installation
+npm list --depth=0  # or yarn list --depth=0
+```
+
+### 2. Environment Configuration
+
+**Create Environment File**:
+```bash
+cp .env.example .env.local
+```
+
+**Edit .env.local**:
+```env
+# Network Configuration
+NEXT_PUBLIC_CHAIN_ID=4202
+NEXT_PUBLIC_RPC_URL=https://rpc.sepolia-api.lisk.com
+
+# Contract Addresses (Lisk Sepolia)
+NEXT_PUBLIC_MOCK_USDC_ADDRESS=0xe61995e2728bd2d2b1abd9e089213b542db7916a
+NEXT_PUBLIC_LENDING_POOL_ADDRESS=0x752168dd102d1c4b9390ab6abf3ec39f2164ad11
+NEXT_PUBLIC_COLLATERAL_MANAGER_ADDRESS=0x23c369a4991a477e4b9dd13f179b2e68203abc1d
+NEXT_PUBLIC_LOAN_MANAGER_ADDRESS=0x8c0694ff8df07554c5a4b2d83992e1987733ba64
+NEXT_PUBLIC_RESTRICTED_WALLET_FACTORY_ADDRESS=0x7364eeb345989c757616988b70976bba163b7571
+
+# WalletConnect Configuration
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_project_id_here
+
+# Development Settings
+NEXT_PUBLIC_DEBUG=false
+NEXT_PUBLIC_TESTNET=true
+```
+
+**Environment Variables Explained**:
+- `CHAIN_ID`: Lisk Sepolia testnet ID (4202)
+- `RPC_URL`: Blockchain RPC endpoint
+- `CONTRACT_ADDRESS_*`: Smart contract addresses
+- `WALLET_CONNECT_PROJECT_ID`: Get from [WalletConnect Cloud](https://cloud.walletconnect.com/)
+
+### 3. Configure WalletConnect (Optional)
+
+**Get Project ID**:
+1. Visit [WalletConnect Cloud](https://cloud.walletconnect.com/)
+2. Create account or sign in
+3. Create new project
+4. Copy Project ID
+5. Add to `.env.local`
+
+### 4. Verify Setup
+
+**Run Development Server**:
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+**Check Browser**:
+- Open [http://localhost:3000](http://localhost:3000)
+- Should see Invalend Protocol interface
+- Check browser console for errors
+
+**Test Wallet Connection**:
+- Click "Connect Wallet"
+- Should see wallet options
+- Try connecting with MetaMask
+
+## IDE Configuration
+
+### VS Code Setup
+
+**Install Extensions**:
+```bash
+# Essential extensions
+code --install-extension bradlc.vscode-tailwindcss
+code --install-extension esbenp.prettier-vscode
+code --install-extension ms-vscode.vscode-typescript-next
+code --install-extension NomicFoundation.hardhat-solidity
+```
+
+**VS Code Settings (.vscode/settings.json)**:
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "tailwindCSS.includeLanguages": {
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
+  }
+}
+```
+
+**Workspace Configuration (.vscode/extensions.json)**:
+```json
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-typescript-next",
+    "NomicFoundation.hardhat-solidity"
+  ]
+}
+```
+
+### Code Formatting
+
+**Prettier Configuration (.prettierrc)**:
+```json
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2
+}
+```
+
+**ESLint Configuration** (already included in project):
+- TypeScript support
+- React hooks rules
+- Next.js specific rules
+- Prettier integration
+
+## Network Configuration
+
+### MetaMask Setup
+
+**Add Lisk Sepolia Network**:
+1. Open MetaMask
+2. Click network dropdown
+3. Click "Add Network"
+4. Enter network details:
+
+```json
+{
+  "chainId": "0x106a",
+  "chainName": "Lisk Sepolia Testnet",
+  "rpcUrls": ["https://rpc.sepolia-api.lisk.com"],
+  "nativeCurrency": {
+    "name": "Sepolia Ether",
+    "symbol": "ETH",
+    "decimals": 18
+  },
+  "blockExplorerUrls": ["https://sepolia-blockscout.lisk.com"]
+}
+```
+
+**Get Test ETH**:
+- Visit [Lisk Sepolia Faucet](https://sepolia-faucet.lisk.com/)
+- Request test ETH for gas fees
+- Wait for distribution
+
+### Alternative Wallets
+
+**WalletConnect Compatible**:
+- Trust Wallet
+- Rainbow Wallet
+- Coinbase Wallet
+- 1inch Wallet
+
+## Build and Deployment
+
+### Local Development
+
+**Development Server**:
+```bash
+npm run dev  # Start development server
+npm run build  # Build for production
+npm run start  # Start production server
+npm run lint  # Run linting
+```
+
+**Environment-Specific Builds**:
+```bash
+# Development build
+npm run build:dev
+
+# Production build
+npm run build:prod
+
+# Staging build
+npm run build:staging
+```
+
+### Production Deployment
+
+**Build Optimization**:
+```bash
+# Install production dependencies only
+npm ci --only=production
+
+# Build optimized bundle
+npm run build
+
+# Analyze bundle size
+npm run analyze
+```
+
+**Deployment Platforms**:
+
+**Vercel (Recommended)**:
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel --prod
+```
+
+**Netlify**:
+```bash
+# Build command: npm run build
+# Publish directory: .next
+```
+
+**Traditional Hosting**:
+```bash
+# Build static files
+npm run build && npm run export
+
+# Upload 'out' directory to your hosting
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Node.js Version Mismatch**:
+```bash
+# Check version
+node --version
+
+# Switch to correct version
+nvm use 20  # or install if not available
+```
+
+**Package Installation Failures**:
+```bash
+# Clear cache and reinstall
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install
+```
+
+**Port Already in Use**:
+```bash
+# Use different port
+npm run dev -- -p 3001
+
+# Or kill process using port 3000
+lsof -ti:3000 | xargs kill -9
+```
+
+**Environment Variables Not Loading**:
+- Verify `.env.local` exists
+- Check variable names (must start with `NEXT_PUBLIC_`)
+- Restart development server
+- Clear browser cache
+
+### Build Errors
+
+**TypeScript Errors**:
+```bash
+# Check types
+npm run type-check
+
+# Generate types
+npm run postinstall
+```
+
+**Import Resolution Issues**:
+```bash
+# Check tsconfig.json paths
+# Verify file extensions (.ts, .tsx)
+# Check case sensitivity
+```
+
+**Dependency Conflicts**:
+```bash
+# Update dependencies
+npm update
+
+# Check for peer dependency warnings
+npm ls
+```
+
+## Development Workflow
+
+### Git Workflow
+
+**Branch Strategy**:
+```bash
+# Create feature branch
+git checkout -b feature/your-feature-name
+
+# Make changes and commit
+git add .
+git commit -m "feat: add your feature description"
+
+# Push to origin
+git push origin feature/your-feature-name
+```
+
+**Commit Message Convention**:
+- `feat:` - New features
+- `fix:` - Bug fixes
+- `docs:` - Documentation updates
+- `style:` - Code style changes
+- `refactor:` - Code refactoring
+- `test:` - Test updates
+- `chore:` - Build/dependency updates
+
+### Testing
+
+**Run Tests**:
+```bash
+npm run test         # Run unit tests
+npm run test:e2e     # Run end-to-end tests
+npm run test:watch   # Run tests in watch mode
+```
+
+**Code Quality**:
+```bash
+npm run lint         # Check code style
+npm run lint:fix     # Auto-fix style issues
+npm run type-check   # Verify TypeScript types
+```
+
+### Performance Monitoring
+
+**Bundle Analysis**:
+```bash
+npm run analyze      # Analyze bundle size
+npm run lighthouse   # Run Lighthouse audit
+```
+
+**Development Tools**:
+- React Developer Tools
+- MetaMask Developer Tools
+- Network tab for API calls
+- Console for debugging
+
+---
+
+*With this setup complete, you're ready to develop, test, and deploy Invalend Protocol integrations. The development environment provides all tools needed for efficient DeFi application development.*
