@@ -1,7 +1,7 @@
 "use client";
 
 
-type TabType = 'pool' | 'loans' | 'dashboard' | 'faucet';
+type TabType = 'pool' | 'loans' | 'dashboard' | 'faucet' | 'trading';
 
 interface NavigationProps {
   activeTab: TabType;
@@ -13,6 +13,7 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
     { id: 'dashboard' as TabType, label: 'Overview', description: 'User position summary' },
     { id: 'pool' as TabType, label: 'Earn / Pool', description: 'Deposit USDC, view TVL & APY' },
     { id: 'loans' as TabType, label: 'Borrow / Loans', description: 'Borrow, repay, view collateral' },
+    { id: 'trading' as TabType, label: 'Trading', description: 'Trade on Uniswap' },
     { id: 'faucet' as TabType, label: 'Faucet', description: 'Get testnet tokens' },
   ];
 
@@ -24,7 +25,7 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors focus-ring ${
                 activeTab === tab.id
                   ? 'border-teal-400 text-teal-400'
                   : 'border-transparent text-gray-300 hover:text-white hover:border-gray-300'

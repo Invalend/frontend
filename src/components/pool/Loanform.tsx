@@ -1,12 +1,16 @@
 import { useCreateLoan, useUserLoanInfo, useRepayLoan } from "@/hooks/useLoan";
-import { formatUSDC } from "@/utils/formatters";
+import { formatUSDC, formatRelativeTime } from "@/utils/formatters";
 import { TransactionButton } from "@/components/common/TransactionButton";
+import { StatusCard, StatusItem } from "@/components/common/StatusCard";
+import { AmountInput } from "@/components/common/AmountInput";
+import { TransactionNotification } from "@/components/common/TransactionNotification";
+import { ExplorerLink } from "@/components/common/ExplorerLink";
 
 export const BorrowForm = () => {
   const {
     amount,
     setAmount,
-    error,
+    validationError,
     requiredCollateral,
     poolFunding,
     needsApproval,
@@ -14,12 +18,15 @@ export const BorrowForm = () => {
     isApproving,
     isCreatingLoan,
     isApproveSuccess,
-    isCreateLoanSuccess,
+    approvalTx,
+    loanTx,
+    usdcBalance,
     handleApprove,
     handleCreateLoan,
+    resetTransactionStates,
   } = useCreateLoan();
 
-  const { loanInfo } = useUserLoanInfo();
+  const { loanInfo, refetch: refetchLoanInfo } = useUserLoanInfo();
 
   const statusText = isApproving
     ? "Approving..."
@@ -30,6 +37,14 @@ export const BorrowForm = () => {
     : "Create Loan";
 
   const isButtonDisabled = !isValidAmount || isApproving || isCreatingLoan;
+
+  const handleAmountChange = (newAmount: string) => {
+    setAmount(newAmount);
+    if (validationError) {
+      // Clear error when user starts typing
+      resetTransactionStates();
+    }
+  };
 
   return (
     <div className="bg-black rounded-lg p-6 border border-gray-700">
@@ -42,61 +57,129 @@ export const BorrowForm = () => {
           </p>
         </div>
 
-        {/* User Loan Info */}
+        {/* Current Loan Status */}
         {loanInfo && (
-          <div className="bg-dark-gray rounded-lg p-4 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Active Loan</span>
-              <span className="text-white font-medium">{loanInfo.isActive ? 'Yes' : 'No'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Loan Amount</span>
-              <span className="text-white font-medium">{formatUSDC(loanInfo.loanAmount)} USDC</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Collateral</span>
-              <span className="text-white font-medium">{formatUSDC(loanInfo.collateralAmount)} USDC</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Pool Funding</span>
-              <span className="text-white font-medium">{formatUSDC(loanInfo.poolFunding)} USDC</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Start Time</span>
-              <span className="text-white font-medium">{loanInfo.startTime ? new Date(Number(loanInfo.startTime) * 1000).toLocaleString() : '-'}</span>
-            </div>
-          </div>
+          <StatusCard 
+            title="Current Loan" 
+            status={loanInfo.isActive ? 'active' : 'inactive'}
+          >
+            <StatusItem 
+              label="Loan Amount" 
+              value={`${formatUSDC(loanInfo.loanAmount)} USDC`}
+              highlight={loanInfo.isActive}
+            />
+            <StatusItem 
+              label="Collateral" 
+              value={`${formatUSDC(loanInfo.marginAmount)} USDC`}
+            />
+            <StatusItem 
+              label="Pool Funding" 
+              value={`${formatUSDC(loanInfo.poolFunding)} USDC`}
+            />
+            <StatusItem 
+              label="Started" 
+              value={formatRelativeTime(loanInfo.startTime)}
+            />
+            {loanInfo.restrictedWallet && (
+              <StatusItem 
+                label="Restricted Wallet" 
+                value={
+                  <ExplorerLink address={loanInfo.restrictedWallet} showIcon={false}>
+                    {loanInfo.restrictedWallet.slice(0, 8)}...
+                  </ExplorerLink>
+                }
+              />
+            )}
+          </StatusCard>
         )}
 
         {/* Amount Input */}
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">Loan Amount (USDC)</label>
-          <input
-            type="text"
-            value={amount}
-            placeholder="0.00"
-            onChange={(e) => {
-              const val = e.target.value;
-              if (/^\d*\.?\d*$/.test(val) || val === "") setAmount(val);
-            }}
-            className="w-full bg-dark-gray border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-teal-400"
+        <AmountInput
+          value={amount}
+          onChange={handleAmountChange}
+          label="Loan Amount"
+          maxValue={usdcBalance}
+          maxLabel="Balance"
+          disabled={isApproving || isCreatingLoan}
+          error={validationError}
+        />
+
+        {/* Loan Requirements */}
+        {(requiredCollateral || poolFunding) && (
+          <div className="bg-dark-gray rounded-lg p-4 space-y-2">
+            <h4 className="text-sm font-medium text-gray-300 mb-2">Loan Requirements</h4>
+            {requiredCollateral && (
+              <StatusItem
+                label="Required Collateral"
+                value={`${formatUSDC(requiredCollateral)} USDC`}
+                highlight
+              />
+            )}
+            {poolFunding && (
+              <StatusItem
+                label="Pool Funding Needed"
+                value={`${formatUSDC(poolFunding)} USDC`}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Transaction Notifications */}
+        {approvalTx.status === 'pending' && (
+          <TransactionNotification
+            hash={approvalTx.hash}
+            status="pending"
+            message="Approving USDC spending..."
+            autoHide={false}
           />
-        </div>
-
-        {requiredCollateral && (
-          <div className="text-sm text-gray-400">
-            Required Collateral: {formatUSDC(requiredCollateral)} USDC
-          </div>
         )}
 
-        {poolFunding && (
-          <div className="text-sm text-gray-400">
-            Pool Funding Needed: {formatUSDC(poolFunding)} USDC
-          </div>
+        {approvalTx.status === 'success' && (
+          <TransactionNotification
+            hash={approvalTx.hash}
+            status="success"
+            message="USDC approval successful!"
+          />
         )}
 
-        {error && <div className="text-sm text-red-400">{error}</div>}
+        {approvalTx.status === 'error' && (
+          <TransactionNotification
+            status="error"
+            message={approvalTx.error || "Approval failed"}
+            onClose={resetTransactionStates}
+          />
+        )}
 
+        {loanTx.status === 'pending' && (
+          <TransactionNotification
+            hash={loanTx.hash}
+            status="pending"
+            message="Creating loan..."
+            autoHide={false}
+          />
+        )}
+
+        {loanTx.status === 'success' && (
+          <TransactionNotification
+            hash={loanTx.hash}
+            status="success"
+            message="Loan created successfully!"
+            onClose={() => {
+              resetTransactionStates();
+              refetchLoanInfo();
+            }}
+          />
+        )}
+
+        {loanTx.status === 'error' && (
+          <TransactionNotification
+            status="error"
+            message={loanTx.error || "Loan creation failed"}
+            onClose={resetTransactionStates}
+          />
+        )}
+
+        {/* Action Button */}
         <TransactionButton
           onClick={needsApproval && !isApproveSuccess ? handleApprove : handleCreateLoan}
           disabled={isButtonDisabled}
@@ -106,10 +189,6 @@ export const BorrowForm = () => {
         >
           {statusText}
         </TransactionButton>
-
-        {isCreateLoanSuccess && (
-          <div className="text-teal-400 text-sm">✅ Loan created successfully!</div>
-        )}
       </div>
     </div>
   );
@@ -117,8 +196,8 @@ export const BorrowForm = () => {
 
 // RepayForm
 export const RepayForm = () => {
-  const { loanInfo } = useUserLoanInfo();
-  const { handleRepay, isRepaying, isRepaySuccess, error } = useRepayLoan();
+  const { loanInfo, refetch: refetchLoanInfo } = useUserLoanInfo();
+  const { handleRepay, repayTx, isRepaying, resetTransactionState } = useRepayLoan();
 
   const activeLoan = loanInfo && loanInfo.loanAmount && loanInfo.isActive;
 
@@ -133,54 +212,85 @@ export const RepayForm = () => {
           </p>
         </div>
 
-        {/* User Loan Info */}
+        {/* Current Loan Status */}
         {loanInfo && (
-          <div className="bg-dark-gray rounded-lg p-4 space-y-2">
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Active Loan</span>
-              <span className="text-white font-medium">{loanInfo.isActive ? 'Yes' : 'No'}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Loan Amount</span>
-              <span className="text-white font-medium">{formatUSDC(loanInfo.loanAmount)} USDC</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Collateral</span>
-              <span className="text-white font-medium">{formatUSDC(loanInfo.collateralAmount)} USDC</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Pool Funding</span>
-              <span className="text-white font-medium">{formatUSDC(loanInfo.poolFunding)} USDC</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Start Time</span>
-              <span className="text-white font-medium">{loanInfo.startTime ? new Date(Number(loanInfo.startTime) * 1000).toLocaleString() : '-'}</span>
-            </div>
-          </div>
+          <StatusCard 
+            title="Loan to Repay" 
+            status={loanInfo.isActive ? 'active' : 'inactive'}
+          >
+            <StatusItem 
+              label="Loan Amount" 
+              value={`${formatUSDC(loanInfo.loanAmount)} USDC`}
+              highlight={loanInfo.isActive}
+            />
+            <StatusItem 
+              label="Collateral" 
+              value={`${formatUSDC(loanInfo.marginAmount)} USDC`}
+            />
+            <StatusItem 
+              label="Pool Funding" 
+              value={`${formatUSDC(loanInfo.poolFunding)} USDC`}
+            />
+            <StatusItem 
+              label="Started" 
+              value={formatRelativeTime(loanInfo.startTime)}
+            />
+            {loanInfo.restrictedWallet && (
+              <StatusItem 
+                label="Restricted Wallet" 
+                value={
+                  <ExplorerLink address={loanInfo.restrictedWallet} showIcon={false}>
+                    {loanInfo.restrictedWallet.slice(0, 8)}...
+                  </ExplorerLink>
+                }
+              />
+            )}
+          </StatusCard>
         )}
 
-        {/* Loan Info/Empty State */}
+        {/* No Active Loan */}
         {!activeLoan && (
-          <div className="bg-dark-gray rounded-lg p-4 text-center">
-            <span className="text-sm text-gray-400">No active loan found.</span>
+          <div className="bg-dark-gray rounded-lg p-6 text-center border border-gray-600">
+            <div className="text-gray-400 mb-2">
+              <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <h4 className="text-lg font-medium text-white mb-2">No Active Loan</h4>
+            <p className="text-sm text-gray-400">
+              You don&apos;t have any active loans to repay at the moment.
+            </p>
           </div>
         )}
 
-        {/* Error */}
-        {error && <div className="text-sm text-red-400">{error}</div>}
-
-        {/* Transaction Feedback */}
-        {isRepaying && (
-          <div className="bg-dark-gray rounded-lg p-4 flex items-center space-x-3">
-            <span className="text-sm text-white font-medium">Repaying...</span>
-          </div>
+        {/* Transaction Notifications */}
+        {repayTx.status === 'pending' && (
+          <TransactionNotification
+            hash={repayTx.hash}
+            status="pending"
+            message="Repaying loan..."
+            autoHide={false}
+          />
         )}
 
-        {/* Success Message */}
-        {isRepaySuccess && (
-          <div className="bg-teal-400/20 border border-teal-400/30 rounded-lg p-4">
-            <span className="text-sm text-teal-400 font-medium">✅ Repay successful!</span>
-          </div>
+        {repayTx.status === 'success' && (
+          <TransactionNotification
+            hash={repayTx.hash}
+            status="success"
+            message="Loan repaid successfully!"
+            onClose={() => {
+              resetTransactionState();
+              refetchLoanInfo();
+            }}
+          />
+        )}
+
+        {repayTx.status === 'error' && (
+          <TransactionNotification
+            status="error"
+            message={repayTx.error || "Repay failed"}
+            onClose={resetTransactionState}
+          />
         )}
 
         {/* Action Button */}
@@ -190,8 +300,9 @@ export const RepayForm = () => {
           loading={isRepaying}
           size="lg"
           className="w-full"
+          variant={activeLoan ? 'primary' : 'secondary'}
         >
-          Repay Loan
+          {activeLoan ? 'Repay Loan' : 'No Loan to Repay'}
         </TransactionButton>
       </div>
     </div>

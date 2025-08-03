@@ -31,7 +31,7 @@ export const FaucetPage = () => {
         <h1 className="text-3xl font-bold text-white mb-4">MockUSDC Faucet</h1>
         <p className="text-gray-400 max-w-2xl mx-auto">
           Get test USDC tokens for the Invalend protocol. This faucet allows you to mint 
-          1000 USDC tokens for testing purposes on Arbitrum Sepolia testnet.
+          1000 USDC tokens for testing purposes on Lisk Sepolia testnet.
         </p>
       </div>
 
@@ -103,7 +103,7 @@ export const FaucetPage = () => {
             <div className="text-xs text-gray-400 space-y-2">
               <p>• Mint 1000 USDC tokens per transaction</p>
               <p>• Tokens are for testing purposes only</p>
-              <p>• No real value - Arbitrum Sepolia testnet</p>
+              <p>• No real value - Lisk Sepolia testnet</p>
               <p>• Use these tokens to test deposits and withdrawals</p>
             </div>
           </div>
@@ -113,7 +113,7 @@ export const FaucetPage = () => {
       {/* Network Info */}
       <div className="bg-dark-gray rounded-lg p-4 text-center">
         <p className="text-sm text-gray-400">
-          <span className="text-teal-400 font-medium">Network:</span> Arbitrum Sepolia Testnet
+          <span className="text-teal-400 font-medium">Network:</span> Lisk Sepolia Testnet
         </p>
         <p className="text-xs text-gray-500 mt-1">
           Make sure your wallet is connected to the correct network

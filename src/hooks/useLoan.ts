@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import {
   useAccount,
   useReadContract,
@@ -9,11 +9,20 @@ import {
 } from "wagmi";
 import { CONTRACT_CONFIGS } from "@/config/contracts";
 import { parseUSDC } from "@/utils/formatters";
+import { validateLoanAmount, getTransactionErrorMessage } from "@/utils/validation";
+
+export type TransactionState = {
+  hash?: string;
+  status: 'idle' | 'pending' | 'success' | 'error';
+  error?: string;
+};
 
 export const useCreateLoan = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [validationError, setValidationError] = useState<string>("");
+  const [approvalTx, setApprovalTx] = useState<TransactionState>({ status: 'idle' });
+  const [loanTx, setLoanTx] = useState<TransactionState>({ status: 'idle' });
 
   const amountRaw = useMemo(() => parseUSDC(amount || "0"), [amount]);
 
@@ -34,7 +43,7 @@ export const useCreateLoan = () => {
   const { data: requiredCollateral, refetch: refetchCollateral } =
     useReadContract({
       ...CONTRACT_CONFIGS.LOAN_MANAGER,
-      functionName: "getRequiredCollateral",
+      functionName: "getRequiredMargin",
       args: [amountRaw],
       query: { enabled: amountRaw > BigInt(0) },
     });
@@ -50,28 +59,63 @@ export const useCreateLoan = () => {
   const { writeContract: createLoan, data: createLoanHash } =
     useWriteContract();
 
-  const { isLoading: isApproving, isSuccess: isApproveSuccess } =
+  const { isLoading: isApproving, isSuccess: isApproveSuccess, isError: isApproveError } =
     useWaitForTransactionReceipt({ hash: approveHash });
 
-  const { isLoading: isCreatingLoan, isSuccess: isCreateLoanSuccess } =
+  const { isLoading: isCreatingLoan, isSuccess: isCreateLoanSuccess, isError: isCreateLoanError } =
     useWaitForTransactionReceipt({ hash: createLoanHash });
+
+  // Validation
+  const validationResult = useMemo(() => {
+    return validateLoanAmount(amount, usdcBalance);
+  }, [amount, usdcBalance]);
+
+  useEffect(() => {
+    setValidationError(validationResult || "");
+  }, [validationResult]);
+
+  // Update approval transaction state
+  useEffect(() => {
+    if (approveHash) {
+      setApprovalTx({ status: 'pending', hash: approveHash });
+    }
+  }, [approveHash]);
 
   useEffect(() => {
     if (isApproveSuccess) {
+      setApprovalTx(prev => ({ ...prev, status: 'success' }));
       refetchAllowance();
       refetchCollateral();
       refetchFunding();
-      setError("");
     }
   }, [isApproveSuccess, refetchAllowance, refetchCollateral, refetchFunding]);
 
   useEffect(() => {
+    if (isApproveError) {
+      setApprovalTx(prev => ({ ...prev, status: 'error', error: 'Approval failed' }));
+    }
+  }, [isApproveError]);
+
+  // Update loan transaction state
+  useEffect(() => {
+    if (createLoanHash) {
+      setLoanTx({ status: 'pending', hash: createLoanHash });
+    }
+  }, [createLoanHash]);
+
+  useEffect(() => {
     if (isCreateLoanSuccess) {
+      setLoanTx(prev => ({ ...prev, status: 'success' }));
       refetchBalance();
       setAmount("");
-      setError("");
     }
   }, [isCreateLoanSuccess, refetchBalance]);
+
+  useEffect(() => {
+    if (isCreateLoanError) {
+      setLoanTx(prev => ({ ...prev, status: 'error', error: 'Loan creation failed' }));
+    }
+  }, [isCreateLoanError]);
 
   const needsApproval = useMemo(() => {
     if (!allowance) return true;
@@ -79,14 +123,13 @@ export const useCreateLoan = () => {
   }, [allowance, amountRaw]);
 
   const isValidAmount = useMemo(() => {
-    if (!amountRaw || !usdcBalance || amountRaw <= BigInt(0)) return false;
-    if (amountRaw > usdcBalance) return false;
-    return true;
-  }, [amountRaw, usdcBalance]);
+    return !validationError && amountRaw > BigInt(0);
+  }, [validationError, amountRaw]);
 
-  const handleApprove = async () => {
-    if (!address || amountRaw <= BigInt(0)) return;
-    setError("");
+  const handleApprove = useCallback(async () => {
+    if (!address || !isValidAmount) return;
+    setApprovalTx({ status: 'idle' });
+    
     try {
       await approve({
         ...CONTRACT_CONFIGS.MOCK_USDC,
@@ -98,17 +141,19 @@ export const useCreateLoan = () => {
       });
     } catch (err: unknown) {
       console.error("Approval error:", err);
-      setError("Approval failed.");
+      const errorMessage = getTransactionErrorMessage(err);
+      setApprovalTx({ status: 'error', error: errorMessage });
     }
-  };
+  }, [address, isValidAmount, approve]);
 
-  const handleCreateLoan = async () => {
-    if (!address || amountRaw <= BigInt(0)) return;
+  const handleCreateLoan = useCallback(async () => {
+    if (!address || !isValidAmount) return;
     if (needsApproval) {
-      setError("Please approve USDC first.");
+      setLoanTx({ status: 'error', error: 'Please approve USDC first' });
       return;
     }
-    setError("");
+    setLoanTx({ status: 'idle' });
+    
     try {
       await createLoan({
         ...CONTRACT_CONFIGS.LOAN_MANAGER,
@@ -117,15 +162,21 @@ export const useCreateLoan = () => {
       });
     } catch (err: unknown) {
       console.error("CreateLoan error:", err);
-      setError("Loan creation failed.");
+      const errorMessage = getTransactionErrorMessage(err);
+      setLoanTx({ status: 'error', error: errorMessage });
     }
-  };
+  }, [address, isValidAmount, needsApproval, createLoan, amountRaw]);
+
+  const resetTransactionStates = useCallback(() => {
+    setApprovalTx({ status: 'idle' });
+    setLoanTx({ status: 'idle' });
+    setValidationError("");
+  }, []);
 
   return {
     amount,
     setAmount,
-    error,
-    setError,
+    validationError,
     usdcBalance,
     allowance,
     requiredCollateral,
@@ -136,8 +187,11 @@ export const useCreateLoan = () => {
     isCreatingLoan,
     isApproveSuccess,
     isCreateLoanSuccess,
+    approvalTx,
+    loanTx,
     handleApprove,
     handleCreateLoan,
+    resetTransactionStates,
     refetchAllowance,
     refetchBalance,
     refetchCollateral,
@@ -159,7 +213,7 @@ export const useUserLoanInfo = () => {
   const info = loanInfoRaw
     ? {
         loanAmount: loanInfoRaw.loanAmount,
-        collateralAmount: loanInfoRaw.collateralAmount,
+        marginAmount: loanInfoRaw.marginAmount,
         poolFunding: loanInfoRaw.poolFunding,
         startTime: loanInfoRaw.startTime,
         restrictedWallet: loanInfoRaw.restrictedWallet,
@@ -172,37 +226,56 @@ export const useUserLoanInfo = () => {
 
 // Hook: useRepayLoan
 export const useRepayLoan = () => {
-  const [isRepaying, setIsRepaying] = useState(false);
-  const [isRepaySuccess, setIsRepaySuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [repayTx, setRepayTx] = useState<TransactionState>({ status: 'idle' });
 
   // Repay transaction
   const { writeContract: repayLoan, data: repayHash } = useWriteContract();
-  const { isLoading: isRepayingTx, isSuccess: isRepayTxSuccess } = useWaitForTransactionReceipt({ hash: repayHash });
+  const { isLoading: isRepayingTx, isSuccess: isRepayTxSuccess, isError: isRepayTxError } = 
+    useWaitForTransactionReceipt({ hash: repayHash });
 
-  const handleRepay = async () => {
-    setError("");
-    setIsRepaying(true);
+  // Update repay transaction state
+  useEffect(() => {
+    if (repayHash) {
+      setRepayTx({ status: 'pending', hash: repayHash });
+    }
+  }, [repayHash]);
+
+  useEffect(() => {
+    if (isRepayTxSuccess) {
+      setRepayTx(prev => ({ ...prev, status: 'success' }));
+    }
+  }, [isRepayTxSuccess]);
+
+  useEffect(() => {
+    if (isRepayTxError) {
+      setRepayTx(prev => ({ ...prev, status: 'error', error: 'Repay failed' }));
+    }
+  }, [isRepayTxError]);
+
+  const handleRepay = useCallback(async () => {
+    setRepayTx({ status: 'idle' });
     try {
       await repayLoan({
         ...CONTRACT_CONFIGS.LOAN_MANAGER,
         functionName: "repayLoan",
         args: [],
       });
-      setIsRepaySuccess(true);
     } catch (err: unknown) {
       console.error("Repay error:", err);
-      setError("Repay failed.");
-    } finally {
-      setIsRepaying(false);
+      const errorMessage = err instanceof Error ? err.message : 'Repay failed';
+      setRepayTx({ status: 'error', error: errorMessage });
     }
-  };
+  }, [repayLoan]);
+
+  const resetTransactionState = useCallback(() => {
+    setRepayTx({ status: 'idle' });
+  }, []);
 
   return {
     handleRepay,
-    isRepaying: isRepaying || isRepayingTx,
-    isRepaySuccess: isRepaySuccess || isRepayTxSuccess,
-    error,
-    setError,
+    repayTx,
+    isRepaying: isRepayingTx,
+    isRepaySuccess: isRepayTxSuccess,
+    resetTransactionState,
   };
 };

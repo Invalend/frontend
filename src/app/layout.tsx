@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Invalend - Leverage DeFi Protocol",
-  description: "Invalend is a leverage DeFi protocol based on EigenLayer with 20/80 prefunding model",
+  description: "Invalend is a leverage DeFi protocol with 20/80 prefunding model",
 };
 
 export default function RootLayout({
