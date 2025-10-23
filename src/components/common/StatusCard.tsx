@@ -37,9 +37,9 @@ export const StatusCard = ({
   };
 
   return (
-    <div className={`bg-dark-gray rounded-lg border border-gray-700 p-4 ${className}`}>
+    <div className={`bg-[#1E1E1E] rounded-lg border border-[rgba(6,182,212,0.15)] p-4 ${className}`}>
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-sm font-medium text-gray-300">{title}</h4>
+        <h4 className="text-sm font-normal text-white" style={{ fontFamily: 'Space Grotesk' }}>{title}</h4>
         {getStatusBadge()}
       </div>
       <div className="space-y-2">
@@ -58,8 +58,8 @@ interface StatusItemProps {
 export const StatusItem = ({ label, value, highlight = false }: StatusItemProps) => {
   return (
     <div className="flex justify-between items-center">
-      <span className="text-sm text-gray-400">{label}</span>
-      <span className={`text-sm font-medium ${highlight ? 'text-teal-400' : 'text-white'}`}>
+      <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>{label}</span>
+      <span className={`text-sm font-normal ${highlight ? 'text-[#06B6D4]' : 'text-white'}`} style={{ fontFamily: 'Space Grotesk' }}>
         {value}
       </span>
     </div>

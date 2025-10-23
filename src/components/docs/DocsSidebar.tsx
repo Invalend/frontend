@@ -115,12 +115,15 @@ export default function DocsSidebar({ className = '' }: DocsSidebarProps) {
 
   const SidebarContent = () => (
     <div className={`w-64 flex-shrink-0 ${className}`}>
-      <div className="h-full bg-gray-900/50 backdrop-blur-sm border-r border-gray-800">
+      <div className="h-full bg-[#0A0A0A] backdrop-blur-sm border-r border-[rgba(6,182,212,0.15)]">
         <div className="p-6">
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-white mb-2">Documentation</h2>
-            <p className="text-sm text-gray-400">
+            <h2 className="text-lg font-normal text-white mb-2" style={{ 
+              fontFamily: 'Space Grotesk',
+              letterSpacing: '-0.5px'
+            }}>Documentation</h2>
+            <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               Complete guide to Invalend Protocol
             </p>
           </div>
@@ -133,8 +136,8 @@ export default function DocsSidebar({ className = '' }: DocsSidebarProps) {
               return (
                 <div key={section.title}>
                   <div className="flex items-center gap-2 mb-3">
-                    <Icon className="w-4 h-4 text-teal-500" />
-                    <h3 className="text-sm font-medium text-white">
+                    <Icon className="w-4 h-4 text-[#06B6D4]" />
+                    <h3 className="text-sm font-normal text-white" style={{ fontFamily: 'Space Grotesk' }}>
                       {section.title}
                     </h3>
                   </div>
@@ -149,24 +152,25 @@ export default function DocsSidebar({ className = '' }: DocsSidebarProps) {
                           {isAvailable ? (
                             <Link
                               href={item.href}
-                              className={`flex items-center justify-between group py-2 px-3 rounded-lg text-sm transition-all duration-200 ${
+                              className={`flex items-center justify-between group py-2 px-3 rounded-lg text-sm transition-all duration-200 font-normal ${
                                 isActive
-                                  ? 'bg-teal-500/20 text-teal-400 border-l-2 border-teal-500'
-                                  : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
+                                  ? 'bg-[#06B6D4]/20 text-[#06B6D4] border-l-2 border-[#06B6D4]'
+                                  : 'text-[#A3A3A3] hover:text-white hover:bg-[#1E1E1E]/50'
                               }`}
+                              style={{ fontFamily: 'Space Grotesk' }}
                             >
                               <span>{item.title}</span>
                               {item.external && (
                                 <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                               )}
                               {isActive && (
-                                <ChevronRight className="w-3 h-3 text-teal-500" />
+                                <ChevronRight className="w-3 h-3 text-[#06B6D4]" />
                               )}
                             </Link>
                           ) : (
-                            <div className="flex items-center justify-between py-2 px-3 text-sm text-gray-600 cursor-not-allowed">
+                            <div className="flex items-center justify-between py-2 px-3 text-sm text-[#A3A3A3] cursor-not-allowed font-normal" style={{ fontFamily: 'Space Grotesk' }}>
                               <span>{item.title}</span>
-                              <span className="text-xs bg-gray-800 px-2 py-1 rounded text-gray-500">
+                              <span className="text-xs bg-[#1E1E1E] px-2 py-1 rounded text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
                                 Soon
                               </span>
                             </div>
@@ -181,10 +185,10 @@ export default function DocsSidebar({ className = '' }: DocsSidebarProps) {
           </nav>
 
           {/* Footer */}
-          <div className="mt-8 pt-6 border-t border-gray-800">
-            <div className="text-xs text-gray-500 space-y-2">
+          <div className="mt-8 pt-6 border-t border-[rgba(6,182,212,0.15)]">
+            <div className="text-xs text-[#A3A3A3] space-y-2 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-[#06B6D4] rounded-full animate-pulse"></div>
                 <span>Live Documentation</span>
               </div>
               <p>Updated regularly with new features and guides</p>
@@ -200,7 +204,7 @@ export default function DocsSidebar({ className = '' }: DocsSidebarProps) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-900 border border-gray-700 rounded-lg text-white hover:bg-gray-800 transition-colors"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#0A0A0A] border border-[rgba(6,182,212,0.15)] rounded-lg text-white hover:bg-[#1E1E1E] transition-colors"
       >
         <Menu className="w-5 h-5" />
       </button>
@@ -218,7 +222,7 @@ export default function DocsSidebar({ className = '' }: DocsSidebarProps) {
             <div className="absolute top-4 right-4">
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 bg-gray-900 border border-gray-700 rounded-lg text-white hover:bg-gray-800 transition-colors"
+                className="p-2 bg-[#0A0A0A] border border-[rgba(6,182,212,0.15)] rounded-lg text-white hover:bg-[#1E1E1E] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

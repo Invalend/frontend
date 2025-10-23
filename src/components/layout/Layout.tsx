@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Header } from "@/components/layout/Header";
-import { Navigation } from "@/components/layout/Navigation";
+import AppNavbar from "./AppNavbar";
 import { PoolPage } from "@/components/pool/PoolPage";
 import { FaucetPage } from "@/components/faucet/FaucetPage";
 import { TradingPage } from "@/components/trading";
@@ -34,45 +33,68 @@ export const Layout = () => {
     switch (activeTab) {
       case "dashboard":
         return (
-          <div className="w-full ">
-            <div className="max-w-6xl mx-auto space-y-6">
-              {/* Welcome Section */}
-              <div className="bg-black rounded-xl border border-gray-700 p-6">
-              <div className="flex items-center justify-between mb-4">
+          <div className="w-full space-y-8">
+            {/* Welcome Section */}
+            <div className="bg-[#141414] rounded-lg border border-[rgba(6,182,212,0.15)] p-8">
+              <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-2xl font-bold text-white">Welcome to Invalend</h1>
-                  <p className="text-gray-400 mt-1">Your decentralized lending & trading platform</p>
+                  <h1 className="text-4xl font-normal text-white mb-2" style={{ 
+                    fontFamily: 'Space Grotesk',
+                    letterSpacing: '-1px',
+                    lineHeight: '1.1'
+                  }}>
+                    Welcome to Invalend
+                  </h1>
+                  <p className="text-[#A3A3A3] text-lg" style={{ 
+                    fontFamily: 'Space Grotesk',
+                    lineHeight: '1.6'
+                  }}>
+                    Your decentralized lending & trading platform
+                  </p>
                 </div>
-                <div className="bg-teal-400/20 text-teal-400 px-3 py-1 rounded-full text-sm font-medium">
+                <div className="bg-[#06B6D4]/10 text-[#06B6D4] px-4 py-2 rounded-lg text-sm font-normal border border-[#06B6D4]/20">
                   Beta
                 </div>
               </div>
               
               {/* Quick Stats */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
-                  <div className="text-gray-400 text-sm mb-1">Total Value Locked</div>
-                  <div className="text-white font-bold text-xl">$2.4M</div>
-                  <div className="text-teal-400 text-xs">+12.5% this month</div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+                  <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Total Value Locked</div>
+                  <div className="text-white text-2xl font-normal mb-1" style={{ 
+                    fontFamily: 'Space Grotesk',
+                    letterSpacing: '-0.5px'
+                  }}>$2.4M</div>
+                  <div className="text-[#06B6D4] text-xs font-normal">+12.5% this month</div>
                 </div>
-                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
-                  <div className="text-gray-400 text-sm mb-1">Active Loans</div>
-                  <div className="text-white font-bold text-xl">156</div>
-                  <div className="text-teal-400 text-xs">8 new today</div>
+                <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+                  <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Active Loans</div>
+                  <div className="text-white text-2xl font-normal mb-1" style={{ 
+                    fontFamily: 'Space Grotesk',
+                    letterSpacing: '-0.5px'
+                  }}>156</div>
+                  <div className="text-[#06B6D4] text-xs font-normal">8 new today</div>
                 </div>
-                <div className="bg-gradient-to-br from-teal-500/10 to-teal-600/5 rounded-lg p-4 border border-teal-500/30">
-                  <div className="text-gray-400 text-sm mb-1">Current APY</div>
-                  <div className="text-teal-400 font-bold text-xl">6.2%</div>
-                  <div className="text-teal-400/70 text-xs">Fixed rate</div>
+                <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.3)]">
+                  <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Current APY</div>
+                  <div className="text-[#06B6D4] text-2xl font-normal mb-1" style={{ 
+                    fontFamily: 'Space Grotesk',
+                    letterSpacing: '-0.5px'
+                  }}>6.2%</div>
+                  <div className="text-[#06B6D4]/70 text-xs font-normal">Fixed rate</div>
                 </div>
               </div>
             </div>
 
             {/* Pool Overview */}
-            <div className="bg-black rounded-xl border border-gray-700 p-6">
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <div className="w-6 h-6 bg-teal-500 rounded-lg flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <div className="bg-[#141414] rounded-lg border border-[rgba(6,182,212,0.15)] p-8">
+              <h2 className="text-2xl font-normal text-white mb-6 flex items-center gap-3" style={{ 
+                fontFamily: 'Space Grotesk',
+                letterSpacing: '-0.5px',
+                lineHeight: '1.2'
+              }}>
+                <div className="w-8 h-8 bg-[#06B6D4]/10 rounded-lg flex items-center justify-center border border-[#06B6D4]/20">
+                  <svg className="w-4 h-4 text-[#06B6D4]" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" />
                   </svg>
                 </div>
@@ -82,10 +104,14 @@ export const Layout = () => {
             </div>
             
             {/* Your Portfolio */}
-            <div className="bg-black rounded-xl border border-gray-700 p-6">
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <div className="w-6 h-6 bg-blue-500 rounded-lg flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <div className="bg-[#141414] rounded-lg border border-[rgba(6,182,212,0.15)] p-8">
+              <h2 className="text-2xl font-normal text-white mb-6 flex items-center gap-3" style={{ 
+                fontFamily: 'Space Grotesk',
+                letterSpacing: '-0.5px',
+                lineHeight: '1.2'
+              }}>
+                <div className="w-8 h-8 bg-[#06B6D4]/10 rounded-lg flex items-center justify-center border border-[#06B6D4]/20">
+                  <svg className="w-4 h-4 text-[#06B6D4]" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clipRule="evenodd" />
                   </svg>
                 </div>
@@ -93,52 +119,67 @@ export const Layout = () => {
               </h2>
               
               {/* Portfolio Tabs */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Lending Position */}
-                <div className="space-y-4">
-                  <h3 className="text-white font-medium">Lending Position</h3>
-                  <div className="space-y-3">
-                    <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
-                      <div className="text-gray-400 text-sm mb-1">USDC Deposited</div>
-                      <div className="text-white font-bold text-lg">
+                <div className="space-y-6">
+                  <h3 className="text-white text-xl font-normal" style={{ 
+                    fontFamily: 'Space Grotesk',
+                    letterSpacing: '-0.5px'
+                  }}>Lending Position</h3>
+                  <div className="space-y-4">
+                    <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+                      <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>USDC Deposited</div>
+                      <div className="text-white text-xl font-normal mb-1" style={{ 
+                        fontFamily: 'Space Grotesk',
+                        letterSpacing: '-0.5px'
+                      }}>
                         {isLoadingPool ? (
                           <LoadingSpinner size="sm" />
                         ) : (
                           `$${userInfo?.shares || "0"}`
                         )}
                       </div>
-                      <div className="text-gray-500 text-xs">Available for lending</div>
+                      <div className="text-[#A3A3A3] text-xs font-normal">Available for lending</div>
                     </div>
-                    <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
-                      <div className="text-gray-400 text-sm mb-1">Asset Value</div>
-                      <div className="text-teal-400 font-bold text-lg">
+                    <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+                      <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Asset Value</div>
+                      <div className="text-[#06B6D4] text-xl font-normal mb-1" style={{ 
+                        fontFamily: 'Space Grotesk',
+                        letterSpacing: '-0.5px'
+                      }}>
                         {isLoadingPool ? (
                           <LoadingSpinner size="sm" />
                         ) : (
                           `$${userInfo?.assetValue || "0"}`
                         )}
                       </div>
-                      <div className="text-gray-500 text-xs">Current value with earnings</div>
+                      <div className="text-[#A3A3A3] text-xs font-normal">Current value with earnings</div>
                     </div>
-                    <div className="bg-gradient-to-br from-teal-500/10 to-teal-600/5 rounded-lg p-4 border border-teal-500/30">
-                      <div className="text-gray-400 text-sm mb-1">Current APY</div>
-                      <div className="text-teal-400 font-bold text-lg">
+                    <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.3)]">
+                      <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Current APY</div>
+                      <div className="text-[#06B6D4] text-xl font-normal mb-1" style={{ 
+                        fontFamily: 'Space Grotesk',
+                        letterSpacing: '-0.5px'
+                      }}>
                         {isLoadingPool ? (
                           <LoadingSpinner size="sm" />
                         ) : (
                           `${poolStats?.apy || "0"}%`
                         )}
                       </div>
-                      <div className="text-teal-400/70 text-xs">Annual yield</div>
+                      <div className="text-[#06B6D4]/70 text-xs font-normal">Annual yield</div>
                     </div>
                     
                     {/* Withdraw Section */}
                     {userInfo && parseFloat(userInfo.shares) > 0 && (
-                      <div className="bg-black/50 rounded-lg p-4 border border-gray-700">
-                        <h4 className="text-white font-medium mb-3">Withdraw Funds</h4>
-                        <div className="space-y-3">
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-300">
+                      <div className="bg-[#0A0A0A] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+                        <h4 className="text-white text-lg font-normal mb-4" style={{ 
+                          fontFamily: 'Space Grotesk',
+                          letterSpacing: '-0.5px'
+                        }}>Withdraw Funds</h4>
+                        <div className="space-y-4">
+                          <div className="space-y-3">
+                            <label className="block text-sm font-normal text-[#A3A3A3]" style={{ fontFamily: 'Space Grotesk' }}>
                               Shares to Withdraw
                             </label>
                             <div className="relative">
@@ -148,17 +189,19 @@ export const Layout = () => {
                                 onChange={(e) => setWithdrawAmount(e.target.value)}
                                 placeholder="0.00"
                                 disabled={isWithdrawing}
-                                className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed pr-16"
+                                className="w-full px-4 py-3 bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg text-white placeholder-[#A3A3A3] focus:outline-none focus:border-[#06B6D4] disabled:opacity-50 disabled:cursor-not-allowed pr-16 transition-colors"
+                                style={{ fontFamily: 'Space Grotesk' }}
                               />
                               <button
                                 onClick={() => setWithdrawAmount(withdrawableShares)}
                                 disabled={isWithdrawing}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-xs font-medium text-teal-400 hover:text-teal-300 border border-teal-500/30 rounded-md hover:border-teal-400/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-xs font-normal text-[#06B6D4] hover:text-[#06B6D4]/80 border border-[#06B6D4]/30 rounded-md hover:border-[#06B6D4]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{ fontFamily: 'Space Grotesk' }}
                               >
                                 Max
                               </button>
                             </div>
-                            <div className="text-xs text-gray-400">
+                            <div className="text-xs text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
                               Available: {withdrawableShares} shares
                             </div>
                           </div>
@@ -179,28 +222,39 @@ export const Layout = () => {
                 </div>
 
                 {/* Trading Position */}
-                <div className="space-y-4">
-                  <h3 className="text-white font-medium">Trading Position</h3>
-                  <div className="space-y-3">
-                    <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
-                      <div className="text-gray-400 text-sm mb-1">Active Loan</div>
-                      <div className="text-white font-bold text-lg">$12,500</div>
-                      <div className="text-gray-500 text-xs">Borrowed for trading</div>
+                <div className="space-y-6">
+                  <h3 className="text-white text-xl font-normal" style={{ 
+                    fontFamily: 'Space Grotesk',
+                    letterSpacing: '-0.5px'
+                  }}>Trading Position</h3>
+                  <div className="space-y-4">
+                    <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+                      <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Active Loan</div>
+                      <div className="text-white text-xl font-normal mb-1" style={{ 
+                        fontFamily: 'Space Grotesk',
+                        letterSpacing: '-0.5px'
+                      }}>$12,500</div>
+                      <div className="text-[#A3A3A3] text-xs font-normal">Borrowed for trading</div>
                     </div>
-                    <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700/50">
-                      <div className="text-gray-400 text-sm mb-1">Collateral</div>
-                      <div className="text-white font-bold text-lg">$2,500</div>
-                      <div className="text-gray-500 text-xs">Margin requirement</div>
+                    <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+                      <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Collateral</div>
+                      <div className="text-white text-xl font-normal mb-1" style={{ 
+                        fontFamily: 'Space Grotesk',
+                        letterSpacing: '-0.5px'
+                      }}>$2,500</div>
+                      <div className="text-[#A3A3A3] text-xs font-normal">Margin requirement</div>
                     </div>
-                    <div className="bg-gradient-to-br from-teal-500/10 to-teal-600/5 rounded-lg p-4 border border-teal-500/30">
-                      <div className="text-gray-400 text-sm mb-1">P&L</div>
-                      <div className="text-teal-400 font-bold text-lg">+$387</div>
-                      <div className="text-teal-400/70 text-xs">Unrealized gains</div>
+                    <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.3)]">
+                      <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>P&L</div>
+                      <div className="text-[#06B6D4] text-xl font-normal mb-1" style={{ 
+                        fontFamily: 'Space Grotesk',
+                        letterSpacing: '-0.5px'
+                      }}>+$387</div>
+                      <div className="text-[#06B6D4]/70 text-xs font-normal">Unrealized gains</div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
             </div>
           </div>
         );
@@ -210,7 +264,7 @@ export const Layout = () => {
         return (
           <div className="space-y-8">
             <div className="space-y-6">
-              <div className="bg-black rounded-xl border border-gray-700 p-0 max-w-md mx-auto">
+              <div className="bg-[#141414] rounded-lg border border-[rgba(6,182,212,0.15)] p-0 max-w-md mx-auto">
                 <LoanTabSwitch />
               </div>
             </div>
@@ -233,11 +287,14 @@ export const Layout = () => {
     }
   };
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab as TabType);
+  };
+
   return (
-    <div className="min-h-screen bg-black">
-      <Header />
-      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
+      <AppNavbar activeTab={activeTab} onTabChange={handleTabChange} />
+      <main id="main-content" className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 py-16 pt-24">
         {renderActiveTab()}
       </main>
     </div>
@@ -250,29 +307,31 @@ const LoanTabSwitch = () => {
   
   return (
     <>
-      <div className="flex border-b border-gray-700">
+      <div className="flex border-b border-[rgba(6,182,212,0.15)]">
         <button
-          className={`flex-1 py-3 text-center font-medium text-sm transition-colors rounded-tl-xl ${
+          className={`flex-1 py-4 text-center font-normal text-sm transition-colors rounded-tl-lg ${
             activeTab === 'borrow'
-              ? 'text-teal-400 border-b-2 border-teal-400 bg-gray-800'
-              : 'text-gray-300 hover:text-white hover:bg-gray-800'
+              ? 'text-[#06B6D4] border-b border-[#06B6D4] bg-[#1E1E1E]'
+              : 'text-[#A3A3A3] hover:text-white hover:bg-[#1E1E1E]'
           }`}
           onClick={() => setActiveTab('borrow')}
+          style={{ fontFamily: 'Space Grotesk' }}
         >
           Borrow
         </button>
         <button
-          className={`flex-1 py-3 text-center font-medium text-sm transition-colors rounded-tr-xl ${
+          className={`flex-1 py-4 text-center font-normal text-sm transition-colors rounded-tr-lg ${
             activeTab === 'repay'
-              ? 'text-teal-400 border-b-2 border-teal-400 bg-gray-800'
-              : 'text-gray-300 hover:text-white hover:bg-gray-800'
+              ? 'text-[#06B6D4] border-b border-[#06B6D4] bg-[#1E1E1E]'
+              : 'text-[#A3A3A3] hover:text-white hover:bg-[#1E1E1E]'
           }`}
           onClick={() => setActiveTab('repay')}
+          style={{ fontFamily: 'Space Grotesk' }}
         >
           Repay
         </button>
       </div>
-      <div className="p-6">
+      <div className="p-8">
         {activeTab === 'borrow' ? <BorrowForm /> : <RepayForm />}
       </div>
     </>

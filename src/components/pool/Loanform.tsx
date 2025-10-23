@@ -47,12 +47,16 @@ export const BorrowForm = () => {
   };
 
   return (
-    <div className="bg-black rounded-lg p-6 border border-gray-700">
+    <div className="bg-[#0A0A0A] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-2">Borrow USDC</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="text-lg font-normal text-white mb-2" style={{ 
+            fontFamily: 'Space Grotesk',
+            letterSpacing: '-0.5px',
+            lineHeight: '1.2'
+          }}>Borrow USDC</h3>
+          <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
             Borrow USDC with collateral. Monitor your loan and repay anytime.
           </p>
         </div>
@@ -202,12 +206,16 @@ export const RepayForm = () => {
   const activeLoan = loanInfo && loanInfo.loanAmount && loanInfo.isActive;
 
   return (
-    <div className="bg-black rounded-lg p-6 border border-gray-700">
+    <div className="bg-[#0A0A0A] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
       <div className="space-y-6">
         {/* Header */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-2">Repay Loan</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="text-lg font-normal text-white mb-2" style={{ 
+            fontFamily: 'Space Grotesk',
+            letterSpacing: '-0.5px',
+            lineHeight: '1.2'
+          }}>Repay Loan</h3>
+          <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
             Repay your active loan to unlock your collateral.
           </p>
         </div>
@@ -250,14 +258,17 @@ export const RepayForm = () => {
 
         {/* No Active Loan */}
         {!activeLoan && (
-          <div className="bg-dark-gray rounded-lg p-6 text-center border border-gray-600">
-            <div className="text-gray-400 mb-2">
+          <div className="bg-[#1E1E1E] rounded-lg p-6 text-center border border-[rgba(6,182,212,0.15)]">
+            <div className="text-[#A3A3A3] mb-2">
               <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
             </div>
-            <h4 className="text-lg font-medium text-white mb-2">No Active Loan</h4>
-            <p className="text-sm text-gray-400">
+            <h4 className="text-lg font-normal text-white mb-2" style={{ 
+              fontFamily: 'Space Grotesk',
+              letterSpacing: '-0.5px'
+            }}>No Active Loan</h4>
+            <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               You don&apos;t have any active loans to repay at the moment.
             </p>
           </div>

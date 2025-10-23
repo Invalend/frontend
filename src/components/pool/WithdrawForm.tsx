@@ -31,29 +31,36 @@ export const WithdrawForm = () => {
   }, [isWithdrawSuccess, resetStates]);
 
   return (
-    <div className="bg-black rounded-lg p-6 border border-gray-700">
-      <div className="space-y-6">
+    <div className="bg-[#0A0A0A] rounded-lg p-8 border border-[rgba(6,182,212,0.15)]">
+      <div className="space-y-8">
 
         {/* Header */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-2">Withdraw USDC</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="text-2xl font-normal text-white mb-3" style={{ 
+            fontFamily: 'Space Grotesk',
+            letterSpacing: '-0.5px',
+            lineHeight: '1.2'
+          }}>Withdraw USDC</h3>
+          <p className="text-lg text-[#A3A3A3]" style={{ 
+            fontFamily: 'Space Grotesk',
+            lineHeight: '1.6'
+          }}>
             Withdraw your shares and redeem USDC from the pool.
           </p>
         </div>
 
         {/* User Info */}
         {userInfo && (
-          <div className="bg-dark-gray rounded-lg p-4 space-y-2">
+          <div className="bg-[#1E1E1E] rounded-lg p-6 space-y-4">
             <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Your Shares</span>
-              <span className="text-white font-medium">
+              <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Your Shares</span>
+              <span className="text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>
                 {userInfo.shares} Shares
               </span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-400">Asset Value</span>
-              <span className="text-white font-medium">
+              <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Asset Value</span>
+              <span className="text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>
                 {userInfo.assetValue} USDC
               </span>
             </div>
@@ -61,21 +68,21 @@ export const WithdrawForm = () => {
         )}
 
         {/* Withdrawable Info */}
-        <div className="bg-dark-gray rounded-lg p-4">
+        <div className="bg-[#1E1E1E] rounded-lg p-6">
           <div className="flex justify-between">
-            <span className="text-sm text-gray-400">Withdrawable Shares</span>
-            <span className="text-white font-medium">
+            <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Withdrawable Shares</span>
+            <span className="text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               {withdrawableShares} Shares
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-[#A3A3A3] mt-2 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
             You can redeem your shares anytime. Asset value may fluctuate based on pool performance.
           </p>
         </div>
 
         {/* Amount Input */}
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
+        <div className="space-y-4">
+          <label className="block text-sm font-normal text-[#A3A3A3]" style={{ fontFamily: 'Space Grotesk' }}>
             Shares to Withdraw
           </label>
           <div className="relative">
@@ -88,19 +95,21 @@ export const WithdrawForm = () => {
               }}
               placeholder="0.00"
               disabled={!hasShares || isWithdrawing}
-              className="w-full bg-dark-gray border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg px-4 py-3 text-white placeholder-[#A3A3A3] focus:outline-none focus:border-[#06B6D4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              style={{ fontFamily: 'Space Grotesk' }}
             />
             <button
               type="button"
               onClick={handleMaxClick}
               disabled={!hasShares || isWithdrawing}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-teal-400 hover:text-teal-300 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-[#06B6D4] hover:text-[#06B6D4]/80 font-normal disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ fontFamily: 'Space Grotesk' }}
             >
               MAX
             </button>
           </div>
           {amount && !isValidAmount && (
-            <p className="text-sm text-red-400">
+            <p className="text-sm text-red-400 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               {parseFloat(amount) <= 0
                 ? 'Amount must be greater than 0'
                 : 'Amount exceeds your shares'}
@@ -115,19 +124,19 @@ export const WithdrawForm = () => {
 
         {/* Transaction Feedback */}
         {isWithdrawing && (
-          <div className="bg-dark-gray rounded-lg p-4 flex items-center space-x-3">
+          <div className="bg-[#1E1E1E] rounded-lg p-6 flex items-center space-x-4">
             <LoadingSpinner size="sm" />
             <div>
-              <p className="text-sm text-white font-medium">Processing withdrawal...</p>
-              <p className="text-xs text-gray-400">Please wait for confirmation.</p>
+              <p className="text-sm text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>Processing withdrawal...</p>
+              <p className="text-xs text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Please wait for confirmation.</p>
             </div>
           </div>
         )}
 
         {/* Success Message */}
         {isWithdrawSuccess && (
-          <div className="bg-teal-400/20 border border-teal-400/30 rounded-lg p-4">
-            <p className="text-sm text-teal-400 font-medium">
+          <div className="bg-[#06B6D4]/10 border border-[#06B6D4]/30 rounded-lg p-6">
+            <p className="text-sm text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               ✅ Withdrawal successful! USDC sent to your wallet.
             </p>
           </div>
@@ -145,7 +154,7 @@ export const WithdrawForm = () => {
         </TransactionButton>
 
         {/* Info */}
-        <div className="text-xs text-gray-500 space-y-1">
+        <div className="text-xs text-[#A3A3A3] space-y-2 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
           <p>• Redeem your shares anytime</p>
           <p>• Earned yield compounds within the pool</p>
           <p>• No withdrawal fees</p>
@@ -153,8 +162,8 @@ export const WithdrawForm = () => {
 
         {/* Empty State */}
         {!hasShares && (
-          <div className="bg-dark-gray rounded-lg p-4 text-center">
-            <p className="text-sm text-gray-400">
+          <div className="bg-[#1E1E1E] rounded-lg p-6 text-center">
+            <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               No shares found. Deposit USDC to start earning.
             </p>
           </div>

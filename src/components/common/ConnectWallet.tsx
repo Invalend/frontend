@@ -18,11 +18,11 @@ export const ConnectWallet = () => {
     <div className="flex items-center gap-4">
       {isConnected && address && (
         <div className="flex items-center gap-3 text-sm">
-          <div className="text-gray-300">
+          <div className="text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
             {formatAddress(address)}
           </div>
-          <div className="bg-dark-gray px-3 py-1 rounded-lg">
-            <span className="text-teal-400 font-medium">
+          <div className="bg-[#1E1E1E] px-3 py-1 rounded-lg border border-[rgba(6,182,212,0.15)]">
+            <span className="text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               {formatUSDC(usdcBalance?.value || 0)} USDC
             </span>
           </div>

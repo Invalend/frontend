@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
   experimental: {
     mdxRs: true,
   },
+  // Remove turbopack configuration that's causing issues
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 };
 
 export default withMdx(nextConfig);

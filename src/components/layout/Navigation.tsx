@@ -48,44 +48,36 @@ export const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
   ];
 
   return (
-    <nav className="bg-black/95 backdrop-blur-sm border-b border-gray-700/50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-[#0A0A0A] border-b border-[rgba(6,182,212,0.15)]">
+      <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16">
         <div className="flex justify-center">
           <div className="flex items-center space-x-1">
             {tabs.map((tab, index) => (
               <div key={tab.id} className="flex items-center">
-                                <button
+                <button
                   onClick={() => onTabChange(tab.id)}
-                  className={`relative px-6 py-4 text-base font-medium transition-all duration-300 group ${
-                    activeTab === tab.id
-                      ? 'text-teal-400'
-                      : 'text-gray-400 hover:text-gray-200'
+                  className={`relative px-6 py-4 text-base font-normal transition-colors group ${
+                    activeTab === tab.id ? 'text-[#06B6D4]' : 'text-[#A3A3A3] hover:text-white'
                   }`}
+                  style={{ fontFamily: 'Space Grotesk' }}
                 >
                   <div className="flex flex-col items-center gap-1">
                     <span className="tracking-wide">{tab.label}</span>
                     <span className={`text-xs font-normal transition-colors ${
-                      activeTab === tab.id ? 'text-teal-500/70' : 'text-gray-500 group-hover:text-gray-400'
-                    }`}>
+                      activeTab === tab.id ? 'text-[#06B6D4]' : 'text-[#A3A3A3]'
+                    }`} style={{ fontFamily: 'Space Grotesk' }}>
                       {tab.description}
                     </span>
                   </div>
-                  
-                  {/* Active state indicator - APY style */}
+                  {/* Active indicator: subtle 1px border per style guide */}
                   {activeTab === tab.id && (
-                    <>
-                      <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-teal-600/5 rounded-lg border border-teal-500/20"></div>
-                      <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-teal-500 rounded-full"></div>
-                    </>
+                    <div className="absolute inset-0 rounded-lg border border-[rgba(6,182,212,0.15)]"></div>
                   )}
-                  
-                  {/* Hover effect - APY style */}
-                  <div className="absolute inset-0 bg-gray-800/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>
                 
                 {/* Separator */}
                 {index < tabs.length - 1 && (
-                  <div className="h-8 w-px bg-gray-700/50 mx-0.5"></div>
+                  <div className="h-8 w-px bg-[rgba(6,182,212,0.15)] mx-0.5"></div>
                 )}
               </div>
             ))}

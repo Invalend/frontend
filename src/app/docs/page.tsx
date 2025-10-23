@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Book, Zap, HelpCircle, Code, Settings } from 'lucide-react';
+import { ArrowRight, Book, Zap, HelpCircle, Code } from 'lucide-react';
 
 export default function DocsPage() {
   return (
@@ -63,20 +63,20 @@ export default function DocsPage() {
         </Link>
 
         <Link
-          href="/docs/dashboard"
+          href="/docs/contracts"
           className="group bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-teal-500/30 hover:bg-gray-900/80 transition-all duration-300"
         >
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center group-hover:bg-teal-500/30 transition-colors">
-              <Settings className="w-5 h-5 text-teal-400" />
+              <Code className="w-5 h-5 text-teal-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white">Dashboard Guide</h3>
+            <h3 className="text-lg font-semibold text-white">Smart Contracts</h3>
           </div>
           <p className="text-gray-400 text-sm mb-4">
-            Master the Invalend dashboard interface and learn to navigate all features efficiently.
+            View all deployed smart contract addresses with direct links to blockchain explorer.
           </p>
           <div className="flex items-center text-teal-400 text-sm font-medium group-hover:gap-2 transition-all">
-            Explore <ArrowRight className="w-4 h-4 ml-1 group-hover:ml-0" />
+            View contracts <ArrowRight className="w-4 h-4 ml-1 group-hover:ml-0" />
           </div>
         </Link>
       </div>
@@ -157,18 +157,19 @@ export default function DocsPage() {
           {/* Smart Contracts */}
           <div className="bg-gray-900/30 border border-gray-800 rounded-xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <Code className="w-6 h-6 text-gray-500" />
-              <h3 className="text-xl font-semibold text-gray-400">Smart Contracts</h3>
-              <span className="text-xs bg-gray-800 px-2 py-1 rounded-full text-gray-500">Coming Soon</span>
+              <Code className="w-6 h-6 text-teal-400" />
+              <h3 className="text-xl font-semibold text-white">Smart Contracts</h3>
             </div>
-            <p className="text-gray-500 text-sm mb-4">
+            <p className="text-gray-400 text-sm mb-4">
               Technical documentation for developers and integrators
             </p>
-            <div className="space-y-2 opacity-50">
-              <div className="text-gray-500 text-sm">→ Contract Architecture</div>
-              <div className="text-gray-500 text-sm">→ Lending Pool</div>
-              <div className="text-gray-500 text-sm">→ Loan Manager</div>
-              <div className="text-gray-500 text-sm">→ Collateral Manager</div>
+            <div className="space-y-2">
+              <Link href="/docs/contracts" className="block text-teal-400 hover:text-teal-300 text-sm">
+                → Contract Addresses & Explorer Links
+              </Link>
+              <div className="text-gray-500 text-sm opacity-50">→ Contract Architecture</div>
+              <div className="text-gray-500 text-sm opacity-50">→ Lending Pool</div>
+              <div className="text-gray-500 text-sm opacity-50">→ Loan Manager</div>
             </div>
           </div>
         </div>

@@ -88,7 +88,7 @@ export const TradingPage: React.FC = () => {
       tokenOut,
       parseFloat(slippage)
     );
-  }, [tradeAmount, tokenIn.price, tokenOut.price, slippage, tokenIn, tokenOut]);
+  }, [tradeAmount, slippage, tokenIn, tokenOut]);
 
   const handleCreateLoan = async () => {
     if (!tradeAmount) return;
@@ -205,44 +205,45 @@ export const TradingPage: React.FC = () => {
               </div>
             </div>
           ) : restrictedWalletAddress && hasActiveLoan ? (
-            <div className="bg-black rounded-lg border border-gray-700 p-4">
+            <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(6,182,212,0.15)] p-4">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-teal-400/20 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-8 h-8 bg-[#06B6D4]/20 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-[#06B6D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </div>
                 <div>
-                  <p className="text-teal-400 font-medium">Trading Wallet Active</p>
-                  <p className="text-gray-300 font-mono text-sm">
+                  <p className="text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Trading Wallet Active</p>
+                  <p className="text-white font-mono text-sm font-normal" style={{ fontFamily: 'Space Grotesk' }}>
                     {restrictedWalletAddress.slice(0, 6)}...{restrictedWalletAddress.slice(-4)}
                   </p>
                 </div>
               </div>
             </div>
           ) : hasActiveLoan && !restrictedWalletAddress ? (
-            <div className="bg-black rounded-lg border border-gray-700 p-4">
+            <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(6,182,212,0.15)] p-4">
               <div className="flex items-center space-x-3">
                 <div className="w-5 h-5 border-2 border-orange-400 border-t-transparent rounded-full animate-spin"></div>
                 <div>
-                  <p className="text-orange-400 font-medium">Loading restricted wallet</p>
-                  <p className="text-gray-400 text-sm">Your loan is active, fetching wallet address</p>
+                  <p className="text-orange-400 font-normal" style={{ fontFamily: 'Space Grotesk' }}>Loading restricted wallet</p>
+                  <p className="text-[#A3A3A3] text-sm font-normal" style={{ fontFamily: 'Space Grotesk' }}>Your loan is active, fetching wallet address</p>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="bg-black rounded-lg border border-gray-700 p-4">
+            <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(6,182,212,0.15)] p-4">
               <div className="text-center">
                 <div className="w-10 h-10 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
                   <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.732 15.5c-.77.833.192 2.5 1.732 2.5z" />
                   </svg>
                 </div>
-                <p className="text-yellow-400 font-medium mb-2">No active trading wallet</p>
-                <p className="text-gray-400 text-sm mb-3">Create a loan to get your restricted wallet for trading</p>
+                <p className="text-yellow-400 font-normal mb-2" style={{ fontFamily: 'Space Grotesk' }}>No active trading wallet</p>
+                <p className="text-[#A3A3A3] text-sm mb-3 font-normal" style={{ fontFamily: 'Space Grotesk' }}>Create a loan to get your restricted wallet for trading</p>
                 <button
                   onClick={() => refetchLoanInfo()}
-                  className="px-3 py-1 bg-yellow-600/20 hover:bg-yellow-600/30 border border-yellow-500/30 rounded text-yellow-300 hover:text-yellow-200 transition-all duration-200 text-sm font-medium"
+                  className="px-3 py-1 bg-yellow-600/20 hover:bg-yellow-600/30 border border-yellow-500/30 rounded text-yellow-300 hover:text-yellow-200 transition-all duration-200 text-sm font-normal"
+                  style={{ fontFamily: 'Space Grotesk' }}
                 >
                   Refresh Status
                 </button>
@@ -264,7 +265,7 @@ export const TradingPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Trading Form */}
           <div className="lg:col-span-2">
-            <div className="bg-black rounded-lg border border-gray-700 p-5">
+            <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(6,182,212,0.15)] p-5">
               {/* Trade Type Toggle */}
               {/* <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-semibold text-white">Trade Tokens</h2>

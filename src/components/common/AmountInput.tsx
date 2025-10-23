@@ -58,18 +58,18 @@ export const AmountInput = ({
   };
 
   const inputClasses = `
-    w-full bg-dark-gray border rounded-lg px-4 py-3 text-white placeholder-gray-500
-    focus:outline-none focus:ring-2 focus:ring-teal-400/50 focus:border-teal-400
+    w-full bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg px-4 py-3 text-white placeholder-[#A3A3A3]
+    focus:outline-none focus:border-[#06B6D4]
     disabled:opacity-50 disabled:cursor-not-allowed
     transition-all duration-200
-    ${error ? 'border-red-500' : isFocused ? 'border-teal-400' : 'border-gray-600'}
+    ${error ? 'border-red-500' : isFocused ? 'border-[#06B6D4]' : 'border-[rgba(6,182,212,0.15)]'}
     ${className}
   `;
 
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <label className="block text-sm font-medium text-gray-300">
+        <label className="block text-sm font-normal text-[#A3A3A3]" style={{ fontFamily: 'Space Grotesk' }}>
           {label}
         </label>
         {maxValue && (
@@ -77,7 +77,8 @@ export const AmountInput = ({
             type="button"
             onClick={handleMaxClick}
             disabled={disabled}
-            className="text-sm text-teal-400 hover:text-teal-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="text-sm text-[#06B6D4] hover:text-[#06B6D4]/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-normal"
+            style={{ fontFamily: 'Space Grotesk' }}
           >
             {maxLabel}: {formatUSDC(maxValue)} USDC
           </button>
@@ -96,12 +97,12 @@ export const AmountInput = ({
           className={inputClasses}
         />
         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-          <span className="text-sm text-gray-400">USDC</span>
+          <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>USDC</span>
         </div>
       </div>
       
       {error && (
-        <p className="text-sm text-red-400 mt-1">{error}</p>
+        <p className="text-sm text-red-400 mt-1 font-normal" style={{ fontFamily: 'Space Grotesk' }}>{error}</p>
       )}
     </div>
   );

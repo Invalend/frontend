@@ -51,6 +51,7 @@ const navigation: NavItem[] = [
     title: 'Smart Contracts',
     icon: <Code className="w-4 h-4" />,
     children: [
+      { title: 'Contract Addresses', href: '/docs/contracts', available: true },
       { title: 'Contract Architecture', href: '#', available: false },
       { title: 'Lending Pool', href: '#', available: false },
       { title: 'Loan Manager', href: '#', available: false },

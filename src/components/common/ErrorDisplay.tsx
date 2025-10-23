@@ -15,14 +15,15 @@ export const ErrorDisplay = ({ error, onRetry }: ErrorDisplayProps) => {
           </svg>
         </div>
         <div className="flex-1">
-          <h4 className="text-sm font-medium text-red-400">Transaction Failed</h4>
-          <p className="text-sm text-red-300 mt-1">
+          <h4 className="text-sm font-normal text-red-400" style={{ fontFamily: 'Space Grotesk' }}>Transaction Failed</h4>
+          <p className="text-sm text-red-300 mt-1 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
             {error}
           </p>
           {onRetry && (
             <button
               onClick={onRetry}
-              className="mt-2 text-xs text-red-300 hover:text-red-200 underline"
+              className="mt-2 text-xs text-red-300 hover:text-red-200 underline font-normal"
+              style={{ fontFamily: 'Space Grotesk' }}
             >
               Try Again
             </button>

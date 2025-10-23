@@ -59,17 +59,23 @@ const TokenBalanceCard: React.FC<TokenBalanceCardProps> = ({
   }
 
   return (
-    <div className="bg-black/50 rounded-lg p-4 border border-gray-700">
+    <div className="bg-[#1E1E1E] rounded-lg p-4 border border-[rgba(6,182,212,0.15)]">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h4 className="text-lg font-medium text-white">{token.symbol}</h4>
-          <p className="text-sm text-gray-400">{token.name}</p>
+          <h4 className="text-lg font-normal text-white" style={{ 
+            fontFamily: 'Space Grotesk',
+            letterSpacing: '-0.5px'
+          }}>{token.symbol}</h4>
+          <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>{token.name}</p>
         </div>
         <div className="text-right">
-          <p className="text-xl font-semibold text-teal-400">
+          <p className="text-xl font-normal text-[#06B6D4]" style={{ 
+            fontFamily: 'Space Grotesk',
+            letterSpacing: '-0.5px'
+          }}>
             {balanceFormatted} {token.symbol}
           </p>
-          <p className="text-xs text-gray-500">Available to withdraw</p>
+          <p className="text-xs text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Available to withdraw</p>
         </div>
       </div>
 
@@ -129,13 +135,16 @@ export const RestrictedWalletPage: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="text-center py-12">
           <div className="mb-6">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
-              <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#1E1E1E] flex items-center justify-center">
+              <svg className="w-8 h-8 text-[#A3A3A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">No Restricted Wallet</h2>
-            <p className="text-gray-400 max-w-md mx-auto">
+            <h2 className="text-2xl font-normal text-white mb-2" style={{ 
+              fontFamily: 'Space Grotesk',
+              letterSpacing: '-0.5px'
+            }}>No Restricted Wallet</h2>
+            <p className="text-[#A3A3A3] max-w-md mx-auto font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               You need to create a loan first to get a restricted wallet. Once you have a restricted wallet, you can manage your trading balances here.
             </p>
           </div>
@@ -187,8 +196,12 @@ export const RestrictedWalletPage: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Restricted Wallet Control</h1>
-        <p className="text-gray-400">
+        <h1 className="text-3xl font-normal text-white mb-2" style={{ 
+          fontFamily: 'Space Grotesk',
+          letterSpacing: '-1px',
+          lineHeight: '1.1'
+        }}>Restricted Wallet Control</h1>
+        <p className="text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
           Manage and withdraw your funds from the restricted trading wallet.
         </p>
       </div>
@@ -215,7 +228,10 @@ export const RestrictedWalletPage: React.FC = () => {
 
       {/* Token Balances and Withdrawal */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-white">Available Balances</h2>
+        <h2 className="text-xl font-normal text-white" style={{ 
+          fontFamily: 'Space Grotesk',
+          letterSpacing: '-0.5px'
+        }}>Available Balances</h2>
         
         {COMMON_TOKENS.map((token) => (
           <TokenBalanceCard

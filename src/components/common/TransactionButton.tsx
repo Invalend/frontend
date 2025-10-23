@@ -37,11 +37,11 @@ export const TransactionButton = ({
     }
   };
 
-  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-normal rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#06B6D4] disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
-    primary: 'bg-teal-400 text-black hover:bg-teal-500 focus:ring-teal-400',
-    secondary: 'bg-dark-gray text-white hover:bg-gray-700 focus:ring-gray-400',
+    primary: 'bg-[#06B6D4] text-[#0A0A0A] hover:bg-[#06B6D4]/90 focus:ring-[#06B6D4]',
+    secondary: 'bg-[#1E1E1E] text-white hover:bg-[#1E1E1E]/80 focus:ring-[#06B6D4] border border-[rgba(6,182,212,0.15)]',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-400',
   };
 
@@ -58,6 +58,7 @@ export const TransactionButton = ({
       onClick={handleClick}
       disabled={disabled || isButtonLoading}
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      style={{ fontFamily: 'Space Grotesk' }}
     >
       {isButtonLoading && (
         <LoadingSpinner size="sm" className="mr-2" />

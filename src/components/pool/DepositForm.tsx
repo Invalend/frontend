@@ -76,18 +76,25 @@ export const DepositForm = () => {
     : "Deposit USDC";
 
   return (
-    <div className="bg-black rounded-lg p-6 border border-gray-700">
-      <div className="space-y-6">
+    <div className="bg-[#0A0A0A] rounded-lg p-8 border border-[rgba(6,182,212,0.15)]">
+      <div className="space-y-8">
         {/* Header */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-2">Deposit USDC</h3>
-          <p className="text-sm text-gray-400">
+          <h3 className="text-2xl font-normal text-white mb-3" style={{ 
+            fontFamily: 'Space Grotesk',
+            letterSpacing: '-0.5px',
+            lineHeight: '1.2'
+          }}>Deposit USDC</h3>
+          <p className="text-lg text-[#A3A3A3]" style={{ 
+            fontFamily: 'Space Grotesk',
+            lineHeight: '1.6'
+          }}>
             Earn 6% APY and provide liquidity for leveraged loans
           </p>
         </div>
 
         {/* User Info */}
-        <div className="bg-dark-gray rounded-lg p-4 space-y-2">
+        <div className="bg-[#1E1E1E] rounded-lg p-6 space-y-4">
           <InfoRow
             label="Available Balance"
             value={`${formatUSDC(usdcBalance || BigInt(0))} USDC`}
@@ -107,12 +114,12 @@ export const DepositForm = () => {
         </div>
 
         {/* Amount Input */}
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-300">
+        <div className="space-y-4">
+          <label className="block text-sm font-normal text-[#A3A3A3]" style={{ fontFamily: 'Space Grotesk' }}>
             Amount to Deposit
           </label>
           {showExpectedShares && (
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               You will receive: {formatUSDC(expectedShares)} Shares
             </p>
           )}
@@ -126,19 +133,21 @@ export const DepositForm = () => {
                 const val = e.target.value;
                 if (/^\d*\.?\d*$/.test(val) || val === "") setAmount(val);
               }}
-              className="w-full bg-dark-gray border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-teal-400 disabled:opacity-50"
+              className="w-full bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg px-4 py-3 text-white placeholder-[#A3A3A3] focus:outline-none focus:border-[#06B6D4] disabled:opacity-50 transition-colors"
+              style={{ fontFamily: 'Space Grotesk' }}
             />
             <button
               type="button"
               onClick={handleMax}
               disabled={!hasBalance || isApproving || isDepositing}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-teal-400 hover:text-teal-300 disabled:opacity-50"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#06B6D4] hover:text-[#06B6D4]/80 disabled:opacity-50 font-normal"
+              style={{ fontFamily: 'Space Grotesk' }}
             >
               MAX
             </button>
           </div>
           {validationMessage && (
-            <p className="text-sm text-red-400">{validationMessage}</p>
+            <p className="text-sm text-red-400 font-normal" style={{ fontFamily: 'Space Grotesk' }}>{validationMessage}</p>
           )}
         </div>
 
@@ -181,7 +190,7 @@ export const DepositForm = () => {
         </TransactionButton>
 
         {/* Info */}
-        <div className="text-xs text-gray-500 space-y-1">
+        <div className="text-xs text-[#A3A3A3] space-y-2 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
           <p>• Earn 6% APY on your USDC</p>
           <p>• Withdraw anytime with accrued yield</p>
           <p>• First time? You must approve USDC before deposit</p>
@@ -193,8 +202,8 @@ export const DepositForm = () => {
 
 const InfoRow = ({ label, value }: { label: string; value: string }) => (
   <div className="flex justify-between">
-    <span className="text-sm text-gray-400">{label}</span>
-    <span className="text-white font-medium">{value}</span>
+    <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>{label}</span>
+    <span className="text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>{value}</span>
   </div>
 );
 
@@ -205,8 +214,8 @@ const SuccessBox = ({
   message: string;
   subtext?: string;
 }) => (
-  <div className="bg-teal-400/20 border border-teal-400/30 rounded-lg p-4 space-y-1">
-    <p className="text-sm text-teal-400 font-medium">{message}</p>
-    {subtext && <p className="text-xs text-teal-300">{subtext}</p>}
+  <div className="bg-[#06B6D4]/10 border border-[#06B6D4]/30 rounded-lg p-4 space-y-1">
+    <p className="text-sm text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>{message}</p>
+    {subtext && <p className="text-xs text-[#06B6D4]/70 font-normal" style={{ fontFamily: 'Space Grotesk' }}>{subtext}</p>}
   </div>
 );
