@@ -10,6 +10,7 @@ import CTASection from '@/components/homepage/CTASection';
 import Footer from '@/components/homepage/Footer';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 
+
 export default function HomePage() {
   return (
     <main id="main-content">

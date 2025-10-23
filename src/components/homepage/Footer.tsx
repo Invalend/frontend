@@ -103,7 +103,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-4">
               {footerLinks.resources.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <a 
                     href={link.href}
                     className="text-small text-secondary hover:text-primary transition-colors duration-300"
@@ -122,7 +122,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-4">
               {footerLinks.community.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <a 
                     href={link.href}
                     className="text-small text-secondary hover:text-primary transition-colors duration-300"
@@ -141,7 +141,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-4">
               {footerLinks.legal.map((link) => (
-                <li key={link.href}>
+                <li key={link.label}>
                   <a 
                     href={link.href}
                     className="text-small text-secondary hover:text-primary transition-colors duration-300"
