@@ -11,7 +11,7 @@ export function calculateMinAmountOut(
   tokenOut: Token,
   slippagePercent: number
 ): string {
-  if (!amountIn || !tokenIn.price || !tokenOut.price) return '0';
+  if (!amountIn || !tokenIn?.price || !tokenOut?.price) return '0';
 
   // Convert prices to numbers (remove commas)
   const priceIn = parseFloat(tokenIn.price.replace(/,/g, ''));
@@ -38,7 +38,7 @@ export function calculateMaxAmountIn(
   tokenOut: Token,
   slippagePercent: number
 ): string {
-  if (!amountOut || !tokenIn.price || !tokenOut.price) return '0';
+  if (!amountOut || !tokenIn?.price || !tokenOut?.price) return '0';
 
   // Convert prices to numbers (remove commas)
   const priceIn = parseFloat(tokenIn.price.replace(/,/g, ''));
@@ -60,7 +60,7 @@ export function calculateMaxAmountIn(
  * Calculate USD value of a token amount
  */
 export function calculateUSDValue(amount: string, token: Token): string {
-  if (!amount || !token.price) return '0.00';
+  if (!amount || !token?.price) return '0.00';
   
   const price = parseFloat(token.price.replace(/,/g, ''));
   const value = parseFloat(amount) * price;

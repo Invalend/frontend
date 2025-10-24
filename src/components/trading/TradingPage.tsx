@@ -15,7 +15,7 @@ import type { Token } from "./constants";
 
 export const TradingPage: React.FC = () => {
   const [selectedTokenIn, setSelectedTokenIn] = useState<string>("USDC");
-  const [selectedTokenOut, setSelectedTokenOut] = useState<string>("LSK");
+  const [selectedTokenOut, setSelectedTokenOut] = useState<string>("ETH");
   const [tradeAmount, setTradeAmount] = useState<string>("");
   const [slippage, setSlippage] = useState<string>("0.5");
   const [estimatedOutput, setEstimatedOutput] = useState<string>("0");
@@ -36,17 +36,19 @@ export const TradingPage: React.FC = () => {
     executeSwap,
     canCreateLoan,
     isLoadingLoanInfo, // Add this to check loading state
+    restrictedWalletAddress, // Use restrictedWalletAddress from useTradingHooks
   } = useTradingHooks();
 
-  // Get loan status from the same source as LoanPage
+  // Get loan status from the same source as LoanPage (for consistency)
   const hasActiveLoan = Boolean(
     loanInfo?.isActive && loanInfo?.loanAmount > BigInt(0)
   );
-  const restrictedWalletAddress = hasActiveLoan
-    ? loanInfo?.restrictedWallet || null
-    : null;
+  // Use restrictedWalletAddress from useTradingHooks instead of calculating it here
+  // const restrictedWalletAddress = hasActiveLoan
+  //   ? loanInfo?.restrictedWallet || null
+  //   : null;
 
-  // Get token objects
+  // Get token objects with null checks
   const tokenIn = TOKENS[selectedTokenIn];
   const tokenOut = TOKENS[selectedTokenOut];
 
@@ -61,11 +63,11 @@ export const TradingPage: React.FC = () => {
 
   // Get restricted wallet token balances (these are what user will trade with)
   const { data: restrictedTokenInBalance } = useRestrictedWalletBalance(
-    tokenIn.address,
+    tokenIn?.address || '',
     restrictedWalletAddress
   );
   const { data: restrictedTokenOutBalance } = useRestrictedWalletBalance(
-    tokenOut.address,
+    tokenOut?.address || '',
     restrictedWalletAddress
   );
 
@@ -137,7 +139,23 @@ export const TradingPage: React.FC = () => {
   }, [isSuccess, refetchLoanInfo]);
 
   const handleExecuteSwap = async () => {
-    if (!tradeAmount || !estimatedOutput || !restrictedWalletAddress) return;
+    console.log('handleExecuteSwap called with:', {
+      tradeAmount,
+      estimatedOutput,
+      restrictedWalletAddress,
+      tokenIn: tokenIn?.symbol,
+      tokenOut: tokenOut?.symbol,
+      slippage
+    });
+
+    if (!tradeAmount || !estimatedOutput || !restrictedWalletAddress) {
+      console.error('Missing required parameters for swap:', {
+        tradeAmount: !!tradeAmount,
+        estimatedOutput: !!estimatedOutput,
+        restrictedWalletAddress: !!restrictedWalletAddress
+      });
+      return;
+    }
 
     // Check if restricted wallet has sufficient balance for the trade
     const restrictedBalanceFormatted = restrictedTokenInBalance
@@ -150,8 +168,8 @@ export const TradingPage: React.FC = () => {
     }
 
     try {
-      // Note: executeSwap signature changed to only take 3 parameters
-      await executeSwap(tokenIn, tokenOut, tradeAmount);
+      // Execute swap with slippage parameter
+      await executeSwap(tokenIn, tokenOut, tradeAmount, parseFloat(slippage));
     } catch (err) {
       console.error("Error executing swap:", err);
     }
@@ -176,6 +194,20 @@ export const TradingPage: React.FC = () => {
   ]);
 
   const tokens = Object.values(TOKENS);
+
+  // Early return if tokens are not found (after all hooks)
+  if (!tokenIn || !tokenOut) {
+    return (
+      <div className="w-full bg-dark-bg p-4 rounded-lg border border-gray-800/50">
+        <div className="text-center text-red-400">
+          <p>Error: Token not found</p>
+          <p className="text-sm text-gray-400 mt-2">
+            Selected tokens: {selectedTokenIn} → {selectedTokenOut}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-dark-bg p-4 rounded-lg border border-gray-800/50">

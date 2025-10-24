@@ -11,6 +11,7 @@ export const WithdrawForm = () => {
     amount,
     userInfo,
     withdrawableShares,
+    currentStep,
     isWithdrawing,
     isWithdrawSuccess,
     error,
@@ -134,10 +135,10 @@ export const WithdrawForm = () => {
         )}
 
         {/* Success Message */}
-        {isWithdrawSuccess && (
+        {currentStep === 'success' && isWithdrawSuccess && (
           <div className="bg-[#06B6D4]/10 border border-[#06B6D4]/30 rounded-lg p-6">
             <p className="text-sm text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-              ✅ Withdrawal successful! USDC sent to your wallet.
+              ✅ Withdrawal berhasil! USDC telah dikirim ke wallet Anda.
             </p>
           </div>
         )}
@@ -145,12 +146,16 @@ export const WithdrawForm = () => {
         {/* Action Button */}
         <TransactionButton
           onClick={handleWithdraw}
-          disabled={!isValidAmount || isWithdrawing || !hasShares}
+          disabled={!isValidAmount || isWithdrawing || !hasShares || currentStep === 'success'}
           loading={isWithdrawing}
           size="lg"
           className="w-full"
         >
-          {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
+          {currentStep === 'withdraw' && isWithdrawing 
+            ? 'Mengwithdraw...' 
+            : currentStep === 'success' 
+            ? 'Withdraw Berhasil!' 
+            : 'Withdraw'}
         </TransactionButton>
 
         {/* Info */}

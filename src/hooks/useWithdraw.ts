@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { CONTRACT_CONFIGS } from '@/config/contracts';
 import { parseUSDC, formatUSDC } from '@/utils/formatters';
@@ -8,8 +8,8 @@ import { parseUSDC, formatUSDC } from '@/utils/formatters';
 export const useWithdraw = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState('');
-  const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [error, setError] = useState<string>('');
+  const [currentStep, setCurrentStep] = useState<'idle' | 'withdraw' | 'success'>('idle');
 
   // Get user info (shares & asset value)
   const { data: userInfo, refetch: refetchUserInfo } = useReadContract({
@@ -21,9 +21,25 @@ export const useWithdraw = () => {
 
   // Withdraw transaction
   const { writeContract: redeem, data: withdrawHash } = useWriteContract();
-  const { isLoading: isWithdrawingTx, isSuccess: isWithdrawSuccess } = useWaitForTransactionReceipt({
+  const { isLoading: isWithdrawingTx, isSuccess: isWithdrawSuccess, isError: isWithdrawError } = useWaitForTransactionReceipt({
     hash: withdrawHash,
   });
+
+  // Effects for step management
+  useEffect(() => {
+    if (isWithdrawSuccess) {
+      setCurrentStep('success');
+      refetchUserInfo();
+      setError('');
+    }
+  }, [isWithdrawSuccess, refetchUserInfo]);
+
+  useEffect(() => {
+    if (isWithdrawError) {
+      setCurrentStep('idle');
+      setError('Withdraw gagal. Silakan coba lagi.');
+    }
+  }, [isWithdrawError]);
 
   // Format user info
   const formattedUserInfo = userInfo ? {
@@ -47,7 +63,7 @@ export const useWithdraw = () => {
   const handleWithdraw = async () => {
     if (!amount || !address) return;
     
-    setIsWithdrawing(true);
+    setCurrentStep('withdraw');
     setError('');
 
     try {
@@ -61,14 +77,14 @@ export const useWithdraw = () => {
     } catch (err) {
       console.error('Withdraw error:', err);
       setError('Gagal melakukan withdraw. Coba lagi.');
-      setIsWithdrawing(false);
+      setCurrentStep('idle');
     }
   };
 
   const resetStates = () => {
     setAmount('');
-    setIsWithdrawing(false);
     setError('');
+    setCurrentStep('idle');
   };
 
   const isValidAmount = () => {
@@ -88,8 +104,12 @@ export const useWithdraw = () => {
     setAmount,
     userInfo: formattedUserInfo,
     withdrawableShares: getWithdrawableShares(),
-    isWithdrawing: isWithdrawing || isWithdrawingTx,
+    
+    // Step Management
+    currentStep,
+    isWithdrawing: isWithdrawingTx,
     isWithdrawSuccess,
+    
     handleAmountChange,
     handleMaxClick,
     handleWithdraw,

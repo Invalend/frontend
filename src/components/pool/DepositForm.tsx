@@ -18,6 +18,7 @@ export const DepositForm = () => {
     userInfo,
     needsApproval,
     isValidAmount,
+    currentStep,
     isApproving,
     isDepositing,
     handleApprove,
@@ -67,13 +68,18 @@ export const DepositForm = () => {
     setAmount(formatUSDC(usdcBalance));
   };
 
-  const statusText = isApproving
-    ? "Approving USDC..."
-    : isDepositing
-    ? "Processing Deposit..."
-    : needsApproval && !isApproveSuccess
-    ? "Approve USDC First"
-    : "Deposit USDC";
+  const statusText = useMemo(() => {
+    switch (currentStep) {
+      case 'approve':
+        return isApproving ? "Mengapprove USDC..." : "Approve USDC";
+      case 'deposit':
+        return isDepositing ? "Mendeposit..." : "Deposit USDC";
+      case 'success':
+        return "Deposit Berhasil!";
+      default:
+        return needsApproval ? "Approve USDC" : "Deposit USDC";
+    }
+  }, [currentStep, isApproving, isDepositing, needsApproval]);
 
   return (
     <div className="bg-[#0A0A0A] rounded-lg p-8 border border-[rgba(6,182,212,0.15)]">
@@ -160,28 +166,32 @@ export const DepositForm = () => {
             <LoadingSpinner size="sm" />
             <div>
               <p className="text-sm text-white font-medium">{statusText}</p>
-              <p className="text-xs text-gray-400">Please wait for confirmation</p>
+              <p className="text-xs text-gray-400">
+                {currentStep === 'approve' ? 'Menunggu konfirmasi approval...' : 'Menunggu konfirmasi deposit...'}
+              </p>
             </div>
           </div>
         )}
 
         {/* Success Message */}
-        {isApproveSuccess && !isApproving && (
+        {currentStep === 'deposit' && isApproveSuccess && !isApproving && (
           <SuccessBox
-            message="✅ Approval successful!"
-            subtext="Click Deposit to continue."
+            message="✅ Approval berhasil!"
+            subtext="Klik Deposit untuk melanjutkan."
           />
         )}
-        {isDepositSuccess && !isDepositing && (
-          <SuccessBox message="✅ Deposit successful! Your funds are earning yield." />
+        {currentStep === 'success' && isDepositSuccess && !isDepositing && (
+          <SuccessBox message="✅ Deposit berhasil! Dana Anda sedang menghasilkan yield." />
         )}
 
         {/* Action Button */}
         <TransactionButton
           onClick={
-            needsApproval && !isApproveSuccess ? handleApprove : handleDeposit
+            currentStep === 'approve' || (needsApproval && currentStep === 'idle') 
+              ? handleApprove 
+              : handleDeposit
           }
-          disabled={isButtonDisabled}
+          disabled={isButtonDisabled || currentStep === 'success'}
           loading={isApproving || isDepositing}
           size="lg"
           className="w-full"

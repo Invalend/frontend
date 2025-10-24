@@ -14,6 +14,7 @@ export const useDeposit = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [currentStep, setCurrentStep] = useState<'idle' | 'approve' | 'deposit' | 'success'>('idle');
 
   const amountRaw = useMemo(() => parseUSDC(amount || "0"), [amount]);
 
@@ -50,15 +51,16 @@ export const useDeposit = () => {
   const { writeContract: approve, data: approveHash } = useWriteContract();
   const { writeContract: deposit, data: depositHash } = useWriteContract();
 
-  const { isLoading: isApproving, isSuccess: isApproveSuccess } =
+  const { isLoading: isApproving, isSuccess: isApproveSuccess, isError: isApproveError } =
     useWaitForTransactionReceipt({ hash: approveHash });
 
-  const { isLoading: isDepositing, isSuccess: isDepositSuccess } =
+  const { isLoading: isDepositing, isSuccess: isDepositSuccess, isError: isDepositError } =
     useWaitForTransactionReceipt({ hash: depositHash });
 
   // Effects
   useEffect(() => {
     if (isApproveSuccess) {
+      setCurrentStep('deposit');
       refetchAllowance();
       refetchUsdcBalance();
       setError("");
@@ -66,13 +68,28 @@ export const useDeposit = () => {
   }, [isApproveSuccess, refetchAllowance, refetchUsdcBalance]);
 
   useEffect(() => {
+    if (isApproveError) {
+      setCurrentStep('idle');
+      setError("Approval gagal. Silakan coba lagi.");
+    }
+  }, [isApproveError]);
+
+  useEffect(() => {
     if (isDepositSuccess) {
+      setCurrentStep('success');
       refetchUsdcBalance();
       refetchUserInfo();
       refetchPreview();
       setError("");
     }
   }, [isDepositSuccess, refetchUsdcBalance, refetchUserInfo, refetchPreview]);
+
+  useEffect(() => {
+    if (isDepositError) {
+      setCurrentStep('idle');
+      setError("Deposit gagal. Silakan coba lagi.");
+    }
+  }, [isDepositError]);
 
   // Logic
   const needsApproval = useMemo(() => {
@@ -90,6 +107,7 @@ export const useDeposit = () => {
   const handleApprove = async () => {
     if (!address || amountRaw <= BigInt(0)) return;
     setError("");
+    setCurrentStep('approve');
     try {
       await approve({
         ...CONTRACT_CONFIGS.MOCK_USDC,
@@ -98,19 +116,19 @@ export const useDeposit = () => {
       });
     } catch (err: unknown) {
       console.error("Approval error:", err);
-      setError(
-        "Approval failed. Check network or gas fees."
-      );
+      setError("Approval gagal. Periksa jaringan atau gas fees.");
+      setCurrentStep('idle');
     }
   };
 
   const handleDeposit = async () => {
     if (!address || amountRaw <= BigInt(0)) return;
     if (needsApproval) {
-      setError("Please approve USDC before depositing.");
+      setError("Silakan approve USDC terlebih dahulu.");
       return;
     }
     setError("");
+    setCurrentStep('deposit');
     try {
       await deposit({
         ...CONTRACT_CONFIGS.LENDING_POOL,
@@ -119,13 +137,15 @@ export const useDeposit = () => {
       });
     } catch (err: unknown) {
       console.error("Deposit error:", err);
-      setError("Deposit failed. Check network or limits.");
+      setError("Deposit gagal. Periksa jaringan atau limits.");
+      setCurrentStep('idle');
     }
   };
 
   const resetStates = () => {
     setAmount("");
     setError("");
+    setCurrentStep('idle');
   };
 
   return {
@@ -144,7 +164,8 @@ export const useDeposit = () => {
     needsApproval,
     isValidAmount,
 
-    // Status
+    // Step Management
+    currentStep,
     isApproving,
     isDepositing,
     isApproveSuccess,

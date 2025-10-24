@@ -12,8 +12,7 @@ import { usePool } from "@/hooks/usePool";
 import { useWithdraw } from "@/hooks/useWithdraw";
 import { TransactionButton } from "@/components/common/TransactionButton";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
-
-type TabType = "pool" | "loans" | "dashboard" | "faucet" | "trading" | "wallet" | "docs";
+import { type TabType } from "@/config/navigation";
 
 export const Layout = () => {
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
@@ -38,10 +37,11 @@ export const Layout = () => {
             <div className="bg-[#141414] rounded-lg border border-[rgba(6,182,212,0.15)] p-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-4xl font-normal text-white mb-2" style={{ 
+                  <h1 className="text-4xl font-normal mb-2" style={{ 
                     fontFamily: 'Space Grotesk',
                     letterSpacing: '-1px',
-                    lineHeight: '1.1'
+                    lineHeight: '1.1',
+                    color: '#06B6D4'
                   }}>
                     Welcome to Invalend
                   </h1>
@@ -61,25 +61,28 @@ export const Layout = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
                   <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Total Value Locked</div>
-                  <div className="text-white text-2xl font-normal mb-1" style={{ 
+                  <div className="text-2xl font-normal mb-1" style={{ 
                     fontFamily: 'Space Grotesk',
-                    letterSpacing: '-0.5px'
+                    letterSpacing: '-0.5px',
+                    color: '#FFFFFF'
                   }}>$2.4M</div>
                   <div className="text-[#06B6D4] text-xs font-normal">+12.5% this month</div>
                 </div>
                 <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
                   <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Active Loans</div>
-                  <div className="text-white text-2xl font-normal mb-1" style={{ 
+                  <div className="text-2xl font-normal mb-1" style={{ 
                     fontFamily: 'Space Grotesk',
-                    letterSpacing: '-0.5px'
+                    letterSpacing: '-0.5px',
+                    color: '#FFFFFF'
                   }}>156</div>
                   <div className="text-[#06B6D4] text-xs font-normal">8 new today</div>
                 </div>
                 <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.3)]">
                   <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Current APY</div>
-                  <div className="text-[#06B6D4] text-2xl font-normal mb-1" style={{ 
+                  <div className="text-2xl font-normal mb-1" style={{ 
                     fontFamily: 'Space Grotesk',
-                    letterSpacing: '-0.5px'
+                    letterSpacing: '-0.5px',
+                    color: '#06B6D4'
                   }}>6.2%</div>
                   <div className="text-[#06B6D4]/70 text-xs font-normal">Fixed rate</div>
                 </div>
@@ -88,10 +91,11 @@ export const Layout = () => {
 
             {/* Pool Overview */}
             <div className="bg-[#141414] rounded-lg border border-[rgba(6,182,212,0.15)] p-8">
-              <h2 className="text-2xl font-normal text-white mb-6 flex items-center gap-3" style={{ 
+              <h2 className="text-2xl font-normal mb-6 flex items-center gap-3" style={{ 
                 fontFamily: 'Space Grotesk',
                 letterSpacing: '-0.5px',
-                lineHeight: '1.2'
+                lineHeight: '1.2',
+                color: '#06B6D4'
               }}>
                 <div className="w-8 h-8 bg-[#06B6D4]/10 rounded-lg flex items-center justify-center border border-[#06B6D4]/20">
                   <svg className="w-4 h-4 text-[#06B6D4]" fill="currentColor" viewBox="0 0 20 20">
@@ -105,10 +109,11 @@ export const Layout = () => {
             
             {/* Your Portfolio */}
             <div className="bg-[#141414] rounded-lg border border-[rgba(6,182,212,0.15)] p-8">
-              <h2 className="text-2xl font-normal text-white mb-6 flex items-center gap-3" style={{ 
+              <h2 className="text-2xl font-normal mb-6 flex items-center gap-3" style={{ 
                 fontFamily: 'Space Grotesk',
                 letterSpacing: '-0.5px',
-                lineHeight: '1.2'
+                lineHeight: '1.2',
+                color: '#06B6D4'
               }}>
                 <div className="w-8 h-8 bg-[#06B6D4]/10 rounded-lg flex items-center justify-center border border-[#06B6D4]/20">
                   <svg className="w-4 h-4 text-[#06B6D4]" fill="currentColor" viewBox="0 0 20 20">
@@ -122,16 +127,18 @@ export const Layout = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Lending Position */}
                 <div className="space-y-6">
-                  <h3 className="text-white text-xl font-normal" style={{ 
+                  <h3 className="text-xl font-normal" style={{ 
                     fontFamily: 'Space Grotesk',
-                    letterSpacing: '-0.5px'
+                    letterSpacing: '-0.5px',
+                    color: '#FFFFFF'
                   }}>Lending Position</h3>
                   <div className="space-y-4">
                     <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
                       <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>USDC Deposited</div>
-                      <div className="text-white text-xl font-normal mb-1" style={{ 
+                      <div className="text-xl font-normal mb-1" style={{ 
                         fontFamily: 'Space Grotesk',
-                        letterSpacing: '-0.5px'
+                        letterSpacing: '-0.5px',
+                        color: '#FFFFFF'
                       }}>
                         {isLoadingPool ? (
                           <LoadingSpinner size="sm" />
@@ -143,9 +150,10 @@ export const Layout = () => {
                     </div>
                     <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
                       <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Asset Value</div>
-                      <div className="text-[#06B6D4] text-xl font-normal mb-1" style={{ 
+                      <div className="text-xl font-normal mb-1" style={{ 
                         fontFamily: 'Space Grotesk',
-                        letterSpacing: '-0.5px'
+                        letterSpacing: '-0.5px',
+                        color: '#06B6D4'
                       }}>
                         {isLoadingPool ? (
                           <LoadingSpinner size="sm" />
@@ -157,9 +165,10 @@ export const Layout = () => {
                     </div>
                     <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.3)]">
                       <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Current APY</div>
-                      <div className="text-[#06B6D4] text-xl font-normal mb-1" style={{ 
+                      <div className="text-xl font-normal mb-1" style={{ 
                         fontFamily: 'Space Grotesk',
-                        letterSpacing: '-0.5px'
+                        letterSpacing: '-0.5px',
+                        color: '#06B6D4'
                       }}>
                         {isLoadingPool ? (
                           <LoadingSpinner size="sm" />
@@ -173,9 +182,10 @@ export const Layout = () => {
                     {/* Withdraw Section */}
                     {userInfo && parseFloat(userInfo.shares) > 0 && (
                       <div className="bg-[#0A0A0A] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
-                        <h4 className="text-white text-lg font-normal mb-4" style={{ 
+                        <h4 className="text-lg font-normal mb-4" style={{ 
                           fontFamily: 'Space Grotesk',
-                          letterSpacing: '-0.5px'
+                          letterSpacing: '-0.5px',
+                          color: '#FFFFFF'
                         }}>Withdraw Funds</h4>
                         <div className="space-y-4">
                           <div className="space-y-3">
@@ -189,14 +199,30 @@ export const Layout = () => {
                                 onChange={(e) => setWithdrawAmount(e.target.value)}
                                 placeholder="0.00"
                                 disabled={isWithdrawing}
-                                className="w-full px-4 py-3 bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg text-white placeholder-[#A3A3A3] focus:outline-none focus:border-[#06B6D4] disabled:opacity-50 disabled:cursor-not-allowed pr-16 transition-colors"
-                                style={{ fontFamily: 'Space Grotesk' }}
+                                className="w-full px-4 py-3 bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg placeholder-[#A3A3A3] focus:outline-none focus:border-[#06B6D4] disabled:opacity-50 disabled:cursor-not-allowed pr-16 transition-colors"
+                                style={{ 
+                                  fontFamily: 'Space Grotesk',
+                                  color: '#FFFFFF'
+                                }}
                               />
                               <button
                                 onClick={() => setWithdrawAmount(withdrawableShares)}
                                 disabled={isWithdrawing}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-xs font-normal text-[#06B6D4] hover:text-[#06B6D4]/80 border border-[#06B6D4]/30 rounded-md hover:border-[#06B6D4]/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                style={{ fontFamily: 'Space Grotesk' }}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-xs font-normal border rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                style={{ 
+                                  fontFamily: 'Space Grotesk',
+                                  color: '#06B6D4',
+                                  borderColor: 'rgba(6, 182, 212, 0.3)',
+                                  backgroundColor: 'transparent'
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.color = '#22D3EE';
+                                  e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.5)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.color = '#06B6D4';
+                                  e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.3)';
+                                }}
                               >
                                 Max
                               </button>
@@ -223,32 +249,36 @@ export const Layout = () => {
 
                 {/* Trading Position */}
                 <div className="space-y-6">
-                  <h3 className="text-white text-xl font-normal" style={{ 
+                  <h3 className="text-xl font-normal" style={{ 
                     fontFamily: 'Space Grotesk',
-                    letterSpacing: '-0.5px'
+                    letterSpacing: '-0.5px',
+                    color: '#FFFFFF'
                   }}>Trading Position</h3>
                   <div className="space-y-4">
                     <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
                       <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Active Loan</div>
-                      <div className="text-white text-xl font-normal mb-1" style={{ 
+                      <div className="text-xl font-normal mb-1" style={{ 
                         fontFamily: 'Space Grotesk',
-                        letterSpacing: '-0.5px'
+                        letterSpacing: '-0.5px',
+                        color: '#FFFFFF'
                       }}>$12,500</div>
                       <div className="text-[#A3A3A3] text-xs font-normal">Borrowed for trading</div>
                     </div>
                     <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
                       <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>Collateral</div>
-                      <div className="text-white text-xl font-normal mb-1" style={{ 
+                      <div className="text-xl font-normal mb-1" style={{ 
                         fontFamily: 'Space Grotesk',
-                        letterSpacing: '-0.5px'
+                        letterSpacing: '-0.5px',
+                        color: '#FFFFFF'
                       }}>$2,500</div>
                       <div className="text-[#A3A3A3] text-xs font-normal">Margin requirement</div>
                     </div>
                     <div className="bg-[#1E1E1E] rounded-lg p-6 border border-[rgba(6,182,212,0.3)]">
                       <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>P&L</div>
-                      <div className="text-[#06B6D4] text-xl font-normal mb-1" style={{ 
+                      <div className="text-xl font-normal mb-1" style={{ 
                         fontFamily: 'Space Grotesk',
-                        letterSpacing: '-0.5px'
+                        letterSpacing: '-0.5px',
+                        color: '#06B6D4'
                       }}>+$387</div>
                       <div className="text-[#06B6D4]/70 text-xs font-normal">Unrealized gains</div>
                     </div>
@@ -287,14 +317,14 @@ export const Layout = () => {
     }
   };
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab as TabType);
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab);
   };
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       <AppNavbar activeTab={activeTab} onTabChange={handleTabChange} />
-      <main id="main-content" className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 py-16 pt-24">
+      <main id="main-content" className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 pt-20">
         {renderActiveTab()}
       </main>
     </div>

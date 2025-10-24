@@ -21,6 +21,7 @@ export const useCreateLoan = () => {
   const { address } = useAccount();
   const [amount, setAmount] = useState<string>("");
   const [validationError, setValidationError] = useState<string>("");
+  const [currentStep, setCurrentStep] = useState<'idle' | 'approve' | 'create' | 'success'>('idle');
   const [approvalTx, setApprovalTx] = useState<TransactionState>({ status: 'idle' });
   const [loanTx, setLoanTx] = useState<TransactionState>({ status: 'idle' });
 
@@ -84,6 +85,7 @@ export const useCreateLoan = () => {
   useEffect(() => {
     if (isApproveSuccess) {
       setApprovalTx(prev => ({ ...prev, status: 'success' }));
+      setCurrentStep('create');
       refetchAllowance();
       refetchCollateral();
       refetchFunding();
@@ -93,6 +95,7 @@ export const useCreateLoan = () => {
   useEffect(() => {
     if (isApproveError) {
       setApprovalTx(prev => ({ ...prev, status: 'error', error: 'Approval failed' }));
+      setCurrentStep('idle');
     }
   }, [isApproveError]);
 
@@ -106,6 +109,7 @@ export const useCreateLoan = () => {
   useEffect(() => {
     if (isCreateLoanSuccess) {
       setLoanTx(prev => ({ ...prev, status: 'success' }));
+      setCurrentStep('success');
       refetchBalance();
       setAmount("");
     }
@@ -114,6 +118,7 @@ export const useCreateLoan = () => {
   useEffect(() => {
     if (isCreateLoanError) {
       setLoanTx(prev => ({ ...prev, status: 'error', error: 'Loan creation failed' }));
+      setCurrentStep('idle');
     }
   }, [isCreateLoanError]);
 
@@ -129,6 +134,7 @@ export const useCreateLoan = () => {
   const handleApprove = useCallback(async () => {
     if (!address || !isValidAmount) return;
     setApprovalTx({ status: 'idle' });
+    setCurrentStep('approve');
     
     try {
       await approve({
@@ -143,16 +149,18 @@ export const useCreateLoan = () => {
       console.error("Approval error:", err);
       const errorMessage = getTransactionErrorMessage(err);
       setApprovalTx({ status: 'error', error: errorMessage });
+      setCurrentStep('idle');
     }
   }, [address, isValidAmount, approve]);
 
   const handleCreateLoan = useCallback(async () => {
     if (!address || !isValidAmount) return;
     if (needsApproval) {
-      setLoanTx({ status: 'error', error: 'Please approve USDC first' });
+      setLoanTx({ status: 'error', error: 'Silakan approve USDC terlebih dahulu' });
       return;
     }
     setLoanTx({ status: 'idle' });
+    setCurrentStep('create');
     
     try {
       await createLoan({
@@ -164,6 +172,7 @@ export const useCreateLoan = () => {
       console.error("CreateLoan error:", err);
       const errorMessage = getTransactionErrorMessage(err);
       setLoanTx({ status: 'error', error: errorMessage });
+      setCurrentStep('idle');
     }
   }, [address, isValidAmount, needsApproval, createLoan, amountRaw]);
 
@@ -171,6 +180,7 @@ export const useCreateLoan = () => {
     setApprovalTx({ status: 'idle' });
     setLoanTx({ status: 'idle' });
     setValidationError("");
+    setCurrentStep('idle');
   }, []);
 
   return {
@@ -183,12 +193,16 @@ export const useCreateLoan = () => {
     poolFunding,
     needsApproval,
     isValidAmount,
+    
+    // Step Management
+    currentStep,
     isApproving,
     isCreatingLoan,
     isApproveSuccess,
     isCreateLoanSuccess,
     approvalTx,
     loanTx,
+    
     handleApprove,
     handleCreateLoan,
     resetTransactionStates,
@@ -227,6 +241,7 @@ export const useUserLoanInfo = () => {
 // Hook: useRepayLoan
 export const useRepayLoan = () => {
   const [repayTx, setRepayTx] = useState<TransactionState>({ status: 'idle' });
+  const [currentStep, setCurrentStep] = useState<'idle' | 'repay' | 'success'>('idle');
 
   // Repay transaction
   const { writeContract: repayLoan, data: repayHash } = useWriteContract();
@@ -243,17 +258,20 @@ export const useRepayLoan = () => {
   useEffect(() => {
     if (isRepayTxSuccess) {
       setRepayTx(prev => ({ ...prev, status: 'success' }));
+      setCurrentStep('success');
     }
   }, [isRepayTxSuccess]);
 
   useEffect(() => {
     if (isRepayTxError) {
       setRepayTx(prev => ({ ...prev, status: 'error', error: 'Repay failed' }));
+      setCurrentStep('idle');
     }
   }, [isRepayTxError]);
 
   const handleRepay = useCallback(async () => {
     setRepayTx({ status: 'idle' });
+    setCurrentStep('repay');
     try {
       await repayLoan({
         ...CONTRACT_CONFIGS.LOAN_MANAGER,
@@ -264,16 +282,19 @@ export const useRepayLoan = () => {
       console.error("Repay error:", err);
       const errorMessage = err instanceof Error ? err.message : 'Repay failed';
       setRepayTx({ status: 'error', error: errorMessage });
+      setCurrentStep('idle');
     }
   }, [repayLoan]);
 
   const resetTransactionState = useCallback(() => {
     setRepayTx({ status: 'idle' });
+    setCurrentStep('idle');
   }, []);
 
   return {
     handleRepay,
     repayTx,
+    currentStep,
     isRepaying: isRepayingTx,
     isRepaySuccess: isRepayTxSuccess,
     resetTransactionState,

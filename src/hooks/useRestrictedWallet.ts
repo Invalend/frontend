@@ -75,7 +75,7 @@ export const useRestrictedWallet = () => {
       await withdrawFromWallet({
         address: restrictedWalletAddress as `0x${string}`,
         abi: RESTRICTED_WALLET_ABI,
-        functionName: 'withdraw',
+        functionName: 'withdrawTokens',
         args: [tokenAddress as `0x${string}`, amountBigInt],
       });
     } catch (err: unknown) {
@@ -96,8 +96,8 @@ export const useRestrictedWallet = () => {
       await withdrawFromWallet({
         address: restrictedWalletAddress as `0x${string}`,
         abi: RESTRICTED_WALLET_ABI,
-        functionName: 'withdrawAll',
-        args: [tokenAddress as `0x${string}`],
+        functionName: 'withdrawTokens',
+        args: [tokenAddress as `0x${string}`, BigInt(2) ** BigInt(256) - BigInt(1)],
       });
     } catch (err: unknown) {
       console.error('Withdraw all error:', err);

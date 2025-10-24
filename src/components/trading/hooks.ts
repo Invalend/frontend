@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseUnits, formatUnits } from 'viem';
 import { CONTRACT_CONFIGS } from '@/config/contracts';
 import { RESTRICTED_WALLET_ABI } from '@/abis/restricted-wallet-abi';
-import { UNISWAP_V3_ROUTER, TRADING_CONFIG } from './constants';
+import { UNISWAP_V4_ROUTER, TRADING_CONFIG } from './constants';
+import { prepareSwapParams, encodeV4SwapData, isTokenPairSupported } from './v4-utils';
 import type { Token } from './constants';
 
 // Type definition for LoanInfo tuple structure
@@ -31,16 +32,23 @@ export const useRestrictedWalletBalance = (tokenAddress: string, restrictedWalle
     ],
     functionName: 'balanceOf',
     args: restrictedWalletAddress ? [restrictedWalletAddress as `0x${string}`] : undefined,
-    query: { enabled: !!restrictedWalletAddress && tokenAddress !== '0x0000000000000000000000000000000000000000' },
+    query: { 
+      enabled: !!restrictedWalletAddress && 
+               !!tokenAddress && 
+               tokenAddress !== '' && 
+               tokenAddress !== '0x0000000000000000000000000000000000000000' 
+    },
   });
 };
 
 export const useTradingHooks = () => {
   const { address, isConnected } = useAccount();
+  const [currentStep, setCurrentStep] = useState<'idle' | 'approve' | 'create' | 'swap' | 'success'>('idle');
+  const [error, setError] = useState<string>('');
 
   // Smart contract hooks
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+  const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess, isError: isTxError } = useWaitForTransactionReceipt({
     hash,
   });
 
@@ -72,13 +80,15 @@ export const useTradingHooks = () => {
       return null;
     }
     
-    const isActive = loanInfo[5];
-    const walletAddress = loanInfo[4];
+    // Handle both array and object formats
+    const isActive = Array.isArray(loanInfo) ? loanInfo[5] : (loanInfo as { isActive: boolean }).isActive;
+    const walletAddress = Array.isArray(loanInfo) ? loanInfo[4] : (loanInfo as { restrictedWallet: string }).restrictedWallet;
     
     console.log('Loan validation:', {
       isActive,
       walletAddress,
-      isValidAddress: walletAddress && walletAddress !== '0x0000000000000000000000000000000000000000'
+      isValidAddress: walletAddress && walletAddress !== '0x0000000000000000000000000000000000000000',
+      loanInfoType: Array.isArray(loanInfo) ? 'array' : 'object'
     });
     
     if (!isActive) {
@@ -100,6 +110,8 @@ export const useTradingHooks = () => {
       throw new Error('Missing required parameters');
     }
 
+    setCurrentStep('create');
+    setError('');
     try {
       const loanAmountWei = parseUnits(loanAmount, 6);
       
@@ -109,6 +121,7 @@ export const useTradingHooks = () => {
         args: [loanAmountWei],
       });
     } catch (err) {
+      setCurrentStep('idle');
       throw err;
     }
   };
@@ -119,6 +132,8 @@ export const useTradingHooks = () => {
       throw new Error('Missing required parameters');
     }
 
+    setCurrentStep('approve');
+    setError('');
     try {
       const marginAmountWei = parseUnits(marginAmount, 6);
       
@@ -128,6 +143,7 @@ export const useTradingHooks = () => {
         args: [CONTRACT_CONFIGS.LOAN_MANAGER.address, marginAmountWei],
       });
     } catch (err) {
+      setCurrentStep('idle');
       throw err;
     }
   };
@@ -136,26 +152,57 @@ export const useTradingHooks = () => {
   const executeSwap = async (
     tokenIn: Token,
     tokenOut: Token,
-    amount: string
-    // slippage parameter removed as it's not used in current implementation
+    amount: string,
+    slippagePercent: number = 0.5
   ) => {
+    console.log('executeSwap called with:', {
+      restrictedWalletAddress,
+      address,
+      amount,
+      tokenIn: tokenIn?.symbol,
+      tokenOut: tokenOut?.symbol,
+      slippagePercent
+    });
+
     if (!restrictedWalletAddress || !address || !amount) {
+      console.error('Missing required parameters:', {
+        restrictedWalletAddress: !!restrictedWalletAddress,
+        address: !!address,
+        amount: !!amount
+      });
       throw new Error('Missing required parameters for swap');
     }
 
+    // Check if token pair is supported
+    if (!isTokenPairSupported(tokenIn, tokenOut)) {
+      throw new Error(`Token pair ${tokenIn.symbol}/${tokenOut.symbol} is not supported`);
+    }
+
+    setCurrentStep('swap');
+    setError('');
     try {
-      // For now, just call execute with minimal data
-      // In real implementation, this would need proper Uniswap swap encoding
+      // Prepare swap parameters
+      const swapParams = prepareSwapParams(tokenIn, tokenOut, amount, slippagePercent);
+      if (!swapParams) {
+        throw new Error('Failed to prepare swap parameters');
+      }
+
+      // Encode V4 swap data
+      const swapData = encodeV4SwapData(swapParams);
+
+      // Execute swap through restricted wallet
       await writeContract({
         address: restrictedWalletAddress as `0x${string}`,
         abi: RESTRICTED_WALLET_ABI,
         functionName: 'execute',
         args: [
-          UNISWAP_V3_ROUTER as `0x${string}`, // target
-          '0x' as `0x${string}` // data - this would need to be encoded swap data in real implementation
+          UNISWAP_V4_ROUTER as `0x${string}`, // target
+          swapData as `0x${string}` // encoded V4 swap data
         ],
       });
     } catch (err) {
+      setCurrentStep('idle');
+      console.error('Swap error:', err);
       throw err;
     }
   };
@@ -175,16 +222,37 @@ export const useTradingHooks = () => {
     return !hasActiveLoan && userBalance >= marginRequired && parseFloat(tradeAmount) >= TRADING_CONFIG.MIN_TRADE_AMOUNT;
   };
 
-  // Update data on successful transactions
-  React.useEffect(() => {
+  // Effects for step management
+  useEffect(() => {
     if (isSuccess) {
+      if (currentStep === 'approve') {
+        setCurrentStep('create');
+      } else if (currentStep === 'create') {
+        setCurrentStep('swap');
+      } else if (currentStep === 'swap') {
+        setCurrentStep('success');
+      }
       refetchLoanInfo();
       refetchUsdcBalance();
+      setError('');
     }
-  }, [isSuccess, refetchLoanInfo, refetchUsdcBalance]);
+  }, [isSuccess, currentStep, refetchLoanInfo, refetchUsdcBalance]);
+
+  useEffect(() => {
+    if (isTxError || writeError) {
+      setCurrentStep('idle');
+      setError('Transaksi gagal. Silakan coba lagi.');
+    }
+  }, [isTxError, writeError]);
+
+  // Reset function
+  const resetStates = () => {
+    setCurrentStep('idle');
+    setError('');
+  };
 
   // Computed values
-  const hasActiveLoan = loanInfo ? loanInfo[5] : false;
+  const hasActiveLoan = loanInfo ? (Array.isArray(loanInfo) ? loanInfo[5] : (loanInfo as { isActive: boolean }).isActive) : false;
   const userBalance = usdcBalance ? formatUnits(usdcBalance as bigint, 6) : '0';
 
   return {
@@ -193,7 +261,11 @@ export const useTradingHooks = () => {
     isPending,
     isConfirming,
     isSuccess,
-    error,
+    error: error || writeError?.message || '',
+    
+    // Step Management
+    currentStep,
+    
     hasActiveLoan,
     userBalance,
     restrictedWalletAddress,
@@ -205,5 +277,6 @@ export const useTradingHooks = () => {
     executeSwap,
     canCreateLoan,
     isLoadingLoanInfo,
+    resetStates,
   };
 };

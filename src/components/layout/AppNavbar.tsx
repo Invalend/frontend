@@ -2,71 +2,23 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { 
-  LayoutDashboard, 
-  TrendingUp, 
-  DollarSign, 
-  Wallet, 
-  Menu, 
-  X,
-  ArrowRight,
-  BarChart3,
-  Droplets
-} from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { ConnectWallet } from '../common/ConnectWallet';
+import { navigationItems, type TabType } from '@/config/navigation';
 
 interface AppNavbarProps {
-  activeTab: string;
-  onTabChange: (tab: string) => void;
+  activeTab: TabType;
+  onTabChange: (tab: TabType) => void;
 }
 
 export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navItems = [
-    { 
-      tab: 'dashboard', 
-      label: 'Dashboard', 
-      icon: LayoutDashboard,
-      description: 'Overview & Analytics'
-    },
-    { 
-      tab: 'pool', 
-      label: 'Earn', 
-      icon: TrendingUp,
-      description: 'Liquidity & Yield'
-    },
-    { 
-      tab: 'loans', 
-      label: 'Borrow', 
-      icon: DollarSign,
-      description: 'Leverage & Loans'
-    },
-    { 
-      tab: 'trading', 
-      label: 'Trading', 
-      icon: BarChart3,
-      description: 'DeFi Trading'
-    },
-    { 
-      tab: 'wallet', 
-      label: 'Wallet', 
-      icon: Wallet,
-      description: 'Asset Management'
-    },
-    { 
-      tab: 'faucet', 
-      label: 'Faucet', 
-      icon: Droplets,
-      description: 'Test Tokens'
-    },
-  ];
-
-  const isActive = (tab: string) => {
+  const isActive = (tab: TabType) => {
     return activeTab === tab;
   };
 
-  const handleNavigation = (tab: string) => {
+  const handleNavigation = (tab: TabType) => {
     onTabChange(tab);
     setIsMobileMenuOpen(false);
   };
@@ -78,8 +30,8 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
         role="navigation"
         aria-label="Application navigation"
       >
-        <div className="px-8 sm:px-12 lg:px-16">
-          <div className="flex items-center justify-between h-20">
+        <div className="px-6 sm:px-8 lg:px-12">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
               <div 
@@ -107,15 +59,15 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1" role="menubar">
-              {navItems.map((item) => {
+              {navigationItems.map((item) => {
                 const Icon = item.icon;
-                const active = isActive(item.tab);
+                const active = isActive(item.id);
                 
                 return (
                   <button
-                    key={item.tab}
-                    onClick={() => handleNavigation(item.tab)}
-                    className={`relative flex items-center gap-3 px-6 py-4 rounded-lg transition-all duration-300 group ${
+                    key={item.id}
+                    onClick={() => handleNavigation(item.id)}
+                    className={`relative flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all duration-300 group ${
                       active ? 'text-[#06B6D4]' : 'text-[#A3A3A3] hover:text-white'
                     }`}
                     style={{ fontFamily: 'Space Grotesk' }}
@@ -123,17 +75,14 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
                     aria-label={`Navigate to ${item.label}`}
                   >
                     <Icon 
-                      className={`w-5 h-5 transition-all duration-300 ${
+                      className={`w-4 h-4 transition-all duration-300 ${
                         active ? 'text-[#06B6D4]' : 'text-[#A3A3A3] group-hover:text-white'
                       }`}
-                      aria-hidden="true"
+                      aria-hidden={true}
                     />
                     <div className="flex flex-col">
-                      <span className="text-base font-normal">
+                      <span className="text-sm font-normal">
                         {item.label}
-                      </span>
-                      <span className="text-xs font-normal opacity-70">
-                        {item.description}
                       </span>
                     </div>
                     
@@ -165,7 +114,7 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-menu"
               >
-                {isMobileMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+                {isMobileMenuOpen ? <X className="w-6 h-6" aria-hidden={true} /> : <Menu className="w-6 h-6" aria-hidden={true} />}
               </button>
             </div>
           </div>
@@ -179,17 +128,17 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
             role="menu"
             aria-label="Mobile navigation menu"
           >
-            <div className="px-8 sm:px-12 py-6 space-y-4">
+            <div className="px-6 sm:px-8 py-4 space-y-3">
               {/* Mobile Navigation Items */}
-              {navItems.map((item) => {
+              {navigationItems.map((item) => {
                 const Icon = item.icon;
-                const active = isActive(item.tab);
+                const active = isActive(item.id);
                 
                 return (
                   <button
-                    key={item.tab}
-                    onClick={() => handleNavigation(item.tab)}
-                    className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-all duration-300 group ${
+                    key={item.id}
+                    onClick={() => handleNavigation(item.id)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-300 group ${
                       active ? 'text-[#06B6D4] bg-[#1E1E1E]' : 'text-[#A3A3A3] hover:text-white hover:bg-[#1E1E1E]'
                     }`}
                     style={{ fontFamily: 'Space Grotesk' }}
@@ -197,13 +146,13 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
                     aria-label={`Navigate to ${item.label}`}
                   >
                     <Icon 
-                      className={`w-5 h-5 transition-all duration-300 ${
+                      className={`w-4 h-4 transition-all duration-300 ${
                         active ? 'text-[#06B6D4]' : 'text-[#A3A3A3] group-hover:text-white'
                       }`}
-                      aria-hidden="true"
+                      aria-hidden={true}
                     />
                     <div className="flex flex-col">
-                      <span className="text-base font-normal">
+                      <span className="text-sm font-normal">
                         {item.label}
                       </span>
                       <span className="text-xs font-normal opacity-70">
@@ -211,7 +160,7 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
                       </span>
                     </div>
                     {active && (
-                      <ArrowRight className="w-4 h-4 ml-auto text-[#06B6D4]" aria-hidden="true" />
+                      <ArrowRight className="w-4 h-4 ml-auto text-[#06B6D4]" aria-hidden={true} />
                     )}
                   </button>
                 );

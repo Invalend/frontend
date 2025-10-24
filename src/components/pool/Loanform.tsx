@@ -15,9 +15,9 @@ export const BorrowForm = () => {
     poolFunding,
     needsApproval,
     isValidAmount,
+    currentStep,
     isApproving,
     isCreatingLoan,
-    isApproveSuccess,
     approvalTx,
     loanTx,
     usdcBalance,
@@ -28,13 +28,18 @@ export const BorrowForm = () => {
 
   const { loanInfo, refetch: refetchLoanInfo } = useUserLoanInfo();
 
-  const statusText = isApproving
-    ? "Approving..."
-    : isCreatingLoan
-    ? "Creating Loan..."
-    : needsApproval && !isApproveSuccess
-    ? "Approve USDC First"
-    : "Create Loan";
+  const statusText = (() => {
+    switch (currentStep) {
+      case 'approve':
+        return isApproving ? "Mengapprove USDC..." : "Approve USDC";
+      case 'create':
+        return isCreatingLoan ? "Membuat Loan..." : "Create Loan";
+      case 'success':
+        return "Loan Berhasil!";
+      default:
+        return needsApproval ? "Approve USDC First" : "Create Loan";
+    }
+  })();
 
   const isButtonDisabled = !isValidAmount || isApproving || isCreatingLoan;
 
@@ -185,8 +190,12 @@ export const BorrowForm = () => {
 
         {/* Action Button */}
         <TransactionButton
-          onClick={needsApproval && !isApproveSuccess ? handleApprove : handleCreateLoan}
-          disabled={isButtonDisabled}
+          onClick={
+            currentStep === 'approve' || (needsApproval && currentStep === 'idle') 
+              ? handleApprove 
+              : handleCreateLoan
+          }
+          disabled={isButtonDisabled || currentStep === 'success'}
           loading={isApproving || isCreatingLoan}
           size="lg"
           className="w-full"
@@ -201,7 +210,7 @@ export const BorrowForm = () => {
 // RepayForm
 export const RepayForm = () => {
   const { loanInfo, refetch: refetchLoanInfo } = useUserLoanInfo();
-  const { handleRepay, repayTx, isRepaying, resetTransactionState } = useRepayLoan();
+  const { handleRepay, repayTx, currentStep, isRepaying, resetTransactionState } = useRepayLoan();
 
   const activeLoan = loanInfo && loanInfo.loanAmount && loanInfo.isActive;
 
@@ -307,13 +316,17 @@ export const RepayForm = () => {
         {/* Action Button */}
         <TransactionButton
           onClick={handleRepay}
-          disabled={!activeLoan || isRepaying}
+          disabled={!activeLoan || isRepaying || currentStep === 'success'}
           loading={isRepaying}
           size="lg"
           className="w-full"
           variant={activeLoan ? 'primary' : 'secondary'}
         >
-          {activeLoan ? 'Repay Loan' : 'No Loan to Repay'}
+          {currentStep === 'repay' && isRepaying 
+            ? 'Membayar Loan...' 
+            : currentStep === 'success' 
+            ? 'Repay Berhasil!' 
+            : activeLoan ? 'Repay Loan' : 'No Loan to Repay'}
         </TransactionButton>
       </div>
     </div>

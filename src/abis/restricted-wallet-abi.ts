@@ -7,16 +7,23 @@ export const RESTRICTED_WALLET_ABI = [
         type: "address",
         internalType: "address",
       },
+      {
+        name: "_universalRouter",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_poolManager",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "_permit2",
+        type: "address",
+        internalType: "address",
+      },
     ],
     stateMutability: "nonpayable",
-  },
-  {
-    type: "fallback",
-    stateMutability: "payable",
-  },
-  {
-    type: "receive",
-    stateMutability: "payable",
   },
   {
     type: "function",
@@ -110,24 +117,6 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "function",
-    name: "emergencyReturnFunds",
-    inputs: [
-      {
-        name: "loanManager",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "token",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "execute",
     inputs: [
       {
@@ -162,6 +151,57 @@ export const RESTRICTED_WALLET_ABI = [
       },
     ],
     stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "getPoolKey",
+    inputs: [
+      {
+        name: "token0",
+        type: "address",
+        internalType: "address",
+      },
+      {
+        name: "token1",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        name: "poolKey",
+        type: "tuple",
+        internalType: "struct PoolKey",
+        components: [
+          {
+            name: "currency0",
+            type: "address",
+            internalType: "Currency",
+          },
+          {
+            name: "currency1",
+            type: "address",
+            internalType: "Currency",
+          },
+          {
+            name: "fee",
+            type: "uint24",
+            internalType: "uint24",
+          },
+          {
+            name: "tickSpacing",
+            type: "int24",
+            internalType: "int24",
+          },
+          {
+            name: "hooks",
+            type: "address",
+            internalType: "contract IHooks",
+          },
+        ],
+      },
+    ],
+    stateMutability: "pure",
   },
   {
     type: "function",
@@ -235,6 +275,32 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "function",
+    name: "permit2",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IPermit2",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "poolManager",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract IPoolManager",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "removeApprovedSelector",
     inputs: [
       {
@@ -281,45 +347,39 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "function",
-    name: "returnFunds",
+    name: "swapExactInputSingleV4",
     inputs: [
       {
-        name: "loanManager",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "token",
-        type: "address",
-        internalType: "address",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "swapExactInputSingle",
-    inputs: [
-      {
-        name: "router",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenIn",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenOut",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "fee",
-        type: "uint24",
-        internalType: "uint24",
+        name: "poolKey",
+        type: "tuple",
+        internalType: "struct PoolKey",
+        components: [
+          {
+            name: "currency0",
+            type: "address",
+            internalType: "Currency",
+          },
+          {
+            name: "currency1",
+            type: "address",
+            internalType: "Currency",
+          },
+          {
+            name: "fee",
+            type: "uint24",
+            internalType: "uint24",
+          },
+          {
+            name: "tickSpacing",
+            type: "int24",
+            internalType: "int24",
+          },
+          {
+            name: "hooks",
+            type: "address",
+            internalType: "contract IHooks",
+          },
+        ],
       },
       {
         name: "amountIn",
@@ -348,81 +408,39 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "function",
-    name: "swapExactInputSingle",
+    name: "swapExactOutputSingleV4",
     inputs: [
       {
-        name: "router",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenIn",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenOut",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "fee",
-        type: "uint24",
-        internalType: "uint24",
-      },
-      {
-        name: "amountIn",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "amountOutMinimum",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "sqrtPriceLimitX96",
-        type: "uint160",
-        internalType: "uint160",
-      },
-      {
-        name: "deadline",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        name: "amountOut",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "swapExactOutputSingle",
-    inputs: [
-      {
-        name: "router",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenIn",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenOut",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "fee",
-        type: "uint24",
-        internalType: "uint24",
+        name: "poolKey",
+        type: "tuple",
+        internalType: "struct PoolKey",
+        components: [
+          {
+            name: "currency0",
+            type: "address",
+            internalType: "Currency",
+          },
+          {
+            name: "currency1",
+            type: "address",
+            internalType: "Currency",
+          },
+          {
+            name: "fee",
+            type: "uint24",
+            internalType: "uint24",
+          },
+          {
+            name: "tickSpacing",
+            type: "int24",
+            internalType: "int24",
+          },
+          {
+            name: "hooks",
+            type: "address",
+            internalType: "contract IHooks",
+          },
+        ],
       },
       {
         name: "amountOut",
@@ -433,60 +451,6 @@ export const RESTRICTED_WALLET_ABI = [
         name: "amountInMaximum",
         type: "uint256",
         internalType: "uint256",
-      },
-      {
-        name: "deadline",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        name: "amountIn",
-        type: "uint256",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "swapExactOutputSingle",
-    inputs: [
-      {
-        name: "router",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenIn",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "tokenOut",
-        type: "address",
-        internalType: "address",
-      },
-      {
-        name: "fee",
-        type: "uint24",
-        internalType: "uint24",
-      },
-      {
-        name: "amountOut",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "amountInMaximum",
-        type: "uint256",
-        internalType: "uint256",
-      },
-      {
-        name: "sqrtPriceLimitX96",
-        type: "uint160",
-        internalType: "uint160",
       },
       {
         name: "deadline",
@@ -518,6 +482,19 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "function",
+    name: "universalRouter",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "contract UniversalRouter",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "whitelistedTokens",
     inputs: [
       {
@@ -537,7 +514,7 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "function",
-    name: "withdraw",
+    name: "withdrawTokens",
     inputs: [
       {
         name: "token",
@@ -548,19 +525,6 @@ export const RESTRICTED_WALLET_ABI = [
         name: "amount",
         type: "uint256",
         internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
-    name: "withdrawAll",
-    inputs: [
-      {
-        name: "token",
-        type: "address",
-        internalType: "address",
       },
     ],
     outputs: [],
@@ -587,7 +551,7 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "event",
-    name: "SelectorWhitelisted",
+    name: "SelectorApproved",
     inputs: [
       {
         name: "selector",
@@ -634,7 +598,7 @@ export const RESTRICTED_WALLET_ABI = [
         internalType: "address",
       },
       {
-        name: "approved",
+        name: "whitelisted",
         type: "bool",
         indexed: false,
         internalType: "bool",
@@ -644,7 +608,45 @@ export const RESTRICTED_WALLET_ABI = [
   },
   {
     type: "event",
-    name: "TradeExecuted",
+    name: "TokensReceived",
+    inputs: [
+      {
+        name: "token",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TokensWithdrawn",
+    inputs: [
+      {
+        name: "token",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "V4TradeExecuted",
     inputs: [
       {
         name: "tokenIn",
@@ -669,31 +671,6 @@ export const RESTRICTED_WALLET_ABI = [
         type: "uint256",
         indexed: false,
         internalType: "uint256",
-      },
-      {
-        name: "router",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-    ],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "TransactionExecuted",
-    inputs: [
-      {
-        name: "target",
-        type: "address",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        name: "data",
-        type: "bytes",
-        indexed: false,
-        internalType: "bytes",
       },
     ],
     anonymous: false,
@@ -739,4 +716,4 @@ export const RESTRICTED_WALLET_ABI = [
 ] as const;
 
 export const RESTRICTED_WALLET_ADDRESS =
-  "0xa7e82b23460233c71e8553387b2d870003a34a50";
+  "0xCA6913E22193cc6D0A125127ffe87953b1170A66";

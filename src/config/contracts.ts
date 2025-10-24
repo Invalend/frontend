@@ -5,15 +5,16 @@ import { LOAN_MANAGER_ABI, LOAN_MANAGER_ADDRESS } from '@/abis/loan-manager-abi'
 import { RESTRICTED_WALLET_FACTORY_ABI, RESTRICTED_WALLET_FACTORY_ADDRESS } from '@/abis/restricted-wallet-factory-abi';
 import { RESTRICTED_WALLET_ABI } from '@/abis/restricted-wallet-abi';
 
-// Chain IDs - Only Lisk Sepolia supported
+// Chain IDs - Only Base Sepolia supported
 export const SUPPORTED_CHAINS = {
-  LISK_SEPOLIA: 4202,
+  BASE_SEPOLIA: 84532,
+  LISK_SEPOLIA: 4202, // Keep for backward compatibility
 } as const;
 
-// Default chain is Lisk Sepolia
-export const DEFAULT_CHAIN_ID = SUPPORTED_CHAINS.LISK_SEPOLIA;
+// Default chain is Base Sepolia
+export const DEFAULT_CHAIN_ID = SUPPORTED_CHAINS.BASE_SEPOLIA;
 
-// Contract Addresses for Lisk Sepolia (imported from ABI files)
+// Contract Addresses for Base Sepolia (imported from ABI files)
 export const CONTRACT_ADDRESSES = {
   MOCK_USDC: MOCK_USDC_ADDRESS,
   LENDING_POOL: LENDING_POOL_ADDRESS,
@@ -22,7 +23,7 @@ export const CONTRACT_ADDRESSES = {
   RESTRICTED_WALLET_FACTORY: RESTRICTED_WALLET_FACTORY_ADDRESS,
 } as const;
 
-// Get contract addresses (always returns Lisk Sepolia addresses)
+// Get contract addresses (always returns Base Sepolia addresses)
 export function getContractAddresses() {
   return CONTRACT_ADDRESSES;
 }

@@ -7,7 +7,7 @@ import { LOAN_MANAGER_ABI } from '@/abis/loan-manager-abi';
 import { RESTRICTED_WALLET_FACTORY_ABI } from '@/abis/restricted-wallet-factory-abi';
 
 /**
- * Hook to get contract configurations for Lisk Sepolia
+ * Hook to get contract configurations for Base Sepolia
  */
 export function useChainAwareContracts() {
   const addresses = getContractAddresses();
@@ -37,11 +37,11 @@ export function useChainAwareContracts() {
 }
 
 /**
- * Hook to check if the current chain is supported (only Lisk Sepolia)
+ * Hook to check if the current chain is supported (only Base Sepolia)
  */
 export function useIsSupportedChain() {
   const chainId = useChainId();
-  return chainId === SUPPORTED_CHAINS.LISK_SEPOLIA;
+  return chainId === SUPPORTED_CHAINS.BASE_SEPOLIA;
 }
 
 /**
@@ -50,17 +50,17 @@ export function useIsSupportedChain() {
 export function useChainName() {
   const chainId = useChainId();
   
-  if (chainId === SUPPORTED_CHAINS.LISK_SEPOLIA) {
-    return 'Lisk Sepolia';
+  if (chainId === SUPPORTED_CHAINS.BASE_SEPOLIA) {
+    return 'Base Sepolia';
   }
   
   return 'Unsupported Chain';
 }
 
 /**
- * Hook to check if current chain is Lisk Sepolia (always true for supported chains)
+ * Hook to check if current chain is Base Sepolia (always true for supported chains)
  */
-export function useIsLiskSepolia() {
+export function useIsBaseSepolia() {
   const chainId = useChainId();
-  return chainId === SUPPORTED_CHAINS.LISK_SEPOLIA;
+  return chainId === SUPPORTED_CHAINS.BASE_SEPOLIA;
 }

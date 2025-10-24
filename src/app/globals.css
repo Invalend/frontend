@@ -1019,3 +1019,109 @@ body {
 }
 
 /* Remove custom teal classes and heavy shadow/glow utilities to enforce flat style */
+
+/* RainbowKit ConnectButton Custom Styling - Cyan Theme */
+[data-rk] {
+  --rk-colors-connectButtonBackground: #1E1E1E;
+  --rk-colors-connectButtonBackgroundHover: #2A2A2A;
+  --rk-colors-connectButtonText: #06B6D4;
+  --rk-colors-connectButtonTextHover: #22D3EE;
+  --rk-colors-connectButtonBorder: rgba(6, 182, 212, 0.15);
+  --rk-colors-connectButtonBorderHover: rgba(6, 182, 212, 0.3);
+  --rk-colors-connectButtonInnerBackground: transparent;
+  --rk-colors-connectButtonInnerBackgroundHover: rgba(6, 182, 212, 0.05);
+  --rk-colors-connectButtonTextError: #EF4444;
+  --rk-colors-connectButtonTextSuccess: #06B6D4;
+  --rk-colors-connectButtonTextSecondary: #A3A3A3;
+  --rk-colors-connectButtonTextSecondaryHover: #FFFFFF;
+  --rk-colors-connectButtonTextTertiary: #737373;
+  --rk-colors-connectButtonTextTertiaryHover: #A3A3A3;
+  --rk-colors-connectButtonTextQuaternary: #525252;
+  --rk-colors-connectButtonTextQuaternaryHover: #737373;
+  --rk-colors-connectButtonTextQuinary: #404040;
+  --rk-colors-connectButtonTextQuinaryHover: #525252;
+  --rk-colors-connectButtonTextSenary: #2A2A2A;
+  --rk-colors-connectButtonTextSenaryHover: #404040;
+  --rk-colors-connectButtonTextSeptenary: #1A1A1A;
+  --rk-colors-connectButtonTextSeptenaryHover: #2A2A2A;
+  --rk-colors-connectButtonTextOctonary: #0A0A0A;
+  --rk-colors-connectButtonTextOctonaryHover: #1A1A1A;
+  --rk-colors-connectButtonTextNonary: #000000;
+  --rk-colors-connectButtonTextNonaryHover: #0A0A0A;
+  --rk-colors-connectButtonTextDenary: #FFFFFF;
+  --rk-colors-connectButtonTextDenaryHover: #F5F5F5;
+  --rk-colors-connectButtonTextUndenary: #F0F0F0;
+  --rk-colors-connectButtonTextUndenaryHover: #E5E5E5;
+  --rk-colors-connectButtonTextDuodenary: #E0E0E0;
+  --rk-colors-connectButtonTextDuodenaryHover: #D4D4D4;
+  --rk-colors-connectButtonTextTredenary: #D0D0D0;
+  --rk-colors-connectButtonTextTredenaryHover: #C4C4C4;
+  --rk-colors-connectButtonTextQuattuordenary: #C0C0C0;
+  --rk-colors-connectButtonTextQuattuordenaryHover: #B4B4B4;
+  --rk-colors-connectButtonTextQuindenary: #B0B0B0;
+  --rk-colors-connectButtonTextQuindenaryHover: #A4A4A4;
+  --rk-colors-connectButtonTextSedenary: #A0A0A0;
+  --rk-colors-connectButtonTextSedenaryHover: #949494;
+  --rk-colors-connectButtonTextSeptendenary: #909090;
+  --rk-colors-connectButtonTextSeptendenaryHover: #848484;
+  --rk-colors-connectButtonTextOctodenary: #808080;
+  --rk-colors-connectButtonTextOctodenaryHover: #747474;
+  --rk-colors-connectButtonTextNovemdenary: #707070;
+  --rk-colors-connectButtonTextNovemdenaryHover: #646464;
+  --rk-colors-connectButtonTextVigintenary: #606060;
+  --rk-colors-connectButtonTextVigintenaryHover: #545454;
+  --rk-colors-connectButtonTextUnvigintenary: #505050;
+  --rk-colors-connectButtonTextUnvigintenaryHover: #444444;
+  --rk-colors-connectButtonTextDuovigintenary: #404040;
+  --rk-colors-connectButtonTextDuovigintenaryHover: #343434;
+  --rk-colors-connectButtonTextTrevigintenary: #303030;
+  --rk-colors-connectButtonTextTrevigintenaryHover: #242424;
+  --rk-colors-connectButtonTextQuattuorvigintenary: #202020;
+  --rk-colors-connectButtonTextQuattuorvigintenaryHover: #141414;
+  --rk-colors-connectButtonTextQuinvigintenary: #101010;
+  --rk-colors-connectButtonTextQuinvigintenaryHover: #040404;
+  --rk-colors-connectButtonTextSexvigintenary: #000000;
+  --rk-colors-connectButtonTextSexvigintenaryHover: #000000;
+}
+
+/* Override RainbowKit button styles */
+[data-rk] button[data-testid="rk-connect-button"] {
+  background: #1E1E1E !important;
+  border: 1px solid rgba(6, 182, 212, 0.15) !important;
+  color: #06B6D4 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 400 !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  transition: all 0.3s ease !important;
+}
+
+[data-rk] button[data-testid="rk-connect-button"]:hover {
+  background: #2A2A2A !important;
+  border-color: rgba(6, 182, 212, 0.3) !important;
+  color: #22D3EE !important;
+  transform: translateY(-1px) !important;
+}
+
+[data-rk] button[data-testid="rk-connect-button"]:active {
+  transform: translateY(0) !important;
+}
+
+/* Account button styling */
+[data-rk] button[data-testid="rk-account-button"] {
+  background: #1E1E1E !important;
+  border: 1px solid rgba(6, 182, 212, 0.15) !important;
+  color: #06B6D4 !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-weight: 400 !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  transition: all 0.3s ease !important;
+}
+
+[data-rk] button[data-testid="rk-account-button"]:hover {
+  background: #2A2A2A !important;
+  border-color: rgba(6, 182, 212, 0.3) !important;
+  color: #22D3EE !important;
+  transform: translateY(-1px) !important;
+}
