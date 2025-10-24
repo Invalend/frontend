@@ -81,8 +81,8 @@ export const useTradingHooks = () => {
     }
     
     // Handle both array and object formats
-    const isActive = Array.isArray(loanInfo) ? loanInfo[5] : (loanInfo as { isActive: boolean }).isActive;
-    const walletAddress = Array.isArray(loanInfo) ? loanInfo[4] : (loanInfo as { restrictedWallet: string }).restrictedWallet;
+    const isActive = Array.isArray(loanInfo) ? loanInfo[5] : (loanInfo as unknown as { isActive: boolean }).isActive;
+    const walletAddress = Array.isArray(loanInfo) ? loanInfo[4] : (loanInfo as unknown as { restrictedWallet: string }).restrictedWallet;
     
     console.log('Loan validation:', {
       isActive,
@@ -252,7 +252,7 @@ export const useTradingHooks = () => {
   };
 
   // Computed values
-  const hasActiveLoan = loanInfo ? (Array.isArray(loanInfo) ? loanInfo[5] : (loanInfo as { isActive: boolean }).isActive) : false;
+  const hasActiveLoan = loanInfo ? (Array.isArray(loanInfo) ? loanInfo[5] : (loanInfo as unknown as { isActive: boolean }).isActive) : false;
   const userBalance = usdcBalance ? formatUnits(usdcBalance as bigint, 6) : '0';
 
   return {
