@@ -9,7 +9,13 @@ import {
 } from "wagmi";
 import { CONTRACT_CONFIGS } from "@/config/contracts";
 import { parseUSDC } from "@/utils/formatters";
-import { validateLoanAmount, getTransactionErrorMessage } from "@/utils/validation";
+import { getTransactionErrorMessage } from "@/utils/validation";
+
+// Validation error constants
+const VALIDATION_ERRORS = {
+  AMOUNT_TOO_LOW: "Amount must be greater than 0",
+  INSUFFICIENT_BALANCE: "Insufficient USDC balance for required margin",
+} as const;
 
 export type TransactionState = {
   hash?: string;
@@ -66,10 +72,22 @@ export const useCreateLoan = () => {
   const { isLoading: isCreatingLoan, isSuccess: isCreateLoanSuccess, isError: isCreateLoanError } =
     useWaitForTransactionReceipt({ hash: createLoanHash });
 
-  // Validation
+  // Validation - Fix: validate 20% margin, not total loan amount
   const validationResult = useMemo(() => {
-    return validateLoanAmount(amount, usdcBalance);
-  }, [amount, usdcBalance]);
+    if (!amountRaw || amountRaw <= BigInt(0)) {
+      return VALIDATION_ERRORS.AMOUNT_TOO_LOW;
+    }
+    
+    // Calculate required margin (20% of loan amount)
+    const requiredMargin = (amountRaw * BigInt(20)) / BigInt(100);
+    
+    // Validate user has enough USDC for 20% margin
+    if (usdcBalance && requiredMargin > usdcBalance) {
+      return VALIDATION_ERRORS.INSUFFICIENT_BALANCE;
+    }
+    
+    return null;
+  }, [amountRaw, usdcBalance]);
 
   useEffect(() => {
     setValidationError(validationResult || "");

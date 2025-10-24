@@ -11,6 +11,7 @@ import {
   hasSufficientBalance,
   formatTokenAmount,
 } from "./utils";
+import { formatUSDC } from "@/utils/formatters";
 import type { Token } from "./constants";
 
 export const TradingPage: React.FC = () => {
@@ -37,6 +38,12 @@ export const TradingPage: React.FC = () => {
     canCreateLoan,
     isLoadingLoanInfo, // Add this to check loading state
     restrictedWalletAddress, // Use restrictedWalletAddress from useTradingHooks
+    // Whitelist functions
+    whitelistTokens,
+    usdcWhitelisted,
+    ethWhitelisted,
+    btcWhitelisted,
+    allTokensWhitelisted,
   } = useTradingHooks();
 
   // Get loan status from the same source as LoanPage (for consistency)
@@ -53,7 +60,9 @@ export const TradingPage: React.FC = () => {
   const tokenOut = TOKENS[selectedTokenOut];
 
   // Calculate values using utility functions
-  const marginRequired = calculateMarginRequired(tradeAmount);
+  // Fix: Use loan amount for margin calculation, not trade amount
+  const loanAmount = loanInfo?.loanAmount ? formatUSDC(loanInfo.loanAmount) : "0";
+  const marginRequired = calculateMarginRequired(loanAmount);
   const hasInsufficientBalance = !hasSufficientBalance(
     userBalance,
     marginRequired
@@ -180,6 +189,14 @@ export const TradingPage: React.FC = () => {
     setSelectedTokenOut(selectedTokenIn);
   };
 
+  const handleWhitelistTokens = async () => {
+    try {
+      await whitelistTokens();
+    } catch (err) {
+      console.error("Error whitelisting tokens:", err);
+    }
+  };
+
   // Update estimated output when inputs change
   React.useEffect(() => {
     setEstimatedOutput(calculateEstimatedOutput());
@@ -237,20 +254,69 @@ export const TradingPage: React.FC = () => {
               </div>
             </div>
           ) : restrictedWalletAddress && hasActiveLoan ? (
-            <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(6,182,212,0.15)] p-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-[#06B6D4]/20 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-[#06B6D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Trading Wallet Active</p>
-                  <p className="text-white font-mono text-sm font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-                    {restrictedWalletAddress.slice(0, 6)}...{restrictedWalletAddress.slice(-4)}
-                  </p>
+            <div className="space-y-3">
+              <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(6,182,212,0.15)] p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-[#06B6D4]/20 rounded-full flex items-center justify-center">
+                    <svg className="w-4 h-4 text-[#06B6D4]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Trading Wallet Active</p>
+                    <p className="text-white font-mono text-sm font-normal" style={{ fontFamily: 'Space Grotesk' }}>
+                      {restrictedWalletAddress.slice(0, 6)}...{restrictedWalletAddress.slice(-4)}
+                    </p>
+                  </div>
                 </div>
               </div>
+
+              {/* Whitelist Status */}
+              {!allTokensWhitelisted && (
+                <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(255,193,7,0.15)] p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-8 h-8 bg-[#FFC107]/20 rounded-full flex items-center justify-center">
+                        <svg className="w-4 h-4 text-[#FFC107]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[#FFC107] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Tokens Not Whitelisted</p>
+                        <p className="text-gray-400 text-sm" style={{ fontFamily: 'Space Grotesk' }}>
+                          USDC: {usdcWhitelisted ? '✅' : '❌'} | ETH: {ethWhitelisted ? '✅' : '❌'} | BTC: {btcWhitelisted ? '✅' : '❌'}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleWhitelistTokens}
+                      disabled={isPending || isConfirming}
+                      className="px-4 py-2 bg-[#FFC107] text-black rounded-lg font-medium hover:bg-[#FFC107]/80 disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ fontFamily: 'Space Grotesk' }}
+                    >
+                      {isPending || isConfirming ? 'Whitelisting...' : 'Whitelist Tokens'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {allTokensWhitelisted && (
+                <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(34,197,94,0.15)] p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-[#22C55E]/20 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-[#22C55E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-[#22C55E] font-normal" style={{ fontFamily: 'Space Grotesk' }}>All Tokens Whitelisted</p>
+                      <p className="text-gray-400 text-sm" style={{ fontFamily: 'Space Grotesk' }}>
+                        Ready for trading! USDC ✅ ETH ✅ BTC ✅
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           ) : hasActiveLoan && !restrictedWalletAddress ? (
             <div className="bg-[#0A0A0A] rounded-lg border border-[rgba(6,182,212,0.15)] p-4">

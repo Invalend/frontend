@@ -1,39 +1,12 @@
 import { useChainId } from 'wagmi';
-import { getContractAddresses, SUPPORTED_CHAINS } from '@/config/contracts';
-import { MOCK_USDC_ABI } from '@/abis/mock-usdc-abi';
-import { LENDING_POOL_ABI } from '@/abis/lending-pool-abi';
-import { COLLATERAL_MANAGER_ABI } from '@/abis/collateral-manager-abi';
-import { LOAN_MANAGER_ABI } from '@/abis/loan-manager-abi';
-import { RESTRICTED_WALLET_FACTORY_ABI } from '@/abis/restricted-wallet-factory-abi';
+import { CONTRACT_CONFIGS, SUPPORTED_CHAINS } from '@/config/contracts';
 
 /**
  * Hook to get contract configurations for Base Sepolia
+ * Now uses CONTRACT_CONFIGS from contracts.ts to avoid duplication
  */
 export function useChainAwareContracts() {
-  const addresses = getContractAddresses();
-
-  return {
-    MOCK_USDC: {
-      address: addresses.MOCK_USDC as `0x${string}`,
-      abi: MOCK_USDC_ABI,
-    },
-    LENDING_POOL: {
-      address: addresses.LENDING_POOL as `0x${string}`,
-      abi: LENDING_POOL_ABI,
-    },
-    COLLATERAL_MANAGER: {
-      address: addresses.COLLATERAL_MANAGER as `0x${string}`,
-      abi: COLLATERAL_MANAGER_ABI,
-    },
-    LOAN_MANAGER: {
-      address: addresses.LOAN_MANAGER as `0x${string}`,
-      abi: LOAN_MANAGER_ABI,
-    },
-    RESTRICTED_WALLET_FACTORY: {
-      address: addresses.RESTRICTED_WALLET_FACTORY as `0x${string}`,
-      abi: RESTRICTED_WALLET_FACTORY_ABI,
-    },
-  };
+  return CONTRACT_CONFIGS;
 }
 
 /**

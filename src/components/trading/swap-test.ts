@@ -1,5 +1,5 @@
-// Test file untuk swap functionality
-// File ini untuk testing dan debugging swap implementation
+// Test file for swap functionality
+// This file is for testing and debugging swap implementation
 
 import { TOKENS, V4_POOLS } from './constants';
 import { buildPoolKey, isTokenPairSupported, prepareSwapParams } from './v4-utils';
@@ -96,7 +96,7 @@ export function testPoolConfigurations() {
   });
 }
 
-// Export test functions untuk digunakan di console
+// Export test functions for use in console
 if (typeof window !== 'undefined') {
   (window as unknown as Record<string, unknown>).testSwap = {
     testSwapImplementation,

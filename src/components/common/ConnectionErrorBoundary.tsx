@@ -82,3 +82,4 @@ export class ConnectionErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
+

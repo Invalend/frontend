@@ -1,3 +1,5 @@
+// Auto-generated ABI for LoanManager
+
 export const LOAN_MANAGER_ABI = [
   {
     type: "constructor",
@@ -452,5 +454,4 @@ export const LOAN_MANAGER_ABI = [
   },
 ] as const;
 
-export const LOAN_MANAGER_ADDRESS =
-  "0xDE63F87cE22E62c8a668DcF2f0869d07Be62944d";
+export const LOAN_MANAGER_ADDRESS = "0x93f3766e8a7F7e15e8990406bdBa1247E3A3aCd2";

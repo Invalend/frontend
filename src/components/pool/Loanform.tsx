@@ -31,11 +31,11 @@ export const BorrowForm = () => {
   const statusText = (() => {
     switch (currentStep) {
       case 'approve':
-        return isApproving ? "Mengapprove USDC..." : "Approve USDC";
+        return isApproving ? "Approving USDC..." : "Approve USDC";
       case 'create':
-        return isCreatingLoan ? "Membuat Loan..." : "Create Loan";
+        return isCreatingLoan ? "Creating Loan..." : "Create Loan";
       case 'success':
-        return "Loan Berhasil!";
+        return "Loan Created Successfully!";
       default:
         return needsApproval ? "Approve USDC First" : "Create Loan";
     }
@@ -323,9 +323,9 @@ export const RepayForm = () => {
           variant={activeLoan ? 'primary' : 'secondary'}
         >
           {currentStep === 'repay' && isRepaying 
-            ? 'Membayar Loan...' 
+            ? 'Repaying Loan...' 
             : currentStep === 'success' 
-            ? 'Repay Berhasil!' 
+            ? 'Repay Successful!' 
             : activeLoan ? 'Repay Loan' : 'No Loan to Repay'}
         </TransactionButton>
       </div>

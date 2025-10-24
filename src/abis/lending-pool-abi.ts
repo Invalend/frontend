@@ -1,3 +1,5 @@
+// Auto-generated ABI for LendingPool
+
 export const LENDING_POOL_ABI = [
   {
     inputs: [
@@ -606,4 +608,4 @@ export const LENDING_POOL_ABI = [
 ] as const;
 
 export const LENDING_POOL_ADDRESS =
-  "0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53";
+  "0x3acFeeDAea433fc47f9000c3c1eb6F486dd58717";

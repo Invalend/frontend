@@ -12,13 +12,6 @@ export const EXPLORER_CONFIGS = {
     addressPath: '/address',
     tokenPath: '/token',
   },
-  [SUPPORTED_CHAINS.LISK_SEPOLIA]: {
-    name: 'Lisk Sepolia Blockscout',
-    baseUrl: 'https://sepolia-blockscout.lisk.com',
-    txPath: '/tx',
-    addressPath: '/address',
-    tokenPath: '/token',
-  },
 } as const satisfies Record<SupportedChainId, {
   name: string;
   baseUrl: string;

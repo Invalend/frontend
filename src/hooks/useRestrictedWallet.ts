@@ -3,6 +3,7 @@ import { useWriteContract, useWaitForTransactionReceipt, useReadContract } from 
 import { parseUnits } from 'viem';
 import { RESTRICTED_WALLET_ABI } from '@/abis/restricted-wallet-abi';
 import { useUserLoanInfo } from './useLoan';
+import { CONTRACT_CONFIGS } from '@/config/contracts';
 
 interface TransactionState {
   status: 'idle' | 'pending' | 'success' | 'error';
@@ -110,6 +111,13 @@ export const useRestrictedWallet = () => {
     setWithdrawTx({ status: 'idle' });
   }, []);
 
+  // Get loan manager stats for additional context
+  const { data: loanStats } = useReadContract({
+    ...CONTRACT_CONFIGS.LOAN_MANAGER,
+    functionName: "getLoanStats",
+    args: [],
+  });
+
   return {
     restrictedWalletAddress,
     hasRestrictedWallet,
@@ -121,5 +129,10 @@ export const useRestrictedWallet = () => {
     withdrawTx,
     isWithdrawing,
     resetTransactionState,
+    loanStats: loanStats ? {
+      totalLoansCreated: loanStats[0],
+      totalLoansRepaid: loanStats[1],
+      activeLoans: loanStats[2]
+    } : null,
   };
 };

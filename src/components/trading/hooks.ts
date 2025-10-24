@@ -3,8 +3,8 @@ import { useAccount, useReadContract, useWriteContract, useWaitForTransactionRec
 import { parseUnits, formatUnits } from 'viem';
 import { CONTRACT_CONFIGS } from '@/config/contracts';
 import { RESTRICTED_WALLET_ABI } from '@/abis/restricted-wallet-abi';
-import { UNISWAP_V4_ROUTER, TRADING_CONFIG } from './constants';
-import { prepareSwapParams, encodeV4SwapData, isTokenPairSupported } from './v4-utils';
+import { TRADING_CONFIG } from './constants';
+import { prepareSwapParams, isTokenPairSupported } from './v4-utils';
 import type { Token } from './constants';
 
 // Type definition for LoanInfo tuple structure
@@ -187,17 +187,17 @@ export const useTradingHooks = () => {
         throw new Error('Failed to prepare swap parameters');
       }
 
-      // Encode V4 swap data
-      const swapData = encodeV4SwapData(swapParams);
-
-      // Execute swap through restricted wallet
+      // Execute swap directly through restricted wallet's swapExactInputSingleV4 function
       await writeContract({
         address: restrictedWalletAddress as `0x${string}`,
         abi: RESTRICTED_WALLET_ABI,
-        functionName: 'execute',
+        functionName: 'swapExactInputSingleV4',
         args: [
-          UNISWAP_V4_ROUTER as `0x${string}`, // target
-          swapData as `0x${string}` // encoded V4 swap data
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          swapParams.poolKey as any, // PoolKey struct for wagmi
+          swapParams.amountIn,
+          swapParams.amountOutMinimum,
+          swapParams.deadline
         ],
       });
     } catch (err) {
@@ -207,9 +207,74 @@ export const useTradingHooks = () => {
     }
   };
 
+  // Whitelist tokens function
+  const whitelistTokens = async () => {
+    if (!restrictedWalletAddress || !isConnected) {
+      throw new Error('Missing required parameters for whitelist');
+    }
+
+    setCurrentStep('approve'); // Reuse approve step for whitelist
+    setError('');
+    try {
+      // Get token addresses
+      const usdcAddress = CONTRACT_CONFIGS.MOCK_USDC.address;
+      const ethAddress = CONTRACT_CONFIGS.MOCK_ETH.address;
+      const btcAddress = CONTRACT_CONFIGS.MOCK_BTC.address;
+
+      // Prepare token array for batch whitelist
+      const tokens = [usdcAddress, ethAddress, btcAddress];
+
+      // Call batch whitelist function
+      await writeContract({
+        address: restrictedWalletAddress as `0x${string}`,
+        abi: RESTRICTED_WALLET_ABI,
+        functionName: 'addWhitelistedTokensBatch',
+        args: [tokens],
+      });
+    } catch (err) {
+      setCurrentStep('idle');
+      console.error('Whitelist error:', err);
+      throw err;
+    }
+  };
+
   // Get restricted wallet balances for tokens
   // Note: Components should use useRestrictedWalletBalance hook directly
   // with restrictedWalletAddress from this hook
+
+  // Check whitelist status for tokens
+  const { data: usdcWhitelisted } = useReadContract({
+    address: restrictedWalletAddress as `0x${string}`,
+    abi: RESTRICTED_WALLET_ABI,
+    functionName: 'isTokenWhitelisted',
+    args: [CONTRACT_CONFIGS.MOCK_USDC.address],
+    query: {
+      enabled: !!restrictedWalletAddress,
+    },
+  });
+
+  const { data: ethWhitelisted } = useReadContract({
+    address: restrictedWalletAddress as `0x${string}`,
+    abi: RESTRICTED_WALLET_ABI,
+    functionName: 'isTokenWhitelisted',
+    args: [CONTRACT_CONFIGS.MOCK_ETH.address],
+    query: {
+      enabled: !!restrictedWalletAddress,
+    },
+  });
+
+  const { data: btcWhitelisted } = useReadContract({
+    address: restrictedWalletAddress as `0x${string}`,
+    abi: RESTRICTED_WALLET_ABI,
+    functionName: 'isTokenWhitelisted',
+    args: [CONTRACT_CONFIGS.MOCK_BTC.address],
+    query: {
+      enabled: !!restrictedWalletAddress,
+    },
+  });
+
+  // Check if all tokens are whitelisted
+  const allTokensWhitelisted = usdcWhitelisted && ethWhitelisted && btcWhitelisted;
 
   // Check if user can create loan
   const canCreateLoan = (tradeAmount: string) => {
@@ -241,7 +306,7 @@ export const useTradingHooks = () => {
   useEffect(() => {
     if (isTxError || writeError) {
       setCurrentStep('idle');
-      setError('Transaksi gagal. Silakan coba lagi.');
+      setError('Transaction failed. Please try again.');
     }
   }, [isTxError, writeError]);
 
@@ -278,5 +343,12 @@ export const useTradingHooks = () => {
     canCreateLoan,
     isLoadingLoanInfo,
     resetStates,
+    
+    // Whitelist functions
+    whitelistTokens,
+    usdcWhitelisted,
+    ethWhitelisted,
+    btcWhitelisted,
+    allTokensWhitelisted,
   };
 };

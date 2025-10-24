@@ -71,11 +71,11 @@ export const DepositForm = () => {
   const statusText = useMemo(() => {
     switch (currentStep) {
       case 'approve':
-        return isApproving ? "Mengapprove USDC..." : "Approve USDC";
+        return isApproving ? "Approving USDC..." : "Approve USDC";
       case 'deposit':
-        return isDepositing ? "Mendeposit..." : "Deposit USDC";
+        return isDepositing ? "Depositing..." : "Deposit USDC";
       case 'success':
-        return "Deposit Berhasil!";
+        return "Deposit Successful!";
       default:
         return needsApproval ? "Approve USDC" : "Deposit USDC";
     }
@@ -176,12 +176,12 @@ export const DepositForm = () => {
         {/* Success Message */}
         {currentStep === 'deposit' && isApproveSuccess && !isApproving && (
           <SuccessBox
-            message="✅ Approval berhasil!"
-            subtext="Klik Deposit untuk melanjutkan."
+            message="✅ Approval successful!"
+            subtext="Click Deposit to continue."
           />
         )}
         {currentStep === 'success' && isDepositSuccess && !isDepositing && (
-          <SuccessBox message="✅ Deposit berhasil! Dana Anda sedang menghasilkan yield." />
+          <SuccessBox message="✅ Deposit successful! Your funds are now earning yield." />
         )}
 
         {/* Action Button */}

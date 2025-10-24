@@ -2,7 +2,7 @@ import { parseUnits, encodeFunctionData } from 'viem';
 import { V4_POOLS } from './constants';
 import type { Token } from './constants';
 
-// PoolKey struct untuk Uniswap V4
+// PoolKey struct for Uniswap V4 
 export interface PoolKey {
   currency0: `0x${string}`;
   currency1: `0x${string}`;
@@ -11,7 +11,7 @@ export interface PoolKey {
   hooks: `0x${string}`;
 }
 
-// Swap parameters untuk V4
+// Swap parameters for V4
 export interface SwapParams {
   poolKey: PoolKey;
   amountIn: bigint;
@@ -20,10 +20,10 @@ export interface SwapParams {
 }
 
 /**
- * Build PoolKey struct untuk Uniswap V4
+ * Build PoolKey struct for Uniswap V4
  */
 export function buildPoolKey(tokenIn: Token, tokenOut: Token): PoolKey | null {
-  // Cari pool yang sesuai dengan token pair
+  // Find pool that matches the token pair
   const poolId = findPoolId(tokenIn, tokenOut);
   if (!poolId) return null;
 
@@ -97,7 +97,7 @@ export function calculateMinAmountOutV4(
   // Calculate expected amount out
   const expectedAmountOut = parseFloat(amountIn) * exchangeRate * slippageMultiplier;
   
-  // Convert to BigInt dengan decimals yang benar
+  // Convert to BigInt with correct decimals
   return parseUnits(expectedAmountOut.toFixed(tokenOut.decimals), tokenOut.decimals);
 }
 
@@ -109,16 +109,16 @@ export function calculateDeadlineV4(minutesFromNow: number = 20): number {
 }
 
 /**
- * Encode swap data untuk Uniswap V4 Universal Router
- * Note: Ini adalah simplified version untuk demo
- * Production implementation akan memerlukan proper V4 router encoding
+ * Encode swap data for Uniswap V4 Universal Router
+ * Note: This is a simplified version for demo
+ * Production implementation will require proper V4 router encoding
  */
 export function encodeV4SwapData(swapParams: SwapParams): string {
-  // Untuk demo, kita akan menggunakan execute function dengan minimal data
-  // Production implementation akan memerlukan proper V4 router call encoding
+  // For demo, we will use execute function with minimal data
+  // Production implementation will require proper V4 router call encoding
   
-  // Simulate swap data (ini adalah placeholder)
-  // Real implementation akan memerlukan proper V4 router encoding
+  // Simulate swap data (this is a placeholder)
+  // Real implementation will require proper V4 router encoding
   const swapData = encodeFunctionData({
     abi: [{
       name: 'swapExactInputSingleV4',

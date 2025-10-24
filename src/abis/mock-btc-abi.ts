@@ -1,6 +1,6 @@
-// Auto-generated ABI for MockUSDC
+// Auto-generated ABI for MockBTC
 
-export const MOCK_USDC_ABI = [
+export const MOCK_BTC_ABI = [
   {
     type: "constructor",
     inputs: [],
@@ -132,6 +132,26 @@ export const MOCK_USDC_ABI = [
   },
   {
     type: "function",
+    name: "owner",
+    inputs: [],
+    outputs: [
+      {
+        name: "",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "renounceOwnership",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "symbol",
     inputs: [],
     outputs: [
@@ -210,6 +230,19 @@ export const MOCK_USDC_ABI = [
     stateMutability: "nonpayable",
   },
   {
+    type: "function",
+    name: "transferOwnership",
+    inputs: [
+      {
+        name: "newOwner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
     type: "event",
     name: "Approval",
     inputs: [
@@ -230,6 +263,25 @@ export const MOCK_USDC_ABI = [
         type: "uint256",
         indexed: false,
         internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "OwnershipTransferred",
+    inputs: [
+      {
+        name: "previousOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "newOwner",
+        type: "address",
+        indexed: true,
+        internalType: "address",
       },
     ],
     anonymous: false,
@@ -345,6 +397,28 @@ export const MOCK_USDC_ABI = [
       },
     ],
   },
+  {
+    type: "error",
+    name: "OwnableInvalidOwner",
+    inputs: [
+      {
+        name: "owner",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
+  {
+    type: "error",
+    name: "OwnableUnauthorizedAccount",
+    inputs: [
+      {
+        name: "account",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+  },
 ] as const;
 
-export const MOCK_USDC_ADDRESS = "0xc309D45d4119487b30205784efF9abACF20872c0";
+export const MOCK_BTC_ADDRESS = "0xb56967f199FF15b098195C6Dcb8e7f3fC26B43D9";

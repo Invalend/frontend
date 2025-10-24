@@ -1,178 +1,171 @@
-"use client";
-
-import { useEffect } from 'react';
-import { useWithdraw } from '@/hooks/useWithdraw';
-import { TransactionButton } from '@/components/common/TransactionButton';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
-import { ErrorDisplay } from '@/components/common/ErrorDisplay';
+import { useWithdraw } from "@/hooks/useWithdraw";
+import { parseUSDC } from "@/utils/formatters";
+import { TransactionButton } from "@/components/common/TransactionButton";
+import { StatusCard, StatusItem } from "@/components/common/StatusCard";
+import { AmountInput } from "@/components/common/AmountInput";
+import { TransactionNotification } from "@/components/common/TransactionNotification";
+import { useState } from "react";
 
 export const WithdrawForm = () => {
-  const {
-    amount,
-    userInfo,
-    withdrawableShares,
-    currentStep,
-    isWithdrawing,
-    isWithdrawSuccess,
-    error,
-    setError,
-    handleAmountChange,
-    handleMaxClick,
-    handleWithdraw,
-    resetStates,
-    isValidAmount,
+  const { 
+    handleWithdraw, 
+    withdrawTx, 
+    currentStep, 
+    isWithdrawing, 
+    canWithdraw, 
+    tokenBalance,
+    resetTransactionState 
   } = useWithdraw();
+  
+  const [amount, setAmount] = useState<string>("");
+  const [validationError, setValidationError] = useState<string>("");
 
-  const hasShares = parseFloat(withdrawableShares) > 0;
+  const amountRaw = parseUSDC(amount || "0");
+  const balanceRaw = parseUSDC(tokenBalance || "0");
+  
+  const isValidAmount = amountRaw > BigInt(0) && amountRaw <= balanceRaw;
+  const isButtonDisabled = !isValidAmount || isWithdrawing || currentStep === 'success';
 
-  useEffect(() => {
-    if (isWithdrawSuccess) {
-      resetStates();
+  const handleAmountChange = (newAmount: string) => {
+    setAmount(newAmount);
+    if (validationError) {
+      setValidationError("");
     }
-  }, [isWithdrawSuccess, resetStates]);
+  };
+
+  const handleWithdrawClick = async () => {
+    if (!isValidAmount) return;
+    
+    try {
+      await handleWithdraw("0x98Ca29e25df55BcE438a2F93013fB9790edaf342", amount); // MockUSDC address
+    } catch (err) {
+      console.error("Withdraw error:", err);
+    }
+  };
 
   return (
-    <div className="bg-[#0A0A0A] rounded-lg p-8 border border-[rgba(6,182,212,0.15)]">
-      <div className="space-y-8">
-
+    <div className="bg-[#0A0A0A] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
+      <div className="space-y-6">
         {/* Header */}
         <div>
-          <h3 className="text-2xl font-normal text-white mb-3" style={{ 
+          <h3 className="text-lg font-normal text-white mb-2" style={{ 
             fontFamily: 'Space Grotesk',
             letterSpacing: '-0.5px',
             lineHeight: '1.2'
-          }}>Withdraw USDC</h3>
-          <p className="text-lg text-[#A3A3A3]" style={{ 
-            fontFamily: 'Space Grotesk',
-            lineHeight: '1.6'
-          }}>
-            Withdraw your shares and redeem USDC from the pool.
+          }}>Withdraw Funds</h3>
+          <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
+            Withdraw your profits and remaining funds after loan repayment.
           </p>
         </div>
 
-        {/* User Info */}
-        {userInfo && (
-          <div className="bg-[#1E1E1E] rounded-lg p-6 space-y-4">
-            <div className="flex justify-between">
-              <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Your Shares</span>
-              <span className="text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-                {userInfo.shares} Shares
-              </span>
+        {/* Withdraw Status */}
+        {canWithdraw ? (
+          <StatusCard 
+            title="Available for Withdrawal"
+            className="border-green-500/20 bg-green-500/5"
+          >
+            <StatusItem 
+              label="Available Balance" 
+              value={`${tokenBalance} USDC`}
+              highlight={true}
+            />
+            <StatusItem 
+              label="Status" 
+              value="Loan Repaid - Funds Available"
+              highlight={true}
+            />
+          </StatusCard>
+        ) : (
+          <div className="bg-[#1E1E1E] rounded-lg p-6 text-center border border-[rgba(6,182,212,0.15)]">
+            <div className="text-[#A3A3A3] mb-2">
+              <svg className="w-12 h-12 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Asset Value</span>
-              <span className="text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-                {userInfo.assetValue} USDC
-              </span>
-            </div>
+            <h4 className="text-lg font-normal text-white mb-2" style={{ 
+              fontFamily: 'Space Grotesk',
+              letterSpacing: '-0.5px'
+            }}>No Funds Available</h4>
+            <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
+              You need to repay your loan first before withdrawing funds.
+            </p>
           </div>
         )}
-
-        {/* Withdrawable Info */}
-        <div className="bg-[#1E1E1E] rounded-lg p-6">
-          <div className="flex justify-between">
-            <span className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Withdrawable Shares</span>
-            <span className="text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-              {withdrawableShares} Shares
-            </span>
-          </div>
-          <p className="text-xs text-[#A3A3A3] mt-2 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-            You can redeem your shares anytime. Asset value may fluctuate based on pool performance.
-          </p>
-        </div>
 
         {/* Amount Input */}
-        <div className="space-y-4">
-          <label className="block text-sm font-normal text-[#A3A3A3]" style={{ fontFamily: 'Space Grotesk' }}>
-            Shares to Withdraw
-          </label>
-          <div className="relative">
-            <input
-              type="text"
+        {canWithdraw && (
+          <div>
+            <label className="block text-sm font-normal text-white mb-2" style={{ fontFamily: 'Space Grotesk' }}>
+              Withdraw Amount
+            </label>
+            <AmountInput
               value={amount}
-              onChange={(e) => {
-                if (error) setError('');
-                handleAmountChange(e);
-              }}
+              onChange={handleAmountChange}
               placeholder="0.00"
-              disabled={!hasShares || isWithdrawing}
-              className="w-full bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg px-4 py-3 text-white placeholder-[#A3A3A3] focus:outline-none focus:border-[#06B6D4] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              style={{ fontFamily: 'Space Grotesk' }}
+              maxValue={parseUSDC(tokenBalance)}
+              maxLabel="Balance"
+              error={validationError}
             />
-            <button
-              type="button"
-              onClick={handleMaxClick}
-              disabled={!hasShares || isWithdrawing}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-[#06B6D4] hover:text-[#06B6D4]/80 font-normal disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ fontFamily: 'Space Grotesk' }}
-            >
-              MAX
-            </button>
-          </div>
-          {amount && !isValidAmount && (
-            <p className="text-sm text-red-400 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-              {parseFloat(amount) <= 0
-                ? 'Amount must be greater than 0'
-                : 'Amount exceeds your shares'}
-            </p>
-          )}
-        </div>
-
-        {/* Error */}
-        {error && (
-          <ErrorDisplay error={error} onRetry={() => setError('')} />
-        )}
-
-        {/* Transaction Feedback */}
-        {isWithdrawing && (
-          <div className="bg-[#1E1E1E] rounded-lg p-6 flex items-center space-x-4">
-            <LoadingSpinner size="sm" />
-            <div>
-              <p className="text-sm text-white font-normal" style={{ fontFamily: 'Space Grotesk' }}>Processing withdrawal...</p>
-              <p className="text-xs text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>Please wait for confirmation.</p>
+            <div className="flex justify-between text-xs text-[#A3A3A3] mt-1">
+              <span>Available: {tokenBalance} USDC</span>
+              <button
+                onClick={() => setAmount(tokenBalance)}
+                className="text-[#06B6D4] hover:text-[#0891B2] transition-colors"
+                style={{ fontFamily: 'Space Grotesk' }}
+              >
+                Max
+              </button>
             </div>
           </div>
         )}
 
-        {/* Success Message */}
-        {currentStep === 'success' && isWithdrawSuccess && (
-          <div className="bg-[#06B6D4]/10 border border-[#06B6D4]/30 rounded-lg p-6">
-            <p className="text-sm text-[#06B6D4] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-              ✅ Withdrawal berhasil! USDC telah dikirim ke wallet Anda.
-            </p>
-          </div>
+        {/* Transaction Notifications */}
+        {withdrawTx.status === 'pending' && (
+          <TransactionNotification
+            hash={withdrawTx.hash}
+            status="pending"
+            message="Withdrawing funds..."
+            autoHide={false}
+          />
+        )}
+
+        {withdrawTx.status === 'success' && (
+          <TransactionNotification
+            hash={withdrawTx.hash}
+            status="success"
+            message="Funds withdrawn successfully!"
+            onClose={() => {
+              resetTransactionState();
+              setAmount("");
+            }}
+          />
+        )}
+
+        {withdrawTx.status === 'error' && (
+          <TransactionNotification
+            status="error"
+            message={withdrawTx.error || "Withdraw failed"}
+            onClose={resetTransactionState}
+          />
         )}
 
         {/* Action Button */}
         <TransactionButton
-          onClick={handleWithdraw}
-          disabled={!isValidAmount || isWithdrawing || !hasShares || currentStep === 'success'}
+          onClick={handleWithdrawClick}
+          disabled={isButtonDisabled}
           loading={isWithdrawing}
           size="lg"
           className="w-full"
+          variant={canWithdraw && isValidAmount ? 'primary' : 'secondary'}
         >
           {currentStep === 'withdraw' && isWithdrawing 
-            ? 'Mengwithdraw...' 
+            ? 'Withdrawing...' 
             : currentStep === 'success' 
-            ? 'Withdraw Berhasil!' 
-            : 'Withdraw'}
+            ? 'Withdraw Successful!' 
+            : canWithdraw 
+            ? 'Withdraw Funds' 
+            : 'No Funds Available'}
         </TransactionButton>
-
-        {/* Info */}
-        <div className="text-xs text-[#A3A3A3] space-y-2 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-          <p>• Redeem your shares anytime</p>
-          <p>• Earned yield compounds within the pool</p>
-          <p>• No withdrawal fees</p>
-        </div>
-
-        {/* Empty State */}
-        {!hasShares && (
-          <div className="bg-[#1E1E1E] rounded-lg p-6 text-center">
-            <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-              No shares found. Deposit USDC to start earning.
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

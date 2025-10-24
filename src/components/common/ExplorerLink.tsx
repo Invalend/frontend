@@ -19,9 +19,9 @@ export const ExplorerLink = ({
   showIcon = true,
 }: ExplorerLinkProps) => {
   const url = hash 
-    ? getTransactionUrl(hash, SUPPORTED_CHAINS.LISK_SEPOLIA)
+    ? getTransactionUrl(hash, SUPPORTED_CHAINS.BASE_SEPOLIA)
     : address 
-    ? getAddressUrl(address, SUPPORTED_CHAINS.LISK_SEPOLIA)
+    ? getAddressUrl(address, SUPPORTED_CHAINS.BASE_SEPOLIA)
     : '';
 
   if (!url) return null;

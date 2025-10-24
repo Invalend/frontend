@@ -1,3 +1,5 @@
+// Auto-generated ABI for CollateralManager
+
 export const COLLATERAL_MANAGER_ABI = [
   {
     type: "constructor",
@@ -245,6 +247,19 @@ export const COLLATERAL_MANAGER_ABI = [
   },
   {
     type: "function",
+    name: "setLoanManager",
+    inputs: [
+      {
+        name: "_loanManager",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "validateMargin",
     inputs: [
       {
@@ -325,4 +340,5 @@ export const COLLATERAL_MANAGER_ABI = [
   },
 ] as const;
 
-export const COLLATERAL_MANAGER_ADDRESS = "0xE85F7074d5b36E776001B6bc675531eAc995C642";
+export const COLLATERAL_MANAGER_ADDRESS =
+  "0xF4624D5dc09047E1643F866925135E70c169822a";

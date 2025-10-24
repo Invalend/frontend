@@ -6,6 +6,7 @@ import { PoolPage } from "@/components/pool/PoolPage";
 import { FaucetPage } from "@/components/faucet/FaucetPage";
 import { TradingPage } from "@/components/trading";
 import { BorrowForm, RepayForm } from "@/components/pool/Loanform";
+import { WithdrawForm } from "@/components/pool/WithdrawForm";
 import { PoolStats } from "@/components/pool/PoolStats";
 import { RestrictedWalletPage } from "@/components/wallet/RestrictedWalletPage";
 import { usePool } from "@/hooks/usePool";
@@ -20,12 +21,10 @@ export const Layout = () => {
   // Get real data for dashboard
   const { poolStats, userInfo, isLoading: isLoadingPool } = usePool();
   const {
-    amount: withdrawAmount,
-    setAmount: setWithdrawAmount,
     isWithdrawing,
     handleWithdraw,
-    isValidAmount: isValidWithdrawAmount,
-    withdrawableShares,
+    canWithdraw,
+    tokenBalance,
   } = useWithdraw();
 
   const renderActiveTab = () => {
@@ -180,7 +179,7 @@ export const Layout = () => {
                     </div>
                     
                     {/* Withdraw Section */}
-                    {userInfo && parseFloat(userInfo.shares) > 0 && (
+                    {userInfo && parseFloat(userInfo.shares) > 0 && canWithdraw && (
                       <div className="bg-[#0A0A0A] rounded-lg p-6 border border-[rgba(6,182,212,0.15)]">
                         <h4 className="text-lg font-normal mb-4" style={{ 
                           fontFamily: 'Space Grotesk',
@@ -188,58 +187,30 @@ export const Layout = () => {
                           color: '#FFFFFF'
                         }}>Withdraw Funds</h4>
                         <div className="space-y-4">
-                          <div className="space-y-3">
-                            <label className="block text-sm font-normal text-[#A3A3A3]" style={{ fontFamily: 'Space Grotesk' }}>
-                              Shares to Withdraw
-                            </label>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                value={withdrawAmount}
-                                onChange={(e) => setWithdrawAmount(e.target.value)}
-                                placeholder="0.00"
-                                disabled={isWithdrawing}
-                                className="w-full px-4 py-3 bg-[#1E1E1E] border border-[rgba(6,182,212,0.15)] rounded-lg placeholder-[#A3A3A3] focus:outline-none focus:border-[#06B6D4] disabled:opacity-50 disabled:cursor-not-allowed pr-16 transition-colors"
-                                style={{ 
-                                  fontFamily: 'Space Grotesk',
-                                  color: '#FFFFFF'
-                                }}
-                              />
-                              <button
-                                onClick={() => setWithdrawAmount(withdrawableShares)}
-                                disabled={isWithdrawing}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-xs font-normal border rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                style={{ 
-                                  fontFamily: 'Space Grotesk',
-                                  color: '#06B6D4',
-                                  borderColor: 'rgba(6, 182, 212, 0.3)',
-                                  backgroundColor: 'transparent'
-                                }}
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.color = '#22D3EE';
-                                  e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.5)';
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.color = '#06B6D4';
-                                  e.currentTarget.style.borderColor = 'rgba(6, 182, 212, 0.3)';
-                                }}
-                              >
-                                Max
-                              </button>
+                          <div className="bg-[#1E1E1E] rounded-lg p-4 border border-[rgba(6,182,212,0.15)]">
+                            <div className="text-[#A3A3A3] text-sm mb-2" style={{ fontFamily: 'Space Grotesk' }}>
+                              Available for Withdrawal
                             </div>
-                            <div className="text-xs text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-                              Available: {withdrawableShares} shares
+                            <div className="text-lg font-normal" style={{ 
+                              fontFamily: 'Space Grotesk',
+                              letterSpacing: '-0.5px',
+                              color: '#06B6D4'
+                            }}>
+                              {tokenBalance} USDC
+                            </div>
+                            <div className="text-xs text-[#A3A3A3] font-normal mt-1" style={{ fontFamily: 'Space Grotesk' }}>
+                              After loan repayment
                             </div>
                           </div>
                           <TransactionButton
-                            onClick={handleWithdraw}
-                            disabled={!isValidWithdrawAmount || isWithdrawing}
+                            onClick={() => handleWithdraw("0x51BE083DB53C0BbD8c8Af1dca4b7A8F7C4b80b2C", tokenBalance)}
+                            disabled={!canWithdraw || isWithdrawing || parseFloat(tokenBalance) <= 0}
                             loading={isWithdrawing}
                             variant="secondary"
                             size="sm"
                             className="w-full"
                           >
-                            {isWithdrawing ? "Withdrawing..." : "Withdraw"}
+                            {isWithdrawing ? "Withdrawing..." : "Withdraw All"}
                           </TransactionButton>
                         </div>
                       </div>
@@ -333,7 +304,7 @@ export const Layout = () => {
 
 // Loan Tab Switch Component
 const LoanTabSwitch = () => {
-  const [activeTab, setActiveTab] = useState<'borrow' | 'repay'>('borrow');
+  const [activeTab, setActiveTab] = useState<'borrow' | 'repay' | 'withdraw'>('borrow');
   
   return (
     <>
@@ -350,7 +321,7 @@ const LoanTabSwitch = () => {
           Borrow
         </button>
         <button
-          className={`flex-1 py-4 text-center font-normal text-sm transition-colors rounded-tr-lg ${
+          className={`flex-1 py-4 text-center font-normal text-sm transition-colors ${
             activeTab === 'repay'
               ? 'text-[#06B6D4] border-b border-[#06B6D4] bg-[#1E1E1E]'
               : 'text-[#A3A3A3] hover:text-white hover:bg-[#1E1E1E]'
@@ -360,9 +331,22 @@ const LoanTabSwitch = () => {
         >
           Repay
         </button>
+        <button
+          className={`flex-1 py-4 text-center font-normal text-sm transition-colors rounded-tr-lg ${
+            activeTab === 'withdraw'
+              ? 'text-[#06B6D4] border-b border-[#06B6D4] bg-[#1E1E1E]'
+              : 'text-[#A3A3A3] hover:text-white hover:bg-[#1E1E1E]'
+          }`}
+          onClick={() => setActiveTab('withdraw')}
+          style={{ fontFamily: 'Space Grotesk' }}
+        >
+          Withdraw
+        </button>
       </div>
       <div className="p-8">
-        {activeTab === 'borrow' ? <BorrowForm /> : <RepayForm />}
+        {activeTab === 'borrow' ? <BorrowForm /> : 
+         activeTab === 'repay' ? <RepayForm /> : 
+         <WithdrawForm />}
       </div>
     </>
   );

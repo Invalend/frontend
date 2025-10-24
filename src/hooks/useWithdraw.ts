@@ -1,123 +1,142 @@
-"use client";
-
-import { useState, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { CONTRACT_CONFIGS } from '@/config/contracts';
 import { parseUSDC, formatUSDC } from '@/utils/formatters';
+import { CONTRACT_CONFIGS } from '@/config/contracts';
+import { TransactionState } from '@/hooks/useLoan';
 
+/**
+ * Hook for handling token withdrawals from RestrictedWallet
+ * Only available after loan is repaid
+ */
 export const useWithdraw = () => {
   const { address } = useAccount();
-  const [amount, setAmount] = useState('');
-  const [error, setError] = useState<string>('');
+  const [withdrawTx, setWithdrawTx] = useState<TransactionState>({ status: 'idle' });
   const [currentStep, setCurrentStep] = useState<'idle' | 'withdraw' | 'success'>('idle');
 
-  // Get user info (shares & asset value)
-  const { data: userInfo, refetch: refetchUserInfo } = useReadContract({
-    ...CONTRACT_CONFIGS.LENDING_POOL,
-    functionName: 'getUserInfo',
-    args: [address as `0x${string}`],
+  // Get user's loan info to check if loan is repaid
+  const { data: loanInfo, refetch: refetchLoanInfo } = useReadContract({
+    ...CONTRACT_CONFIGS.LOAN_MANAGER,
+    functionName: 'getLoanInfo',
+    args: address ? [address] : undefined,
     query: { enabled: !!address },
   });
 
-  // Withdraw transaction
-  const { writeContract: redeem, data: withdrawHash } = useWriteContract();
-  const { isLoading: isWithdrawingTx, isSuccess: isWithdrawSuccess, isError: isWithdrawError } = useWaitForTransactionReceipt({
-    hash: withdrawHash,
+  // Check if user has repaid loan (loan is not active)
+  const canWithdraw = useMemo(() => {
+    if (!loanInfo) return false;
+    
+    // Handle both array and object formats
+    const isActive = Array.isArray(loanInfo) ? loanInfo[5] : (loanInfo as unknown as { isActive: boolean }).isActive;
+    const restrictedWallet = Array.isArray(loanInfo) ? loanInfo[4] : (loanInfo as unknown as { restrictedWallet: string }).restrictedWallet;
+    
+    return !isActive && restrictedWallet && restrictedWallet !== '0x0000000000000000000000000000000000000000';
+  }, [loanInfo]);
+
+  // Get restricted wallet address
+  const restrictedWalletAddress = useMemo(() => {
+    if (!loanInfo) return null;
+    
+    const walletAddress = Array.isArray(loanInfo) ? loanInfo[4] : (loanInfo as unknown as { restrictedWallet: string }).restrictedWallet;
+    return walletAddress && walletAddress !== '0x0000000000000000000000000000000000000000' ? walletAddress : null;
+  }, [loanInfo]);
+
+  // Get token balance in restricted wallet
+  const { data: tokenBalance, refetch: refetchBalance } = useReadContract({
+    address: restrictedWalletAddress as `0x${string}`,
+    abi: [
+      {
+        name: 'getBalance',
+        type: 'function',
+        stateMutability: 'view',
+        inputs: [{ name: 'token', type: 'address' }],
+        outputs: [{ name: 'balance', type: 'uint256' }],
+      },
+    ],
+    functionName: 'getBalance',
+    args: [CONTRACT_CONFIGS.MOCK_USDC.address],
+    query: { 
+      enabled: !!restrictedWalletAddress && canWithdraw 
+    },
   });
 
-  // Effects for step management
+  // Withdraw transaction
+  const { writeContract: withdrawTokens, data: withdrawHash } = useWriteContract();
+  const { isLoading: isWithdrawing, isSuccess: isWithdrawSuccess, isError: isWithdrawError } = 
+    useWaitForTransactionReceipt({ hash: withdrawHash });
+
+  // Update withdraw transaction state
+  useEffect(() => {
+    if (withdrawHash) {
+      setWithdrawTx({ status: 'pending', hash: withdrawHash });
+    }
+  }, [withdrawHash]);
+
   useEffect(() => {
     if (isWithdrawSuccess) {
+      setWithdrawTx(prev => ({ ...prev, status: 'success' }));
       setCurrentStep('success');
-      refetchUserInfo();
-      setError('');
+      refetchBalance();
+      refetchLoanInfo();
     }
-  }, [isWithdrawSuccess, refetchUserInfo]);
+  }, [isWithdrawSuccess, refetchBalance, refetchLoanInfo]);
 
   useEffect(() => {
     if (isWithdrawError) {
+      setWithdrawTx(prev => ({ ...prev, status: 'error', error: 'Withdraw failed' }));
       setCurrentStep('idle');
-      setError('Withdraw gagal. Silakan coba lagi.');
     }
   }, [isWithdrawError]);
 
-  // Format user info
-  const formattedUserInfo = userInfo ? {
-    shares: formatUSDC(userInfo[0] as bigint),
-    assetValue: formatUSDC(userInfo[1] as bigint),
-  } : null;
-
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (/^\d*\.?\d*$/.test(value) || value === '') {
-      setAmount(value);
+  const handleWithdraw = useCallback(async (tokenAddress: string, amount: string) => {
+    if (!restrictedWalletAddress || !canWithdraw) {
+      throw new Error('Cannot withdraw: loan is still active or no restricted wallet');
     }
-  };
 
-  const handleMaxClick = () => {
-    if (formattedUserInfo) {
-      setAmount(formattedUserInfo.shares);
-    }
-  };
-
-  const handleWithdraw = async () => {
-    if (!amount || !address) return;
-    
+    setWithdrawTx({ status: 'idle' });
     setCurrentStep('withdraw');
-    setError('');
-
+    
     try {
-      const sharesToRedeem = parseUSDC(amount);
-
-      await redeem({
-        ...CONTRACT_CONFIGS.LENDING_POOL,
-        functionName: 'redeem',
-        args: [sharesToRedeem, address, address], // amount of shares, receiver, owner
+      const amountWei = parseUSDC(amount);
+      
+      await withdrawTokens({
+        address: restrictedWalletAddress as `0x${string}`,
+        abi: [
+          {
+            name: 'withdrawTokens',
+            type: 'function',
+            stateMutability: 'nonpayable',
+            inputs: [
+              { name: 'token', type: 'address' },
+              { name: 'amount', type: 'uint256' }
+            ],
+            outputs: [],
+          },
+        ],
+        functionName: 'withdrawTokens',
+        args: [tokenAddress as `0x${string}`, amountWei],
       });
-    } catch (err) {
-      console.error('Withdraw error:', err);
-      setError('Gagal melakukan withdraw. Coba lagi.');
+    } catch (err: unknown) {
+      console.error("Withdraw error:", err);
+      const errorMessage = err instanceof Error ? err.message : 'Withdraw failed';
+      setWithdrawTx({ status: 'error', error: errorMessage });
       setCurrentStep('idle');
     }
-  };
+  }, [withdrawTokens, restrictedWalletAddress, canWithdraw]);
 
-  const resetStates = () => {
-    setAmount('');
-    setError('');
+  const resetTransactionState = useCallback(() => {
+    setWithdrawTx({ status: 'idle' });
     setCurrentStep('idle');
-  };
-
-  const isValidAmount = () => {
-    if (!amount || !formattedUserInfo) return false;
-    const amountNum = parseFloat(amount);
-    const maxShares = parseFloat(formattedUserInfo.shares);
-    return amountNum > 0 && amountNum <= maxShares;
-  };
-
-  const getWithdrawableShares = () => {
-    if (!formattedUserInfo) return "0";
-    return formattedUserInfo.shares;
-  };
+  }, []);
 
   return {
-    amount,
-    setAmount,
-    userInfo: formattedUserInfo,
-    withdrawableShares: getWithdrawableShares(),
-    
-    // Step Management
-    currentStep,
-    isWithdrawing: isWithdrawingTx,
-    isWithdrawSuccess,
-    
-    handleAmountChange,
-    handleMaxClick,
     handleWithdraw,
-    resetStates,
-    refetchUserInfo,
-    withdrawHash,
-    isValidAmount: isValidAmount(),
-    error,
-    setError,
+    withdrawTx,
+    currentStep,
+    isWithdrawing,
+    isWithdrawSuccess,
+    canWithdraw,
+    restrictedWalletAddress,
+    tokenBalance: tokenBalance ? formatUSDC(tokenBalance) : '0',
+    resetTransactionState,
   };
 };

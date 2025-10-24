@@ -1,3 +1,5 @@
+// Auto-generated ABI for RestrictedWalletFactory
+
 export const RESTRICTED_WALLET_FACTORY_ABI = [
   {
     type: "constructor",
@@ -127,6 +129,19 @@ export const RESTRICTED_WALLET_FACTORY_ABI = [
   },
   {
     type: "function",
+    name: "setLoanManager",
+    inputs: [
+      {
+        name: "_loanManager",
+        type: "address",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
     name: "userWallet",
     inputs: [
       {
@@ -190,4 +205,4 @@ export const RESTRICTED_WALLET_FACTORY_ABI = [
 ] as const;
 
 export const RESTRICTED_WALLET_FACTORY_ADDRESS =
-  "0xA8bE9eb8dF632fCD4dfB71D7A7199ebC8238d7C9";
+  "0xeba187f19417DbCDe5DcfF45B5f431c762EF862D";
