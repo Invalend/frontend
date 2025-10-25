@@ -53,6 +53,7 @@ export default function UseCasesSection() {
 
   return (
     <section 
+      id="use-cases"
       ref={ref}
       className="relative overflow-hidden"
       style={{ 

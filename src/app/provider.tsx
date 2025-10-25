@@ -12,10 +12,24 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
-        retry: 3,
+        retry: (failureCount, error) => {
+          // Retry untuk network errors, tapi tidak untuk user rejection
+          if (error?.message?.includes('User rejected')) return false;
+          if (error?.message?.includes('Connection interrupted')) return true;
+          return failureCount < 3;
+        },
         retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
         refetchOnWindowFocus: false,
         staleTime: 5 * 60 * 1000, // 5 minutes
+        networkMode: 'offlineFirst',
+      },
+      mutations: {
+        retry: (failureCount, error) => {
+          if (error?.message?.includes('User rejected')) return false;
+          if (error?.message?.includes('Connection interrupted')) return true;
+          return failureCount < 2;
+        },
+        retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
       },
     },
   }));
@@ -23,6 +37,29 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
   // Ensure client-side mounting to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
+    
+    // Monitor connection health
+    const handleConnectionError = (event: Event) => {
+      console.warn('Connection error detected:', event);
+    };
+    
+    const handleOnline = () => {
+      console.log('Connection restored');
+    };
+    
+    const handleOffline = () => {
+      console.warn('Connection lost');
+    };
+    
+    window.addEventListener('error', handleConnectionError);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('error', handleConnectionError);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   if (!mounted) {

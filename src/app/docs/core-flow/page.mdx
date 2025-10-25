@@ -1,0 +1,332 @@
+# Core Flow
+
+## Overview
+
+The core flow of Invalend Protocol demonstrates how the 20/80 prefunding model operates in practice, from initial LP deposit to final loan repayment. This flow ensures safety, transparency, and efficiency throughout the entire process.
+
+## 1. Liquidity Provider Flow
+
+### Step 1: LP Deposits USDC
+**Process:**
+- LP connects wallet to Invalend dApp
+- Navigates to Pool page
+- Deposits USDC into LendingPool contract
+- Receives Invalend Pool Shares (IPS) representing their portion
+
+**Technical details:**
+```solidity
+function deposit(uint256 assets) public returns (uint256 shares) {
+    // Transfer USDC from LP to contract
+    IERC20(asset).transferFrom(msg.sender, address(this), assets);
+    
+    // Calculate shares based on current exchange rate
+    shares = convertToShares(assets);
+    
+    // Mint shares to LP
+    _mint(msg.sender, shares);
+    
+    // Emit event
+    emit Deposit(msg.sender, receiver, assets, shares);
+}
+```
+
+**Result:**
+- LP has IPS representing their pool share
+- Pool has USDC available for lending
+- LP starts earning yield
+
+### Step 2: Pool Allocation
+**Process:**
+- Pool maintains USDC for loan funding
+- 80% of each loan comes from pool
+- 20% comes from borrower margin
+- Pool earns yield from successful loans
+
+**Technical details:**
+```solidity
+function allocateFunds(address borrower, uint256 amount) public {
+    // Check pool has sufficient liquidity
+    require(totalAssets() >= amount, "Insufficient liquidity");
+    
+    // Transfer USDC to restricted wallet
+    IERC20(USDC).transfer(restrictedWallet, amount);
+    
+    // Update pool accounting
+    totalAllocated += amount;
+    
+    // Emit event
+    emit FundsAllocated(borrower, amount);
+}
+```
+
+**Result:**
+- Pool provides 80% funding for loans
+- Pool earns yield from successful trading
+- LPs benefit from pool performance
+
+## 2. Borrower Flow
+
+### Step 1: Create Loan
+**Process:**
+- Borrower connects wallet
+- Navigates to Loan page
+- Enters desired loan amount
+- System calculates required collateral (20%)
+- Borrower approves and deposits USDC
+
+**Technical details:**
+```solidity
+function createLoan(uint256 loanAmount) public {
+    // Calculate required collateral (20%)
+    uint256 collateralAmount = loanAmount * 20 / 100;
+    
+    // Validate borrower has sufficient USDC
+    require(IERC20(USDC).balanceOf(msg.sender) >= collateralAmount, "Insufficient balance");
+    
+    // Transfer collateral from borrower
+    IERC20(USDC).transferFrom(msg.sender, address(this), collateralAmount);
+    
+    // Allocate 80% from pool
+    uint256 poolAmount = loanAmount * 80 / 100;
+    lendingPool.allocateFunds(msg.sender, poolAmount);
+    
+    // Create restricted wallet
+    address wallet = restrictedWalletFactory.getOrCreateWallet(msg.sender);
+    
+    // Transfer combined capital to wallet
+    IERC20(USDC).transfer(wallet, loanAmount);
+    
+    // Create loan record
+    collateralManager.createLoanRecord(msg.sender, collateralAmount, loanAmount);
+    
+    // Emit event
+    emit LoanCreated(msg.sender, loanAmount, collateralAmount);
+}
+```
+
+**Result:**
+- Borrower has 5x leverage (loanAmount / collateralAmount)
+- Combined capital sent to restricted wallet
+- Loan record created for tracking
+
+### Step 2: Trading Execution
+**Process:**
+- Borrower navigates to Trading page
+- Selects trading pair (USDC/ETH, USDC/BTC, etc.)
+- Enters trade amount and slippage
+- Executes swap through restricted wallet
+
+**Technical details:**
+```solidity
+function swapExactInputSingleV4(
+    PoolKey memory poolKey,
+    uint256 amountIn,
+    uint256 amountOutMin,
+    uint256 deadline
+) public onlyOwner {
+    // Validate token is whitelisted
+    require(whitelistedTokens[tokenIn], "Token not whitelisted");
+    
+    // Execute V4 swap
+    ISwapRouter(UNISWAP_V4_ROUTER).exactInputSingle(
+        ISwapRouter.ExactInputSingleParams({
+            tokenIn: tokenIn,
+            tokenOut: tokenOut,
+            fee: poolKey.fee,
+            recipient: address(this),
+            deadline: deadline,
+            amountIn: amountIn,
+            amountOutMinimum: amountOutMin,
+            sqrtPriceLimitX96: 0
+        })
+    );
+    
+    // Emit event
+    emit TradeExecuted(tokenIn, tokenOut, amountIn, amountOut);
+}
+```
+
+**Result:**
+- Trade executed on Uniswap V4
+- Token balances updated in restricted wallet
+- P&L calculated in real-time
+
+### Step 3: Position Monitoring
+**Process:**
+- System continuously monitors position health
+- Calculates real-time P&L
+- Tracks health factor
+- Monitors for liquidation triggers
+
+**Technical details:**
+```solidity
+function calculateHealthFactor(address borrower) public view returns (uint256) {
+    // Get current position value
+    uint256 positionValue = getPositionValue(borrower);
+    
+    // Get loan amount
+    uint256 loanAmount = getLoanAmount(borrower);
+    
+    // Calculate health factor
+    return (positionValue * 100) / loanAmount;
+}
+
+function isLiquidatable(address borrower) public view returns (bool) {
+    return calculateHealthFactor(borrower) < 100; // 100% = 1.0 health factor
+}
+```
+
+**Result:**
+- Real-time position monitoring
+- Automated risk assessment
+- Transparent health tracking
+
+## 3. Repayment Flow
+
+### Step 1: Repay Loan
+**Process:**
+- Borrower decides to close position
+- Calls repayLoan function
+- System withdraws all tokens from restricted wallet
+- Calculates final P&L and repayment amount
+
+**Technical details:**
+```solidity
+function repayLoan() public {
+    // Get restricted wallet address
+    address wallet = restrictedWalletFactory.getWalletAddress(msg.sender);
+    
+    // Withdraw all tokens from wallet
+    uint256 totalValue = withdrawAllTokens(wallet);
+    
+    // Calculate repayment amount (80% + interest)
+    uint256 repaymentAmount = calculateRepaymentAmount(msg.sender);
+    
+    // Transfer repayment to pool
+    IERC20(USDC).transferFrom(wallet, address(lendingPool), repaymentAmount);
+    
+    // Return remaining collateral to borrower
+    uint256 remainingCollateral = totalValue - repaymentAmount;
+    IERC20(USDC).transfer(msg.sender, remainingCollateral);
+    
+    // Mark loan as repaid
+    collateralManager.markLoanRepaid(msg.sender);
+    
+    // Emit event
+    emit LoanRepaid(msg.sender, repaymentAmount, remainingCollateral);
+}
+```
+
+**Result:**
+- Pool receives 80% + interest
+- Borrower receives remaining collateral + profits
+- Loan marked as repaid
+
+## 4. Liquidation Flow
+
+### Step 1: Liquidation Trigger
+**Process:**
+- Position health factor drops below 100%
+- Automated liquidation is triggered
+- All tokens are withdrawn from restricted wallet
+- Pool is repaid from available funds
+
+**Technical details:**
+```solidity
+function liquidatePosition(address borrower) public {
+    // Check if position is liquidatable
+    require(isLiquidatable(borrower), "Position not liquidatable");
+    
+    // Get restricted wallet address
+    address wallet = restrictedWalletFactory.getWalletAddress(borrower);
+    
+    // Withdraw all tokens
+    uint256 totalValue = withdrawAllTokens(wallet);
+    
+    // Calculate repayment amount
+    uint256 repaymentAmount = calculateRepaymentAmount(borrower);
+    
+    // Transfer repayment to pool
+    IERC20(USDC).transferFrom(wallet, address(lendingPool), repaymentAmount);
+    
+    // Borrower loses remaining collateral
+    // Pool is protected by margin
+    
+    // Mark loan as liquidated
+    collateralManager.markLoanLiquidated(borrower);
+    
+    // Emit event
+    emit PositionLiquidated(borrower, totalValue, repaymentAmount);
+}
+```
+
+**Result:**
+- Pool is fully protected
+- Borrower loses margin
+- Position is closed
+
+## 5. Complete Flow Example
+
+### Scenario: DAO Treasury Optimization
+**Setup:**
+- DAO has $20M USDC
+- Wants to deploy $100M position
+- Uses Invalend for 5x leverage
+
+**Flow:**
+1. **LP deposits $20M** → Receives 20M IPS
+2. **DAO creates $100M loan** → Deposits $20M collateral
+3. **Pool provides $80M** → Combined $100M to restricted wallet
+4. **DAO trades $100M** → Executes trading strategy
+5. **Position performs well** → $100M becomes $110M
+6. **DAO repays loan** → Pool gets $80M + interest
+7. **DAO keeps profits** → $30M total return
+
+**Result:**
+- DAO achieved 5x leverage
+- Pool earned yield
+- Both parties benefited
+
+## Key Benefits of This Flow
+
+### For LPs
+- **Principal protection**: Never at risk of loss
+- **Automated yield**: Earn 6% APY
+- **Transparent monitoring**: See all activities
+- **Professional infrastructure**: Institutional-grade tools
+
+### For Borrowers
+- **Capital efficiency**: 5x leverage with 20% margin
+- **Trading control**: Full autonomy within restrictions
+- **Transparent execution**: All actions on-chain
+- **Self-custody**: No centralized control
+
+### For Ecosystem
+- **Capital efficiency**: Better utilization of DeFi capital
+- **Transparent standards**: On-chain execution
+- **Professional infrastructure**: Institutional-grade tools
+- **Network effects**: Growth benefits all participants
+
+## Flow Validation
+
+### Safety Checks
+- ✅ **Margin validation**: 20% collateral requirement enforced
+- ✅ **Pool protection**: LPs never at risk
+- ✅ **Automated liquidation**: Positions closed when needed
+- ✅ **Transparent execution**: All actions visible on-chain
+
+### Efficiency Checks
+- ✅ **5x leverage**: Achieved with 20% margin
+- ✅ **Immediate access**: No waiting for individual lenders
+- ✅ **Optimal execution**: Best price discovery and routing
+- ✅ **Fair distribution**: Profits shared proportionally
+
+### Transparency Checks
+- ✅ **Event emission**: All actions emit events
+- ✅ **Real-time monitoring**: Live position tracking
+- ✅ **Audit trail**: Complete transaction history
+- ✅ **Open source**: All code auditable
+
+---
+
+*Ready to explore the smart contracts? Check out our [Smart Contracts](/docs/smart-contracts) or see the [Live Demo](/docs/demo).*

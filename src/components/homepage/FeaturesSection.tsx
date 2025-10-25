@@ -52,7 +52,7 @@ export default function FeaturesSection() {
   return (
     <section 
       ref={featuresRef}
-      id="features-section"
+      id="features"
       className="relative overflow-hidden"
       style={{ 
         background: '#141414',

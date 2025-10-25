@@ -76,7 +76,7 @@ src/
 
 ## Contract Addresses
 
-All contract addresses are deployed on **Lisk Sepolia** testnet:
+All contract addresses are deployed on **Base Sepolia** testnet:
 
 - **MockUSDC**: `0xe61995e2728bd2d2b1abd9e089213b542db7916a`
 - **LendingPool**: `0x752168dd102d1c4b9390ab6abf3ec39f2164ad11`

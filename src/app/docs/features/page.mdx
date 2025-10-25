@@ -1,0 +1,331 @@
+# Features
+
+## Core Protocol Features
+
+### 20/80 Prefunding Mechanism
+
+The protocol implements a prefunding model where borrowers provide 20% collateral and the liquidity pool provides 80% funding.
+
+**Functionality:**
+- Borrowers deposit 20% collateral (margin)
+- Liquidity pool provides 80% funding
+- Combined capital enables 5x leverage
+- Risk and rewards distributed proportionally
+
+**Benefits:**
+- 5x capital efficiency with minimal collateral
+- Shared risk and reward structure
+- Improved capital utilization compared to traditional lending
+- Transparent fund allocation on-chain
+
+**Implementation:**
+- Smart contract enforces 20/80 ratio validation
+- Automatic fund allocation to restricted wallets
+- Real-time tracking of margin and pool contributions
+- Proportional profit and loss distribution
+
+### Restricted Smart Wallets
+
+The protocol creates isolated trading environments for each borrower with enforced restrictions on protocol access.
+
+**Functionality:**
+- Creates dedicated trading environment for each borrower
+- Enforces whitelist-only protocol access
+- Prevents unauthorized external transfers
+- Enables trading control within defined boundaries
+
+**Benefits:**
+- Prevents unauthorized fund drainage
+- Maintains borrower control within restrictions
+- Eliminates need for trust or human oversight
+- Provides transparent execution of all actions
+
+**Implementation:**
+- Factory pattern creates unique wallet per borrower
+- Whitelist enforcement at smart contract level
+- Transaction-level validation for all operations
+- Event emission for complete transparency
+
+### ERC-4626 Liquidity Vaults
+
+The protocol implements standardized vaults for liquidity provider deposits using the ERC-4626 standard.
+
+**Functionality:**
+- Standardized vault system for LP deposits
+- Share-based accounting with yield accrual
+- Automated yield distribution (6% APY simulated)
+- Compatible with DeFi ecosystem standards
+
+**Benefits:**
+- Standardized interface for DeFi compatibility
+- Automated yield with principal protection
+- Transparent share-based accounting system
+- Easy integration with existing DeFi protocols
+
+**Implementation:**
+- OpenZeppelin ERC-4626 standard implementation
+- Custom yield calculation logic
+- Automated share minting and burning
+- Real-time yield accrual tracking
+
+### On-Chain Risk Management
+
+The protocol implements automated risk management through smart contracts for real-time monitoring and liquidation.
+
+**Functionality:**
+- Real-time margin tracking and P&L calculation
+- Automated liquidation triggers at predefined thresholds
+- Transparent settlement and profit distribution
+- No human judgment or intervention required
+
+**Benefits:**
+- Automated protection without human oversight
+- Transparent risk calculations visible on-chain
+- Fair proportional profit and loss distribution
+- Predictable outcomes through clear rules
+
+**Implementation:**
+- Time-based liquidation currently implemented
+- Real-time health factor calculation
+- Automated liquidation execution
+- Transparent settlement mechanisms
+- Chainlink oracle integration (planned)
+
+## Trading Features
+
+### Uniswap V4 Integration
+
+The protocol integrates with Uniswap V4 for decentralized trading execution within restricted wallets.
+
+**Functionality:**
+- Direct integration with Uniswap V4 for trading
+- Support for USDC/ETH and USDC/BTC pairs
+- Advanced routing and slippage protection
+- Real-time price feeds and execution
+
+**Benefits:**
+- Latest DEX technology with advanced features
+- Optimal execution with best price discovery
+- Configurable slippage tolerance settings
+- Real-time pricing and updates
+
+**Implementation:**
+- V4-specific swap functions in restricted wallet
+- Pool ID management for supported pairs
+- Slippage and deadline configuration
+- Event emission for trade tracking
+
+### Multi-Asset Support
+
+The protocol supports trading across multiple assets with comprehensive position management.
+
+**Functionality:**
+- Support for USDC, ETH, and BTC trading
+- Cross-asset position management
+- Portfolio tracking across multiple assets
+- Risk management per asset class
+
+**Benefits:**
+- Diversified trading across multiple assets
+- Cross-asset position tracking and management
+- Risk distribution across different asset classes
+- Flexible trading strategies
+
+**Implementation:**
+- Token whitelist management system
+- Balance tracking per asset
+- Cross-asset P&L calculation
+- Asset-specific risk parameters
+
+## User Interface Features
+
+### Professional Dashboard
+
+The protocol provides a comprehensive dashboard for monitoring positions and managing trades.
+
+**Functionality:**
+- Real-time position monitoring
+- P&L tracking and visualization
+- Health factor monitoring
+- Transaction history and analytics
+
+**Benefits:**
+- Live position and P&L tracking
+- Professional user interface
+- Comprehensive performance analytics
+- Mobile-responsive design
+
+**Implementation:**
+- React-based dashboard with real-time updates
+- Web3 integration for on-chain data
+- Event listening for live updates
+- Responsive design with Tailwind CSS
+
+### Multi-User Support
+
+The protocol supports multiple user types with role-based access and customized interfaces.
+
+**Functionality:**
+- Support for DAO treasuries, traders, and institutions
+- Role-based access and permissions
+- Customized interfaces per user type
+- Scalable user management
+
+**Benefits:**
+- Professional-grade infrastructure
+- Appropriate permissions per user type
+- Scalable design for growth
+- Tailored interfaces per user role
+
+**Implementation:**
+- User role management system
+- Customized UI components per role
+- Permission-based access control
+- Scalable architecture design
+
+## Security Features
+
+### Chain-Enforced Restrictions
+
+The protocol implements smart contract-level restrictions to prevent unauthorized access and fund drainage.
+
+**Functionality:**
+- Whitelist-only protocol access
+- No external transfers allowed
+- Transaction-level validation
+- No escape hatches or backdoors
+
+**Benefits:**
+- Code enforces all restrictions without trust requirements
+- Automated validation prevents human error
+- Transparent enforcement with all rules visible on-chain
+- Smart contract-level protection
+
+**Implementation:**
+- Function selector validation
+- Whitelist management system
+- Transaction-level checks
+- Event emission for transparency
+
+### Automated Liquidation
+
+The protocol implements automated liquidation mechanisms to protect liquidity providers from losses.
+
+**Functionality:**
+- Time-based liquidation triggers (current implementation)
+- Automated execution at predefined thresholds
+- LP protection via margin absorption
+- Transparent settlement process
+
+**Benefits:**
+- Principal protection for liquidity providers
+- Automated execution without human intervention
+- Transparent process with all actions visible on-chain
+- Fair proportional distribution
+
+**Implementation:**
+- Time-based liquidation currently implemented
+- Health factor calculation
+- Automated liquidation execution
+- Transparent settlement mechanisms
+- Chainlink oracle integration (planned)
+
+## Integration Features
+
+### DeFi Ecosystem Integration
+
+The protocol is designed for seamless integration with existing DeFi protocols and infrastructure.
+
+**Functionality:**
+- Compatible with existing DeFi protocols
+- Standard interfaces for easy integration
+- API for third-party developers
+- Composable architecture
+
+**Benefits:**
+- Easy integration through standard interfaces
+- Ecosystem compatibility with existing DeFi
+- Developer-friendly with clear documentation
+- Composable and extensible design
+
+**Implementation:**
+- ERC-4626 standard compliance
+- Standard ABI interfaces
+- Comprehensive documentation
+- Developer tools and examples
+
+### Base Network Optimization
+
+The protocol is optimized for Base network infrastructure and ecosystem integration.
+
+**Functionality:**
+- Optimized for Base network infrastructure
+- Leverages Base's institutional focus
+- Integrates with Base ecosystem
+- Performance optimizations for Base
+
+**Benefits:**
+- Aligned with Base's institutional mission
+- Fast and efficient execution
+- Ecosystem integration with Base protocols
+- Cost-effective gas usage
+
+**Implementation:**
+- Base-specific optimizations
+- Gas-efficient contract design
+- Base ecosystem integrations
+- Performance monitoring
+
+## Planned Features
+
+### Multi-Chain Support
+
+The protocol plans to expand to multiple blockchain networks for broader accessibility.
+
+**Planned Functionality:**
+- Deploy on multiple chains
+- Cross-chain position management
+- Unified interface across chains
+- Liquidity optimization
+
+**Expected Benefits:**
+- Broader access across multiple chains
+- Liquidity optimization across networks
+- Risk distribution across multiple networks
+- Ecosystem growth and user reach
+
+### Advanced Risk Management
+
+Enhanced risk management features are planned for future releases.
+
+**Planned Functionality:**
+- Dynamic liquidation thresholds
+- Risk scoring and assessment
+- Insurance mechanisms
+- Advanced analytics
+
+**Expected Benefits:**
+- Sophisticated risk management tools
+- Enhanced LP protection
+- Detailed risk assessment capabilities
+- Additional protection layers
+
+### Governance System
+
+A community governance system is planned for protocol parameter management.
+
+**Planned Functionality:**
+- Community governance for protocol parameters
+- Voting mechanisms for changes
+- Decentralized decision making
+- Protocol evolution
+
+**Expected Benefits:**
+- Decentralized community control
+- Community-driven development
+- Transparent decision making
+- Long-term protocol sustainability
+
+---
+
+*Ready to understand the core concepts? Check out our [Core Concept & Definition](/docs/core-concept) or explore the [Architecture](/docs/architecture).*

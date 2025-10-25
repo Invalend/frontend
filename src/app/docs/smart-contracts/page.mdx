@@ -1,69 +1,82 @@
 # Smart Contracts
 
-Invalend Protocol is built on a suite of smart contracts deployed on **Lisk Sepolia Testnet**. All contracts are verified and can be viewed on the Lisk Sepolia Blockscout explorer.
+## Contract Overview
+
+Invalend Protocol consists of five core smart contracts deployed on Base Sepolia testnet. All contracts are verified and can be viewed on the Base Sepolia Blockscout explorer.
 
 ## Network Information
 
-- **Chain**: Lisk Sepolia Testnet
-- **Chain ID**: 4202
+- **Chain**: Base Sepolia Testnet
+- **Chain ID**: 84532
 - **Native Token**: ETH (for gas fees)
-- **Block Explorer**: [Lisk Sepolia Blockscout](https://sepolia-blockscout.lisk.com)
-- **RPC Endpoint**: https://rpc.sepolia-api.lisk.com
+- **Block Explorer**: [Base Sepolia Blockscout](https://sepolia.basescan.org)
+- **RPC Endpoint**: https://sepolia.base.org
 
 ## Contract Addresses
 
 ### Core Protocol Contracts
 
-#### 1. **Lending Pool Contract**
+#### 1. **LendingPool Contract**
 The main contract that manages USDC deposits and handles yield distribution.
 
-- **Address**: [`0x752168dd102d1c4b9390ab6abf3ec39f2164ad11`](https://sepolia-blockscout.lisk.com/address/0x752168dd102d1c4b9390ab6abf3ec39f2164ad11)
+- **Address**: [`0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53`](https://sepolia.basescan.org/address/0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53)
 - **Functions**: Deposit, Withdraw, Yield Distribution, Pool Statistics
 - **Key Features**:
-  - 6% APY for depositors
+  - Yield generation for depositors
   - Automated yield calculations
   - Liquidity pool management
   - User balance tracking
 
-#### 2. **Loan Manager Contract**
+#### 2. **LoanManager Contract**
 Manages loan creation, collateral requirements, and liquidations.
 
-- **Address**: [`0x8c0694Ff8df07554C5a4b2D83992e1987733Ba64`](https://sepolia-blockscout.lisk.com/address/0x8c0694Ff8df07554C5a4b2D83992e1987733Ba64)
+- **Address**: [`0xDE63F87cE22E62c8a668DcF2f0869d07Be62944d`](https://sepolia.basescan.org/address/0xDE63F87cE22E62c8a668DcF2f0869d07Be62944d)
 - **Functions**: Create Loans, Manage Collateral, Handle Liquidations
 - **Key Features**:
   - 20% collateral requirement
   - 5x maximum leverage
   - 30-day loan terms
-  - Automated liquidation protection
+  - Time-based liquidation protection
 
-#### 3. **Collateral Manager Contract**
+#### 3. **CollateralManager Contract**
 Handles collateral deposits, calculations, and risk management.
 
-- **Address**: [`0x23c369a4991a477e4b9dd13f179b2e68203abc1d`](https://sepolia-blockscout.lisk.com/address/0x23c369a4991a477e4b9dd13f179b2e68203abc1d)
+- **Address**: [`0xE85F7074d5b36E776001B6bc675531eAc995C642`](https://sepolia.basescan.org/address/0xE85F7074d5b36E776001B6bc675531eAc995C642)
 - **Functions**: Collateral Validation, Risk Assessment, Position Monitoring
 - **Key Features**:
   - Real-time collateral valuation
   - Health factor calculations
   - Liquidation threshold monitoring
-  - Multi-asset collateral support
+  - Multi-asset collateral support (planned)
 
-#### 4. **Restricted Wallet Factory**
+#### 4. **RestrictedWalletFactory**
 Creates and manages restricted smart contract wallets for secure trading.
 
-- **Address**: [`0x7364eeb345989c757616988b70976bba163b7571`](https://sepolia-blockscout.lisk.com/address/0x7364eeb345989c757616988b70976bba163b7571)
+- **Address**: [`0xA8bE9eb8dF632fCD4dfB71D7A7199ebC8238d7C9`](https://sepolia.basescan.org/address/0xA8bE9eb8dF632fCD4dfB71D7A7199ebC8238d7C9)
 - **Functions**: Create Restricted Wallets, Manage Permissions, Access Control
 - **Key Features**:
   - Whitelisted function calls only
-  - Uniswap V3 integration
+  - Uniswap V4 integration
   - Automated security enforcement
-  - Owner-controlled operations
+  - Owner-controlled operations (planned)
+
+#### 5. **RestrictedWallet**
+Individual trading wallet for each borrower with chain-enforced restrictions.
+
+- **Address**: [`0xCA6913E22193cc6D0A125127ffe87953b1170A66`](https://sepolia.basescan.org/address/0xCA6913E22193cc6D0A125127ffe87953b1170A66)
+- **Functions**: Execute Swaps, Manage Balances, Enforce Restrictions
+- **Key Features**:
+  - Swap-only execution
+  - Whitelisted protocols only
+  - No external transfers
+  - Real-time balance tracking
 
 ### Token Contracts
 
-#### 5. **Mock USDC Token**
-Test USDC token for Lisk Sepolia testnet operations.
+#### 6. **Mock USDC Token**
+Test USDC token for Base Sepolia testnet operations.
 
-- **Address**: [`0xe61995e2728bd2d2b1abd9e089213b542db7916a`](https://sepolia-blockscout.lisk.com/address/0xe61995e2728bd2d2b1abd9e089213b542db7916a)
+- **Address**: [`0x98Ca29e25df55BcE438a2F93013fB9790edaf342`](https://sepolia.basescan.org/address/0x98Ca29e25df55BcE438a2F93013fB9790edaf342)
 - **Symbol**: USDC
 - **Decimals**: 6
 - **Functions**: Transfer, Approve, Mint (testnet only)
@@ -83,7 +96,7 @@ graph TB
     
     C --> D[Restricted Wallet Factory]
     D --> F[Restricted Wallet]
-    F --> G[Uniswap V3]
+    F --> G[Uniswap V4]
     
     B --> C
     E --> C
@@ -125,18 +138,18 @@ graph TB
 
 You can add these contracts to your wallet for easy interaction:
 
-1. **Lisk Sepolia Network**:
+1. **Base Sepolia Network**:
    ```
-   Network Name: Lisk Sepolia
-   RPC URL: https://rpc.sepolia-api.lisk.com
-   Chain ID: 4202
+   Network Name: Base Sepolia
+   RPC URL: https://sepolia.base.org
+   Chain ID: 84532
    Currency Symbol: ETH
-   Block Explorer: https://sepolia-blockscout.lisk.com
+   Block Explorer: https://sepolia.basescan.org
    ```
 
 2. **Add USDC Token**:
    ```
-   Token Address: 0xe61995e2728bd2d2b1abd9e089213b542db7916a
+   Token Address: 0x98Ca29e25df55BcE438a2F93013fB9790edaf342
    Token Symbol: USDC
    Token Decimals: 6
    ```
@@ -149,8 +162,8 @@ You can add these contracts to your wallet for easy interaction:
 // Example with ethers.js
 import { ethers } from 'ethers';
 
-const provider = new ethers.providers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com');
-const lendingPoolAddress = '0x752168dd102d1c4b9390ab6abf3ec39f2164ad11';
+const provider = new ethers.providers.JsonRpcProvider('https://sepolia.base.org');
+const lendingPoolAddress = '0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53';
 
 // Initialize contract
 const lendingPool = new ethers.Contract(lendingPoolAddress, LENDING_POOL_ABI, provider);
@@ -168,7 +181,7 @@ import { LENDING_POOL_ABI } from '@/abis/lending-pool-abi';
 
 export function PoolStats() {
   const { data: totalDeposits } = useReadContract({
-    address: '0x752168dd102d1c4b9390ab6abf3ec39f2164ad11',
+    address: '0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53',
     abi: LENDING_POOL_ABI,
     functionName: 'totalDeposits',
   });
@@ -187,7 +200,7 @@ export function PoolStats() {
 5. **Restricted Wallet Factory** - Secure wallet creation
 
 ### Verification Status
-All contracts are verified on Lisk Sepolia Blockscout and their source code is publicly available.
+All contracts are verified on Base Sepolia Blockscout and their source code is publicly available.
 
 ## Support & Resources
 
@@ -208,4 +221,4 @@ All contracts are verified on Lisk Sepolia Blockscout and their source code is p
 
 ---
 
-*All contract addresses are for Lisk Sepolia testnet. Always verify addresses before interacting with contracts.*
+*All contract addresses are for Base Sepolia testnet. Always verify addresses before interacting with contracts.*

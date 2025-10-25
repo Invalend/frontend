@@ -1,0 +1,494 @@
+# Frontend Implementation
+
+## Technology Stack
+
+### Core Technologies
+- **Next.js 14**: Modern React framework with App Router
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first CSS framework
+- **Wagmi v2**: Ethereum integration library
+- **React Hooks**: Custom state management
+
+### Design System
+- **Obsidian Cyan**: Custom design system
+- **Dark Mode**: Optimized for dark theme
+- **Responsive Design**: Mobile-first approach
+- **Professional UI**: Institutional-grade interface
+
+## Architecture Overview
+
+### Component Structure
+```
+src/
+├── app/
+│   ├── docs/           # Documentation pages
+│   ├── page.tsx        # Home page
+│   └── layout.tsx      # Root layout
+├── components/
+│   ├── ui/             # Reusable UI components
+│   ├── forms/          # Form components
+│   └── charts/         # Data visualization
+├── hooks/
+│   ├── useLoan.ts      # Loan management hooks
+│   ├── useTrading.ts   # Trading hooks
+│   └── usePool.ts      # Pool management hooks
+├── utils/
+│   ├── contracts.ts    # Contract utilities
+│   └── formatting.ts   # Data formatting
+└── types/
+    ├── loan.ts         # Loan types
+    └── pool.ts         # Pool types
+```
+
+## Key Components
+
+### 1. Pool Management Interface
+
+#### PoolPage.tsx
+```typescript
+export default function PoolPage() {
+  const { data: poolStats } = usePoolStats();
+  const { data: userBalance } = useUserBalance();
+  
+  return (
+    <div className="space-y-6">
+      <PoolStats stats={poolStats} />
+      <DepositForm />
+      <WithdrawForm />
+    </div>
+  );
+}
+```
+
+#### DepositForm.tsx
+```typescript
+export function DepositForm() {
+  const [amount, setAmount] = useState('');
+  const { write: deposit } = useDeposit();
+  
+  const handleDeposit = () => {
+    deposit({ args: [parseUnits(amount, 6)] });
+  };
+  
+  return (
+    <form onSubmit={handleDeposit}>
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        placeholder="Enter USDC amount"
+      />
+      <button type="submit">Deposit USDC</button>
+    </form>
+  );
+}
+```
+
+### 2. Loan Management Interface
+
+#### LoanPage.tsx
+```typescript
+export default function LoanPage() {
+  const { data: loanInfo } = useUserLoanInfo();
+  const { write: createLoan } = useCreateLoan();
+  
+  return (
+    <div className="space-y-6">
+      {loanInfo ? (
+        <LoanInfoCard loan={loanInfo} />
+      ) : (
+        <LoanForm onCreateLoan={createLoan} />
+      )}
+    </div>
+  );
+}
+```
+
+#### LoanForm.tsx
+```typescript
+export function LoanForm({ onCreateLoan }: { onCreateLoan: (amount: string) => void }) {
+  const [amount, setAmount] = useState('');
+  const collateralAmount = (parseFloat(amount) * 0.2).toString();
+  
+  return (
+    <form onSubmit={() => onCreateLoan(amount)}>
+      <div>
+        <label>Loan Amount (USDC)</label>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+      </div>
+      <div>
+        <label>Required Collateral (20%)</label>
+        <input
+          type="number"
+          value={collateralAmount}
+          disabled
+        />
+      </div>
+      <button type="submit">Create Loan</button>
+    </form>
+  );
+}
+```
+
+### 3. Trading Interface
+
+#### TradingPage.tsx
+```typescript
+export default function TradingPage() {
+  const { data: balances } = useRestrictedWalletBalance();
+  const { write: executeSwap } = useExecuteSwap();
+  
+  return (
+    <div className="space-y-6">
+      <BalanceDisplay balances={balances} />
+      <TokenSelector />
+      <AmountInput />
+      <SlippageSettings />
+      <SwapButton onSwap={executeSwap} />
+    </div>
+  );
+}
+```
+
+#### SwapButton.tsx
+```typescript
+export function SwapButton({ onSwap }: { onSwap: (params: SwapParams) => void }) {
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const handleSwap = async () => {
+    setIsLoading(true);
+    try {
+      await onSwap(swapParams);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  return (
+    <button
+      onClick={handleSwap}
+      disabled={isLoading}
+      className="w-full py-3 bg-teal-500 text-white rounded-lg"
+    >
+      {isLoading ? 'Swapping...' : 'Execute Swap'}
+    </button>
+  );
+}
+```
+
+## Custom Hooks
+
+### 1. useLoan.ts - Loan Management
+
+```typescript
+export function useCreateLoan() {
+  const { writeContract } = useWriteContract();
+  
+  return useMutation({
+    mutationFn: async (amount: string) => {
+      await writeContract({
+        address: LOAN_MANAGER_ADDRESS,
+        abi: LOAN_MANAGER_ABI,
+        functionName: 'createLoan',
+        args: [parseUnits(amount, 6)],
+      });
+    },
+  });
+}
+
+export function useUserLoanInfo() {
+  const { address } = useAccount();
+  
+  return useReadContract({
+    address: LOAN_MANAGER_ADDRESS,
+    abi: LOAN_MANAGER_ABI,
+    functionName: 'getLoanInfo',
+    args: [address],
+  });
+}
+```
+
+### 2. useTrading.ts - Trading Logic
+
+```typescript
+export function useExecuteSwap() {
+  const { writeContract } = useWriteContract();
+  
+  return useMutation({
+    mutationFn: async (params: SwapParams) => {
+      await writeContract({
+        address: RESTRICTED_WALLET_ADDRESS,
+        abi: RESTRICTED_WALLET_ABI,
+        functionName: 'swapExactInputSingleV4',
+        args: [params.poolKey, params.amountIn, params.amountOutMin, params.deadline],
+      });
+    },
+  });
+}
+
+export function useRestrictedWalletBalance() {
+  const { data: usdcBalance } = useReadContract({
+    address: MOCK_USDC_ADDRESS,
+    abi: ERC20_ABI,
+    functionName: 'balanceOf',
+    args: [RESTRICTED_WALLET_ADDRESS],
+  });
+  
+  return {
+    usdc: usdcBalance,
+    eth: 0, // Placeholder
+    btc: 0, // Placeholder
+  };
+}
+```
+
+### 3. usePool.ts - Pool Management
+
+```typescript
+export function usePoolStats() {
+  const { data: totalDeposits } = useReadContract({
+    address: LENDING_POOL_ADDRESS,
+    abi: LENDING_POOL_ABI,
+    functionName: 'totalDeposits',
+  });
+  
+  const { data: totalAssets } = useReadContract({
+    address: LENDING_POOL_ADDRESS,
+    abi: LENDING_POOL_ABI,
+    functionName: 'totalAssets',
+  });
+  
+  return {
+    totalDeposits,
+    totalAssets,
+    apy: 6, // Fixed 6% APY
+  };
+}
+```
+
+## State Management
+
+### Context Providers
+
+#### Web3Provider.tsx
+```typescript
+export function Web3Provider({ children }: { children: React.ReactNode }) {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </WagmiProvider>
+  );
+}
+```
+
+#### AppProvider.tsx
+```typescript
+export function AppProvider({ children }: { children: React.ReactNode }) {
+  const [userType, setUserType] = useState<'lp' | 'borrower'>('lp');
+  
+  return (
+    <AppContext.Provider value={{ userType, setUserType }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+```
+
+## Styling System
+
+### Design Tokens
+
+```typescript
+// design-tokens.ts
+export const tokens = {
+  colors: {
+    primary: {
+      50: '#f0fdfa',
+      400: '#4fd1c7',
+      500: '#14b8a6',
+      600: '#0d9488',
+    },
+    gray: {
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
+    },
+  },
+  spacing: {
+    xs: '0.25rem',
+    sm: '0.5rem',
+    md: '1rem',
+    lg: '1.5rem',
+    xl: '2rem',
+  },
+  typography: {
+    fontFamily: {
+      sans: ['Inter', 'sans-serif'],
+      mono: ['JetBrains Mono', 'monospace'],
+    },
+  },
+};
+```
+
+### Component Styles
+
+```typescript
+// Button.tsx
+export function Button({ variant, size, children, ...props }: ButtonProps) {
+  const baseStyles = "inline-flex items-center justify-center rounded-lg font-medium transition-colors";
+  const variants = {
+    primary: "bg-teal-500 text-white hover:bg-teal-600",
+    secondary: "bg-gray-800 text-gray-300 hover:bg-gray-700",
+  };
+  const sizes = {
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2 text-base",
+    lg: "px-6 py-3 text-lg",
+  };
+  
+  return (
+    <button
+      className={cn(baseStyles, variants[variant], sizes[size])}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+## Performance Optimization
+
+### Code Splitting
+```typescript
+// Lazy load heavy components
+const TradingPage = lazy(() => import('./TradingPage'));
+const PoolPage = lazy(() => import('./PoolPage'));
+```
+
+### Memoization
+```typescript
+// Memoize expensive calculations
+const poolStats = useMemo(() => {
+  return calculatePoolStats(rawData);
+}, [rawData]);
+
+// Memoize components
+const PoolStats = memo(({ stats }: { stats: PoolStats }) => {
+  return <div>{/* Component content */}</div>;
+});
+```
+
+### Caching
+```typescript
+// Cache contract reads
+const { data: balance } = useReadContract({
+  address: USDC_ADDRESS,
+  abi: ERC20_ABI,
+  functionName: 'balanceOf',
+  args: [address],
+  staleTime: 30000, // 30 seconds
+});
+```
+
+## Error Handling
+
+### Error Boundaries
+```typescript
+export function ErrorBoundary({ children }: { children: React.ReactNode }) {
+  return (
+    <ErrorBoundary
+      fallback={<ErrorFallback />}
+      onError={(error) => {
+        console.error('Error caught by boundary:', error);
+      }}
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
+```
+
+### Transaction Error Handling
+```typescript
+export function useCreateLoan() {
+  return useMutation({
+    mutationFn: async (amount: string) => {
+      // Transaction logic
+    },
+    onError: (error) => {
+      if (error.code === 'INSUFFICIENT_FUNDS') {
+        toast.error('Insufficient USDC balance');
+      } else if (error.code === 'USER_REJECTED') {
+        toast.error('Transaction rejected by user');
+      } else {
+        toast.error('Transaction failed');
+      }
+    },
+  });
+}
+```
+
+## Testing
+
+### Unit Tests
+```typescript
+// Button.test.tsx
+import { render, screen } from '@testing-library/react';
+import { Button } from './Button';
+
+test('renders button with correct text', () => {
+  render(<Button>Click me</Button>);
+  expect(screen.getByText('Click me')).toBeInTheDocument();
+});
+```
+
+### Integration Tests
+```typescript
+// PoolPage.test.tsx
+import { render, screen } from '@testing-library/react';
+import { PoolPage } from './PoolPage';
+
+test('renders pool stats', () => {
+  render(<PoolPage />);
+  expect(screen.getByText('Total Deposits')).toBeInTheDocument();
+});
+```
+
+## Deployment
+
+### Build Configuration
+```typescript
+// next.config.ts
+const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
+};
+
+export default nextConfig;
+```
+
+### Environment Variables
+```bash
+# .env.local
+NEXT_PUBLIC_CHAIN_ID=84532
+NEXT_PUBLIC_RPC_URL=https://sepolia.base.org
+NEXT_PUBLIC_LENDING_POOL_ADDRESS=0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53
+NEXT_PUBLIC_LOAN_MANAGER_ADDRESS=0xDE63F87cE22E62c8a668DcF2f0869d07Be62944d
+NEXT_PUBLIC_COLLATERAL_MANAGER_ADDRESS=0xE85F7074d5b36E776001B6bc675531eAc995C642
+NEXT_PUBLIC_RESTRICTED_WALLET_FACTORY_ADDRESS=0xA8bE9eb8dF632fCD4dfB71D7A7199ebC8238d7C9
+NEXT_PUBLIC_MOCK_USDC_ADDRESS=0x98Ca29e25df55BcE438a2F93013fB9790edaf342
+```
+
+---
+
+*Ready to see the integration guide? Check out our [Integration Guide](/docs/integration) or explore the [Live Demo](/docs/demo).*

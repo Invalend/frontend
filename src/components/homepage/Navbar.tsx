@@ -22,7 +22,7 @@ export default function Navbar() {
     { href: '#architecture', label: 'Architecture' },
     { href: '#features', label: 'Features' },
     { href: '#use-cases', label: 'Use Cases' },
-    { href: '/docs', label: 'Docs' },
+    { href: '/docs', label: 'Documentation' },
   ];
 
   return (
@@ -60,14 +60,14 @@ export default function Navbar() {
         >
           <div className="container h-full flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
-                <div className="w-5 h-5 rounded-sm" style={{ background: '#06B6D4' }}></div>
+            <Link href="/" className="flex items-center gap-3 group transition-all duration-300 hover:opacity-80">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-105" style={{ background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.2)' }}>
+                <div className="w-5 h-5 rounded-sm transition-all duration-300 group-hover:scale-110" style={{ background: '#06B6D4' }}></div>
               </div>
-              <span className="text-xl font-normal tracking-[-0.02em]" style={{ color: '#FFFFFF' }}>
+              <span className="text-xl font-normal tracking-[-0.02em] transition-colors duration-300 group-hover:text-[#06B6D4]" style={{ color: '#FFFFFF' }}>
                 Invalend
               </span>
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-12" role="menubar">

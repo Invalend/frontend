@@ -2,6 +2,7 @@
 
 import { ArrowRight, BookOpen, Shield, TrendingUp, Users } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 // Custom counter animation hook
 function useCounterAnimation({ startValue, endValue, isVisible, duration = 2000 }: { startValue: number, endValue: number, isVisible: boolean, duration?: number }) {
@@ -131,7 +132,8 @@ export default function HeroSection() {
 
               {/* CTA Buttons */}
               <div className="flex items-center gap-4">
-                <button 
+                <Link 
+                  href="/app"
                   className="flex items-center gap-3 px-8 py-4 rounded-lg transition-all duration-300 group"
                   style={{ 
                     background: '#06B6D4',
@@ -149,9 +151,10 @@ export default function HeroSection() {
                 >
                   Launch App
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </button>
+                </Link>
                 
-                <button 
+                <Link 
+                  href="/docs"
                   className="flex items-center gap-3 px-8 py-4 rounded-lg transition-all duration-300 group"
                   style={{ 
                     background: 'transparent',
@@ -169,7 +172,7 @@ export default function HeroSection() {
                 >
                   Documentation
                   <BookOpen className="w-5 h-5" />
-                </button>
+                </Link>
               </div>
 
             </div>

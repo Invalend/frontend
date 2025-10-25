@@ -43,7 +43,7 @@ export default function ArchitectureOverview() {
   return (
     <section 
       ref={architectureRef}
-      id="architecture-section"
+      id="architecture"
       className="relative overflow-hidden"
       style={{ 
         background: '#0A0A0A',

@@ -89,7 +89,7 @@ export default function StatsSection() {
   };
 
   return (
-    <section className="py-[160px] bg-secondary relative overflow-hidden">
+    <section id="stats" className="py-[160px] bg-secondary relative overflow-hidden">
       {/* Background Accent */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-cyan-500/8 to-transparent pointer-events-none" />
       

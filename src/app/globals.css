@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Smooth scroll behavior for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset for fixed navbar when scrolling to sections */
+section[id] {
+  scroll-margin-top: -40px;
+}
+
+
 /* Design tokens per INVALEND_HOMEPAGE.md (Light & Airy Minimalism with Dark Theme) */
 :root {
   /* Backgrounds */

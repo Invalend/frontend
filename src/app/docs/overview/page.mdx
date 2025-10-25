@@ -1,0 +1,145 @@
+# Overview
+
+## What is Invalend
+
+Invalend is a decentralized leverage trading protocol that enables users to access 5x leverage with 20% collateral through a community-funded liquidity pool. The protocol operates on Base Sepolia testnet and integrates with Uniswap V4 for trading execution.
+
+## Core Mechanism
+
+The protocol implements a 20/80 prefunding model where:
+- Borrowers provide 20% collateral (margin)
+- The liquidity pool provides 80% funding
+- Combined capital is deployed through restricted smart wallets
+- Trading is limited to whitelisted protocols only
+
+## Key Components
+
+### Restricted Smart Wallets
+Each borrower receives a dedicated smart contract wallet that:
+- Enforces whitelist-only protocol access
+- Prevents unauthorized external transfers
+- Enables trading within defined parameters
+- Maintains full borrower control within restrictions
+
+### Liquidity Pool
+The ERC-4626 compliant vault system that:
+- Accepts USDC deposits from liquidity providers
+- Provides 80% funding for leveraged positions
+- Distributes yield to participants
+- Maintains principal protection through margin requirements
+
+### Risk Management
+The protocol includes automated risk management features:
+- Real-time position monitoring
+- Automated liquidation triggers (planned)
+- Margin requirement validation
+- Transparent settlement processes
+
+## Technical Implementation
+
+### Smart Contract Architecture
+The protocol consists of five core smart contracts:
+- **LendingPool**: ERC-4626 vault for liquidity management
+- **LoanManager**: Orchestrates loan creation and management
+- **CollateralManager**: Tracks margin and risk parameters
+- **RestrictedWalletFactory**: Creates trading wallets for borrowers
+- **RestrictedWallet**: Enforces trading restrictions
+
+### Network Deployment
+- **Network**: Base Sepolia testnet (Chain ID: 84532)
+- **Status**: Deployed and verified
+- **Integration**: Uniswap V4 for trading execution
+- **Oracle**: Chainlink integration (planned)
+
+## Current Status
+
+### Implementation Status
+- **Core Contracts**: Deployed and functional on Base Sepolia
+- **Frontend Interface**: Complete with multi-user support
+- **Trading Integration**: Uniswap V4 integration operational
+- **Risk Management**: Time-based liquidation implemented
+- **Oracle Integration**: Planned for future release
+
+### Testing Status
+- **Unit Tests**: 90% code coverage
+- **Integration Tests**: End-to-end flows validated
+- **User Acceptance**: Multi-user scenarios tested
+- **Security Review**: Internal audit completed
+
+## Key Features
+
+### Capital Efficiency
+- **5x Leverage**: Achieved with 20% collateral requirement
+- **Pool-based Funding**: Community pre-funds 80% of loan amount
+- **Immediate Access**: No waiting for individual lenders
+- **Risk Sharing**: Both borrowers and LPs benefit from successful trades
+
+### Security Model
+- **Chain-enforced Restrictions**: Smart contract-level enforcement
+- **Whitelist-only Access**: Limited to approved protocols
+- **No External Transfers**: Prevents unauthorized fund movement
+- **Automated Risk Management**: Real-time monitoring and liquidation
+
+### Transparency
+- **On-chain Execution**: All operations visible on blockchain
+- **Event Emission**: Complete audit trail for all actions
+- **Real-time Monitoring**: Live position and P&L tracking
+- **Open Source**: All code publicly auditable
+
+## Technology Stack
+
+### Smart Contracts
+- **Solidity**: Smart contract development language
+- **OpenZeppelin**: Standard library for security patterns
+- **ERC-4626**: Standardized vault interface
+- **Factory Pattern**: Dynamic wallet creation
+
+### Frontend
+- **Next.js 14**: React framework with App Router
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first styling
+- **Wagmi v2**: Ethereum integration library
+
+### Network Infrastructure
+- **Base Sepolia**: Testnet deployment
+- **Uniswap V4**: DEX integration
+- **Mock Tokens**: USDC, ETH, BTC for testing
+- **Event Monitoring**: Real-time transaction tracking
+
+## Development Roadmap
+
+### Phase 1 (Current - MVP)
+- **Status**: Completed
+- **Achievements**: Core contracts deployed, frontend interface complete
+- **Features**: 20/80 prefunding, restricted wallets, Uniswap V4 integration
+- **Testing**: 90% code coverage, end-to-end validation
+
+### Phase 2 (Next 3 months)
+- **Oracle Integration**: Chainlink price feeds for real-time liquidation
+- **Real Yield Generation**: Fee sharing mechanism for LPs
+- **Enhanced Risk Management**: Price-based liquidation triggers
+- **Security Audit**: External audit of smart contracts
+
+### Phase 3 (6+ months)
+- **Multi-Asset Support**: ETH and BTC vaults
+- **Cross-Chain Deployment**: Multi-chain support
+- **Advanced Features**: Dynamic liquidation, risk scoring
+- **Institutional Integration**: Enterprise-grade tools
+
+## Project Goals
+
+### Primary Objectives
+- Provide capital-efficient leverage trading infrastructure
+- Ensure principal protection for liquidity providers
+- Maintain transparent and auditable operations
+- Enable institutional-grade DeFi tools
+
+### Success Criteria
+- Functional 20/80 prefunding mechanism
+- Secure restricted wallet execution
+- Transparent on-chain operations
+- Professional user interface
+
+---
+
+*Ready to dive deeper? Check out our [Problem & Solution](/docs/problem-solution) or explore the [Core Concepts](/docs/core-concept).*

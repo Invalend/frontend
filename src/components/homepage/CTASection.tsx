@@ -2,6 +2,7 @@
 
 import { ArrowRight, BookOpen, Check } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import Link from 'next/link';
 
 export default function CTASection() {
   const { ref, isVisible } = useScrollAnimation();
@@ -13,7 +14,7 @@ export default function CTASection() {
   ];
 
   return (
-    <section className="py-[200px] bg-primary relative overflow-hidden">
+    <section id="cta" className="py-[200px] bg-primary relative overflow-hidden">
       {/* Background Accent */}
       <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent/5 pointer-events-none" />
       
@@ -39,14 +40,14 @@ export default function CTASection() {
 
           {/* CTA Buttons */}
           <div className="flex gap-5 justify-center flex-wrap mb-16">
-            <button className="btn-primary btn-lg">
+            <Link href="/app" className="btn-primary btn-lg">
               Launch App
               <ArrowRight className="w-5 h-5" />
-            </button>
-            <button className="btn-secondary btn-lg">
+            </Link>
+            <Link href="/docs" className="btn-secondary btn-lg">
               Read Documentation
               <BookOpen className="w-5 h-5" />
-            </button>
+            </Link>
           </div>
 
           {/* Features */}

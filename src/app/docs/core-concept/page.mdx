@@ -1,0 +1,278 @@
+# Core Concept & Definition
+
+## Core Concept
+
+### Safe-Leverage Protocol
+
+Invalend is a decentralized leverage trading protocol that enables users to access 5x leverage while protecting liquidity providers through a 20/80 prefunding model and chain-enforced restrictions.
+
+**Key Elements:**
+- **Safety**: LPs are protected by borrower margin requirements
+- **Leverage**: Up to 5x capital efficiency achieved
+- **Protocol**: Decentralized, on-chain execution
+- **Restrictions**: Chain-enforced trading boundaries
+
+### 20/80 Prefunding Model
+
+The protocol's core mechanism that enables safe leverage through community prefunding.
+
+**Mechanism:**
+- **Borrower Contribution**: 20% collateral (margin)
+- **Pool Contribution**: 80% funding from liquidity pool
+- **Combined Capital**: Up to 5x leverage for trading
+- **Risk Distribution**: Both parties benefit from successful trades
+
+**Benefits:**
+- **Capital Efficiency**: 5x more efficient than traditional lending
+- **Risk Sharing**: Distributed between borrower and pool
+- **LP Protection**: Losses never exceed borrower margin
+- **Transparent Execution**: All actions visible on-chain
+
+## Definitions
+
+### Key Terms
+
+**Borrower**
+- Individual or entity seeking leverage for trading
+- Provides 20% collateral (margin)
+- Gains access to 5x trading capital
+- Maintains control within restricted wallet
+
+**Liquidity Provider (LP)**
+- Individual or entity providing capital to the pool
+- Earns yield with principal protection
+- Protected by borrower margin requirements
+- Benefits from successful trading activity
+
+**Restricted Wallet**
+- Smart contract wallet created for each borrower
+- Enforces whitelist-only protocol access
+- Prevents unauthorized external transfers
+- Enables trading control within defined boundaries
+
+**Margin**
+- 20% collateral provided by borrower
+- First to absorb any trading losses
+- Enables access to 5x leverage
+- Protects LP principal
+
+**Pool**
+- ERC-4626 vault containing LP deposits
+- Provides 80% funding for loans
+- Earns yield from trading activity
+- Protected by borrower margin
+
+**Health Factor**
+- Real-time calculation of position health
+- Based on collateral value versus loan amount
+- Triggers liquidation when below threshold
+- Ensures LP protection
+
+### Technical Definitions
+
+**Chain-Enforced Restrictions**
+- Smart contract-level enforcement of trading boundaries
+- Whitelist-only protocol access
+- No external transfers allowed
+- Transaction-level validation
+
+**Automated Liquidation**
+- Time-based liquidation triggers (current implementation)
+- Automated execution at predefined thresholds
+- LP protection via margin absorption
+- Transparent settlement process
+
+**Prefunding**
+- Pool pre-funds 80% of loan amount
+- Enables immediate access to leverage
+- No waiting for individual lenders
+- Pool-based capital allocation
+
+**Risk Engine**
+- On-chain system for risk management
+- Real-time margin tracking
+- P&L calculation and monitoring
+- Automated liquidation execution
+
+## Core Principles
+
+### 1. Safety First
+
+**Principle**: LPs must be protected from losses
+**Implementation**: Borrower margin absorbs all losses
+**Result**: LP principal never at risk
+
+### 2. Transparency
+
+**Principle**: All operations must be visible on-chain
+**Implementation**: Event emission for all actions
+**Result**: Full audit trail and monitoring
+
+### 3. Automation
+
+**Principle**: No human judgment or intervention required
+**Implementation**: Smart contract enforcement
+**Result**: Predictable and fair outcomes
+
+### 4. Efficiency
+
+**Principle**: Maximum capital utilization
+**Implementation**: 20/80 prefunding model
+**Result**: 5x capital efficiency
+
+### 5. Decentralization
+
+**Principle**: No single points of failure
+**Implementation**: Distributed execution
+**Result**: Resilient and censorship-resistant
+
+## Value Proposition
+
+### For Borrowers
+
+**Capital Efficiency**
+- Access 5x leverage with 20% margin requirement
+- More efficient than traditional 150%+ collateral requirements
+- Immediate access to prefunded capital
+
+**Trading Control**
+- Full autonomy within restricted wallet
+- No external interference or restrictions
+- Professional-grade trading interface
+
+**Transparency**
+- All trades executed on-chain
+- Real-time P&L tracking
+- Transparent settlement process
+
+**Self-Custody**
+- No centralized control
+- No trust requirements
+- Complete ownership of trading strategy
+
+### For Liquidity Providers
+
+**Principal Protection**
+- Losses never exceed borrower margin
+- Automated liquidation protection
+- No direct exposure to trader market risk
+
+**Automated Yield**
+- Yield generation with principal protection
+- No active management required
+- Transparent yield distribution
+
+**Transparent Monitoring**
+- Real-time position tracking
+- Full visibility into all activities
+- Professional-grade analytics
+
+**Risk-Adjusted Returns**
+- Better returns than traditional lending
+- Lower risk than undercollateralized models
+- Professional infrastructure
+
+### For Ecosystem
+
+**Capital Efficiency**
+- Better utilization of DeFi capital
+- Reduced capital lockup
+- Higher overall returns
+
+**Transparent Standards**
+- On-chain execution standards
+- Audit trail for compliance
+- Professional infrastructure
+
+**Institutional Infrastructure**
+- Professional-grade tools
+- Compliance-ready execution
+- Scalable architecture
+
+## Innovation
+
+### Chain-Enforced Restrictions
+
+**What it is**: Smart contract-level enforcement of trading boundaries
+**Why it matters**: Eliminates trust requirements and human error
+**How it works**: Whitelist-only protocol access with transaction validation
+
+### 20/80 Prefunding
+
+**What it is**: Community pre-funds 80% of loan amount
+**Why it matters**: Enables immediate access to leverage
+**How it works**: Pool-based capital allocation with risk sharing
+
+### Automated Risk Management
+
+**What it is**: Smart contract-based risk management
+**Why it matters**: No human judgment or intervention required
+**How it works**: Real-time monitoring with automated liquidation
+
+### Transparent Execution
+
+**What it is**: All operations visible on-chain
+**Why it matters**: Builds trust through transparency
+**How it works**: Event emission and real-time monitoring
+
+## Competitive Differentiation
+
+### vs Over-collateralized Lending
+
+**Capital Efficiency**: 5x more efficient (20% vs 150% collateral)
+**Leverage**: Higher leverage (5x vs 2-3x)
+**LP Returns**: Better returns (6% APY vs 3-5% APY)
+**Safety**: Same safety level with better efficiency
+
+### vs Undercollateralized Lending
+
+**Execution**: On-chain vs off-chain
+**Transparency**: 100% transparent vs opaque
+**Restrictions**: Chain-enforced vs trust-based
+**Safety**: Automated protection vs human oversight
+
+### vs Centralized Platforms
+
+**Custody**: Self-custody vs fund control
+**Transparency**: On-chain vs opaque
+**Decentralization**: Distributed vs centralized
+**Trust**: Code-based vs human-based
+
+## Market Position
+
+### Target Market
+
+**Primary Users**:
+- DeFi traders seeking capital efficiency
+- DAO treasuries optimizing deployment
+- Institutional entities requiring compliance
+- Liquidity providers seeking yield
+
+**Market Size**:
+- TAM: $200B+ annual crypto derivatives volume
+- SAM: $12B DeFi leverage markets
+- SOM: $150M early adopters on Base + L2s
+
+### Competitive Advantages
+
+**Technical**:
+- Chain-enforced restrictions (unique)
+- 20/80 prefunding model (unique)
+- Automated risk management
+- Transparent execution
+
+**Business**:
+- First mover advantage
+- Institutional focus
+- Professional infrastructure
+- Strong value proposition
+
+**Market**:
+- Large addressable market
+- Growing institutional adoption
+- Base ecosystem alignment
+- Network effects potential
+
+---
+
+*Ready to understand the core principles? Check out our [Core Principles](/docs/core-principles) or explore the [Architecture](/docs/architecture).*

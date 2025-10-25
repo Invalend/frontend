@@ -1,0 +1,194 @@
+# Integration Guide
+
+## Overview
+
+This guide provides step-by-step instructions for integrating with Invalend Protocol's smart contracts and frontend components.
+
+## Smart Contract Integration
+
+### Contract Addresses
+
+```typescript
+const CONTRACT_ADDRESSES = {
+  MOCK_USDC: '0x98Ca29e25df55BcE438a2F93013fB9790edaf342',
+  LENDING_POOL: '0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53',
+  LOAN_MANAGER: '0xDE63F87cE22E62c8a668DcF2f0869d07Be62944d',
+  COLLATERAL_MANAGER: '0xE85F7074d5b36E776001B6bc675531eAc995C642',
+  RESTRICTED_WALLET_FACTORY: '0xA8bE9eb8dF632fCD4dfB71D7A7199ebC8238d7C9',
+  RESTRICTED_WALLET: '0xCA6913E22193cc6D0A125127ffe87953b1170A66'
+};
+```
+
+### Network Configuration
+
+```typescript
+const NETWORK_CONFIG = {
+  chainId: 84532, // Base Sepolia
+  rpcUrl: 'https://sepolia.base.org',
+  explorerUrl: 'https://sepolia.basescan.org'
+};
+```
+
+## Frontend Integration
+
+### Installation
+
+```bash
+npm install @wagmi/core @wagmi/connectors viem
+```
+
+### Configuration
+
+```typescript
+import { createConfig, http } from '@wagmi/core';
+import { baseSepolia } from '@wagmi/core/chains';
+
+export const config = createConfig({
+  chains: [baseSepolia],
+  transports: {
+    [baseSepolia.id]: http('https://sepolia.base.org'),
+  },
+});
+```
+
+### Usage Examples
+
+#### Reading Contract Data
+
+```typescript
+import { readContract } from '@wagmi/core';
+
+const poolStats = await readContract(config, {
+  address: '0x0CFBf6055f5d4546D25ADb937a6FbC49dB2C5e53',
+  abi: LENDING_POOL_ABI,
+  functionName: 'totalAssets',
+});
+```
+
+#### Writing to Contracts
+
+```typescript
+import { writeContract } from '@wagmi/core';
+
+await writeContract(config, {
+  address: '0xDE63F87cE22E62c8a668DcF2f0869d07Be62944d',
+  abi: LOAN_MANAGER_ABI,
+  functionName: 'createLoan',
+  args: [parseUnits('1000', 6)],
+});
+```
+
+## API Reference
+
+### LendingPool Contract
+
+#### Functions
+
+- `deposit(uint256 assets)` - Deposit USDC to earn yield
+- `withdraw(uint256 assets)` - Withdraw USDC from pool
+- `totalAssets()` - Get total pool assets
+- `balanceOf(address account)` - Get user balance
+
+### LoanManager Contract
+
+#### Functions
+
+- `createLoan(uint256 loanAmount)` - Create new loan
+- `repayLoan()` - Repay active loan
+- `getLoanInfo(address borrower)` - Get loan details
+
+### RestrictedWallet Contract
+
+#### Functions
+
+- `swapExactInputSingleV4(PoolKey, uint256, uint256, uint256)` - Execute V4 swap
+- `getBalance(address token)` - Get token balance
+- `execute(address target, bytes data)` - Execute approved calls
+
+## Error Handling
+
+### Common Errors
+
+```typescript
+try {
+  await writeContract(config, {
+    address: LOAN_MANAGER_ADDRESS,
+    abi: LOAN_MANAGER_ABI,
+    functionName: 'createLoan',
+    args: [amount],
+  });
+} catch (error) {
+  if (error.code === 'INSUFFICIENT_FUNDS') {
+    console.error('Insufficient USDC balance');
+  } else if (error.code === 'USER_REJECTED') {
+    console.error('Transaction rejected by user');
+  } else {
+    console.error('Transaction failed:', error.message);
+  }
+}
+```
+
+## Testing
+
+### Unit Tests
+
+```typescript
+import { describe, it, expect } from 'vitest';
+import { readContract } from '@wagmi/core';
+
+describe('LendingPool', () => {
+  it('should return total assets', async () => {
+    const totalAssets = await readContract(config, {
+      address: LENDING_POOL_ADDRESS,
+      abi: LENDING_POOL_ABI,
+      functionName: 'totalAssets',
+    });
+    
+    expect(totalAssets).toBeGreaterThan(0);
+  });
+});
+```
+
+### Integration Tests
+
+```typescript
+describe('Loan Creation', () => {
+  it('should create loan successfully', async () => {
+    const tx = await writeContract(config, {
+      address: LOAN_MANAGER_ADDRESS,
+      abi: LOAN_MANAGER_ABI,
+      functionName: 'createLoan',
+      args: [parseUnits('1000', 6)],
+    });
+    
+    expect(tx).toBeDefined();
+  });
+});
+```
+
+## Best Practices
+
+### Security
+
+- Always validate user inputs
+- Check contract state before transactions
+- Handle errors gracefully
+- Use proper error messages
+
+### Performance
+
+- Cache contract reads when possible
+- Batch multiple operations
+- Use appropriate gas limits
+- Monitor transaction status
+
+### User Experience
+
+- Show loading states during transactions
+- Provide clear error messages
+- Display transaction progress
+- Confirm actions before execution
+
+---
+
+*Ready to start building? Check out our [Smart Contracts](/docs/smart-contracts) or explore the [Frontend Implementation](/docs/frontend).*

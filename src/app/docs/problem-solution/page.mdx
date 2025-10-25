@@ -1,0 +1,182 @@
+# Problem & Solution
+
+## The Problem
+
+### Capital Inefficiency in DeFi Lending
+
+Current DeFi lending protocols require excessive collateral for leverage, limiting capital efficiency and trader potential.
+
+**Current Limitations:**
+- **Collateral Requirements**: 150-200% for basic leverage
+- **Available Leverage**: 2-3x maximum
+- **Capital Utilization**: Low due to over-collateralization
+- **LP Returns**: 3-5% APY on major protocols
+
+**Market Impact:**
+- Limited leverage access for traders
+- Suboptimal capital deployment for DAOs
+- Reduced efficiency for institutional users
+- Lower returns for liquidity providers
+
+### Risk Management Challenges
+
+Existing protocols face challenges in risk management despite high collateralization requirements.
+
+**Identified Issues:**
+- **Oracle Dependencies**: Price feed manipulation risks
+- **Liquidation Cascades**: Mass liquidations during market volatility
+- **Centralized Control**: Single points of failure in risk management
+- **Trust Requirements**: Human oversight and judgment dependencies
+
+**Historical Context:**
+- Multiple DeFi protocols experienced significant losses
+- Centralized platforms faced liquidity and solvency issues
+- Risk management systems proved inadequate during market stress
+
+### Centralized Platform Limitations
+
+Centralized leverage platforms present several limitations for users seeking capital efficiency.
+
+**Centralized Platform Issues:**
+- **Fund Control**: Users do not maintain custody of assets
+- **Risk Management**: Human-controlled liquidation decisions
+- **Transparency**: Limited visibility into risk calculations
+- **Single Points of Failure**: Platform failure results in user loss
+
+**Market Context:**
+- Centralized platforms have experienced significant failures
+- User funds have been lost due to platform insolvency
+- Risk management has proven inadequate during market stress
+
+## The Solution
+
+### 20/80 Prefunding Model
+
+The protocol enables 5x leverage through a community-funded approach where borrowers provide 20% collateral and the pool provides 80% funding.
+
+**Mechanism:**
+- **Borrower Contribution**: 20% collateral (margin)
+- **Pool Contribution**: 80% funding from liquidity pool
+- **Total Leverage**: 5x the borrower's capital
+- **Risk Distribution**: Shared between borrower and pool
+
+**Example Implementation:**
+- Desired position: $100,000
+- Required collateral: $20,000 (20%)
+- Pool funding: $80,000 (80%)
+- Total trading capital: $100,000
+- Leverage achieved: 5x
+
+### Restricted Smart Wallets
+
+The protocol implements restricted smart wallets that limit trading to whitelisted protocols only, preventing unauthorized fund transfers.
+
+**Restriction Mechanisms:**
+- **Whitelist Enforcement**: Only approved protocols can be called
+- **Trading Limitations**: Restricted to swap functions only
+- **Transfer Prevention**: No external transfers allowed
+- **Transaction Validation**: All actions verified at smart contract level
+
+**Security Features:**
+- **Code-based Enforcement**: No human intervention required
+- **Automated Validation**: Smart contract-level checks
+- **Access Control**: Limited to approved functions only
+- **Transparent Operations**: All actions recorded on-chain
+
+### Liquidity Provider Protection
+
+The protocol ensures liquidity provider capital is protected through margin requirements and automated liquidation mechanisms.
+
+**Protection Mechanisms:**
+- **Margin Priority**: Borrower margin absorbs all trading losses
+- **Automated Liquidation**: Triggered when losses approach margin threshold
+- **Principal Protection**: LP capital protected by margin buffer
+- **Position Monitoring**: Real-time tracking of loan health
+
+**Risk Distribution:**
+- **LP Risk**: Protected by borrower margin
+- **Borrower Risk**: Limited to margin amount
+- **Pool Risk**: Minimized through over-collateralization
+- **System Risk**: Reduced through automated enforcement
+
+### Automated Risk Management
+
+The protocol implements automated risk management through smart contracts, eliminating human judgment and ensuring consistent enforcement.
+
+**Automated Processes:**
+1. **Fund Allocation**: Pool provides 80% funding to borrower
+2. **Trading Execution**: Restricted wallet executes approved trades
+3. **Position Monitoring**: Real-time P&L and health factor tracking
+4. **Settlement**: Automatic repayment when position is closed
+5. **Liquidation**: Automated protection when margin is insufficient
+
+**System Benefits:**
+- **Consistent Enforcement**: Code-based decision making
+- **Predictable Outcomes**: Clear rules and parameters
+- **Fair Distribution**: Proportional profit and loss sharing
+- **Transparent Operations**: All processes recorded on-chain
+
+## Solution Benefits
+
+### Addresses Identified Problems
+
+**Capital Efficiency:**
+- 5x more efficient than traditional over-collateralized lending
+- Maintains safety through margin requirements
+- Improves capital utilization for all participants
+
+**Trust and Transparency:**
+- Chain-enforced restrictions eliminate trust requirements
+- 100% transparent execution through on-chain operations
+- Automated enforcement prevents human error
+
+**Decentralization:**
+- Self-custody solutions for users
+- Decentralized execution through smart contracts
+- Eliminates single points of failure
+
+### Value Creation
+
+**For Borrowers:**
+- 5x leverage with 20% margin requirement
+- Full trading control within defined restrictions
+- Transparent execution and settlement processes
+- Professional-grade infrastructure
+
+**For Liquidity Providers:**
+- Principal protection through margin requirements
+- Automated yield generation (planned)
+- No direct exposure to trader market risk
+- Transparent monitoring of all positions
+
+**For Ecosystem:**
+- Improved capital efficiency across DeFi
+- Transparent standards for leverage trading
+- Institutional-grade infrastructure on Base
+- Network effects through increased adoption
+
+## Technical Implementation
+
+### Smart Contract Architecture
+The protocol consists of five core smart contracts deployed on Base Sepolia:
+- **LendingPool**: ERC-4626 vault for liquidity management
+- **LoanManager**: Orchestrates loan creation and management
+- **CollateralManager**: Tracks margin and risk parameters
+- **RestrictedWalletFactory**: Creates trading wallets for borrowers
+- **RestrictedWallet**: Enforces trading restrictions
+
+### Integration Points
+- **Uniswap V4**: DEX integration for trading execution
+- **Base Sepolia**: Testnet deployment and testing
+- **Mock Tokens**: USDC, ETH, BTC for testing purposes
+- **Event Monitoring**: Real-time transaction tracking
+
+### Current Status
+- **Deployment**: Contracts deployed and verified on Base Sepolia
+- **Testing**: 90% code coverage with end-to-end validation
+- **Frontend**: Complete interface with multi-user support
+- **Oracle Integration**: Planned for future release
+
+---
+
+*Ready to explore the features? Check out our [Features](/docs/features) or dive into the [Core Concepts](/docs/core-concept).*

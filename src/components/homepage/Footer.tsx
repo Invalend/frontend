@@ -1,32 +1,33 @@
 'use client';
 
 import { Twitter, Github } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Footer() {
   const footerLinks = {
     product: [
-      { href: '#how-it-works', label: 'How It Works' },
+      { href: '#architecture', label: 'Architecture' },
       { href: '#features', label: 'Features' },
       { href: '#use-cases', label: 'Use Cases' },
       { href: '/app', label: 'Launch App' }
     ],
     resources: [
       { href: '/docs', label: 'Documentation' },
-      { href: '#', label: 'Whitepaper' },
-      { href: '#', label: 'Blog' },
-      { href: '#', label: 'FAQ' }
+      { href: '/docs/overview', label: 'Overview' },
+      { href: '/docs/core-concept', label: 'Core Concepts' },
+      { href: '/docs/smart-contracts', label: 'Smart Contracts' }
     ],
     community: [
-      { href: '#', label: 'Discord' },
-      { href: '#', label: 'Twitter' },
-      { href: '#', label: 'Forum' },
-      { href: '#', label: 'Governance' }
+      { href: '#', label: 'Discord (coming soon)' },
+      { href: '#', label: 'Twitter (coming soon)' },
+      { href: '#', label: 'GitHub (coming soon)' },
+      { href: '#', label: 'Governance (coming soon)' }
     ],
     legal: [
-      { href: '#', label: 'Terms of Service' },
-      { href: '#', label: 'Privacy Policy' },
-      { href: '#', label: 'Security' },
-      { href: '#', label: 'Brand Assets' }
+      { href: '#', label: 'Terms of Service (coming soon)' },
+      { href: '#', label: 'Privacy Policy (coming soon)' },
+      { href: '#', label: 'Security (coming soon)' },
+      { href: '#', label: 'Brand Assets (coming soon)' }
     ]
   };
 
@@ -36,12 +37,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-20 mb-20">
           {/* Brand Column */}
           <div className="lg:col-span-2 max-w-[320px]">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                <div className="w-5 h-5 bg-primary rounded-sm"></div>
+            <Link href="/" className="flex items-center gap-3 mb-5 group transition-all duration-300 hover:opacity-80">
+              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-105">
+                <div className="w-5 h-5 bg-primary rounded-sm transition-all duration-300 group-hover:scale-110"></div>
               </div>
-              <span className="text-xl text-primary">Invalend</span>
-            </div>
+              <span className="text-xl text-primary transition-colors duration-300 group-hover:text-accent">Invalend</span>
+            </Link>
             <p className="text-small text-tertiary leading-relaxed mb-8">
               Shared-risk liquidity infrastructure for on-chain institutions
             </p>

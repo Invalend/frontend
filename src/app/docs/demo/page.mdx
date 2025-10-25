@@ -1,0 +1,130 @@
+# Live Demo
+
+## Demo Overview
+
+This guide provides step-by-step instructions for demonstrating Invalend Protocol's core functionality during the Base hackathon presentation.
+
+## Demo Environment
+
+### Prerequisites
+- **Network**: Base Sepolia (Chain ID: 84532)
+- **RPC**: `https://sepolia.base.org`
+- **Explorer**: `https://sepolia.basescan.org`
+- **Test Tokens**: Mock USDC, ETH, BTC available
+
+### Demo Setup
+1. **Connect** to Base Sepolia network
+2. **Get** test tokens from faucet
+3. **Access** demo interface
+4. **Follow** demo scenarios
+
+## Demo Scenarios
+
+### Scenario 1: DAO Treasury Optimization (5 minutes)
+
+**Objective**: Demonstrate 5x capital efficiency for DAO treasury
+
+**Setup**:
+- Use DAO wallet with $100K USDC
+- Target: Deploy $500K position with $100K collateral
+
+**Steps**:
+1. **Connect** DAO wallet
+2. **Navigate** to Loan page
+3. **Enter** $500K loan amount
+4. **Show** required collateral: $100K (20%)
+5. **Click** "Approve USDC"
+6. **Click** "Create Loan"
+7. **Show** restricted wallet address
+8. **Navigate** to Trading page
+9. **Select** USDC → ETH trade
+10. **Enter** $500K trade amount
+11. **Execute** swap
+12. **Show** 5x leverage achieved
+
+**Key Points**:
+- 5x capital efficiency achieved
+- Transparent on-chain execution
+- Professional user interface
+- No governance token sales required
+
+### Scenario 2: Professional Trader Leverage (3 minutes)
+
+**Objective**: Demonstrate trading with 5x leverage
+
+**Setup**:
+- Use trader wallet with $20K USDC
+- Target: Trade $100K position with $20K collateral
+
+**Steps**:
+1. **Connect** trader wallet
+2. **Create** $100K loan
+3. **Show** restricted wallet balance
+4. **Execute** multiple trades:
+   - USDC → ETH
+   - ETH → BTC
+   - BTC → USDC
+5. **Show** P&L tracking
+6. **Demonstrate** restriction enforcement
+
+**Key Points**:
+- 5x leverage for trading
+- Self-custody solutions
+- Real-time position monitoring
+- Chain-enforced execution restrictions
+
+### Scenario 3: Individual LP Yield (3 minutes)
+
+**Objective**: Demonstrate 6% APY with principal protection
+
+**Setup**:
+- Use LP wallet with $50K USDC
+- Target: Earn yield with protection
+
+**Steps**:
+1. **Connect** LP wallet
+2. **Navigate** to Pool page
+3. **Deposit** $50K USDC
+4. **Show** Invalend Pool Shares received
+5. **Show** 6% APY yield accrual
+6. **Demonstrate** principal protection
+7. **Show** vault utilization
+8. **Withdraw** after demo period
+
+**Key Points**:
+- 6% APY yield generation
+- Principal protection through margin
+- Transparent monitoring
+- Passive income strategy
+
+## Demo Script
+
+### Introduction (1 minute)
+"Today I'll demonstrate Invalend Protocol, a safe-leverage protocol that allows traders to unlock 5x buying power using only 20% of their own capital. The remaining 80% is transparently provided by a shared liquidity pool."
+
+### Problem Statement (1 minute)
+"Current DeFi leverage protocols require excessive collateral for leverage, limiting capital efficiency. Invalend addresses this through a 20/80 prefunding model with chain-enforced restrictions and transparent execution."
+
+### Core Mechanism (2 minutes)
+"Let me show you how the 20/80 prefunding mechanism works. A DAO wants to deploy $500K but only has $100K available. They create a loan, deposit 20% collateral, and the community pre-funds 80%. The combined capital goes to a restricted wallet that can only trade on whitelisted protocols."
+
+### Live Demo (8 minutes)
+- **DAO Scenario** (5 minutes)
+- **Trader Scenario** (3 minutes)
+
+### Key Differentiators (2 minutes)
+"Invalend provides 5x capital efficiency through the 20/80 prefunding model. Restrictions are enforced at the smart contract level, and the protocol focuses on institutional use cases with professional-grade infrastructure."
+
+### Technical Highlights (2 minutes)
+"Built on Base with Uniswap V4 integration, ERC-4626 standard vaults, and comprehensive testing. All transactions are on-chain and transparent."
+
+### Q&A (3 minutes)
+Answer questions about:
+- Security and risk management
+- Oracle integration plans
+- Yield generation mechanisms
+- Cross-chain deployment plans
+
+---
+
+*This guide ensures a successful demo presentation. For technical details, see [Technical Architecture](/docs/architecture).*

@@ -1,6 +1,5 @@
 "use client";
 import Link from 'next/link';
-import { ConnectWallet } from '@/components/common/ConnectWallet';
 
 export const Header = () => {
   return (
@@ -33,9 +32,6 @@ export const Header = () => {
               </span>
             </div>
           </Link>
-          
-          {/* Connect Wallet */}
-          <ConnectWallet />
         </div>
       </div>
     </header>

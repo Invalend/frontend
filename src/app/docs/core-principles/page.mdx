@@ -1,0 +1,218 @@
+# Core Principles
+
+## 1. Safety First
+
+### Principle
+Liquidity providers must be protected from losses at all costs.
+
+### Implementation
+- **Borrower margin absorbs all losses**: The 20% collateral provided by borrowers is the first to absorb any trading losses
+- **Automated liquidation**: When losses approach the margin threshold, positions are automatically liquidated
+- **Principal protection**: LP principal is never at risk, only the borrower's margin
+- **Over-collateralization by design**: The system is inherently over-collateralized through the margin requirement
+
+### Why This Matters
+- **Builds trust**: LPs can participate without fear of losing principal
+- **Enables growth**: Safe capital attracts more liquidity providers
+- **Reduces risk**: Systemic risk is minimized through protection mechanisms
+- **Professional standards**: Meets institutional risk management requirements
+
+## 2. Transparency
+
+### Principle
+All operations must be visible and verifiable on-chain.
+
+### Implementation
+- **Event emission**: Every action emits events for full transparency
+- **Real-time monitoring**: All positions and activities are visible in real-time
+- **Audit trail**: Complete history of all transactions and decisions
+- **Open source**: All code is open source and auditable
+
+### Why This Matters
+- **Builds trust**: Transparency eliminates opacity and builds confidence
+- **Enables compliance**: Full audit trail meets regulatory requirements
+- **Prevents manipulation**: Visible operations prevent hidden activities
+- **Enables innovation**: Open source enables community contributions
+
+## 3. Automation
+
+### Principle
+No human judgment or intervention should be required for core operations.
+
+### Implementation
+- **Smart contract enforcement**: All rules are enforced by smart contracts
+- **Automated liquidation**: Price-based triggers execute automatically
+- **Automated settlement**: P&L calculations and distributions are automatic
+- **Automated risk management**: Health factors and monitoring are automatic
+
+### Why This Matters
+- **Eliminates human error**: Code execution is more reliable than human judgment
+- **Ensures fairness**: Automated systems treat all users equally
+- **Reduces costs**: No human oversight required for operations
+- **Enables scale**: Automated systems can handle large volumes
+
+## 4. Efficiency
+
+### Principle
+Maximum capital utilization while maintaining safety.
+
+### Implementation
+- **20/80 prefunding model**: Enables 5x leverage with minimal capital
+- **Pool-based allocation**: Community pre-funds loans for immediate access
+- **Risk sharing**: Both borrowers and LPs benefit from successful trades
+- **Optimized execution**: Best price discovery and routing
+
+### Why This Matters
+- **Better returns**: More efficient capital utilization benefits all parties
+- **Competitive advantage**: Superior efficiency attracts users
+- **Market growth**: Efficient systems enable larger markets
+- **Innovation**: Efficiency drives further innovation
+
+## 5. Decentralization
+
+### Principle
+No single points of failure or control.
+
+### Implementation
+- **Distributed execution**: Smart contracts run on decentralized network
+- **No central authority**: No single entity controls the protocol
+- **Community governance**: Protocol parameters controlled by community
+- **Open participation**: Anyone can participate as borrower or LP
+
+### Why This Matters
+- **Resilience**: No single point of failure
+- **Censorship resistance**: No entity can prevent participation
+- **Innovation**: Open participation enables innovation
+- **Trust**: Decentralization builds trust through code
+
+## 6. Composability
+
+### Principle
+The protocol should integrate seamlessly with the broader DeFi ecosystem.
+
+### Implementation
+- **ERC-4626 standard**: Compatible with existing DeFi infrastructure
+- **Standard interfaces**: Easy integration with other protocols
+- **Modular design**: Components can be used independently
+- **Open APIs**: Clear interfaces for third-party integration
+
+### Why This Matters
+- **Ecosystem growth**: Composability enables ecosystem development
+- **User experience**: Seamless integration improves UX
+- **Innovation**: Composability enables new use cases
+- **Network effects**: Integration creates network effects
+
+## 7. Fairness
+
+### Principle
+All participants should be treated equally and fairly.
+
+### Implementation
+- **Equal access**: No preferential treatment for any user
+- **Transparent rules**: All rules and parameters are visible
+- **Proportional benefits**: Rewards are proportional to contribution
+- **Fair settlement**: P&L distribution is fair and transparent
+
+### Why This Matters
+- **Builds trust**: Fair treatment builds user confidence
+- **Enables growth**: Fair systems attract more participants
+- **Reduces conflict**: Fair rules minimize disputes
+- **Professional standards**: Fairness meets institutional requirements
+
+## 8. Innovation
+
+### Principle
+The protocol should continuously evolve and improve.
+
+### Implementation
+- **Community governance**: Community controls protocol evolution
+- **Open development**: Open source enables community contributions
+- **Research focus**: Continuous research and development
+- **User feedback**: Protocol evolves based on user needs
+
+### Why This Matters
+- **Competitive advantage**: Innovation maintains competitive edge
+- **User satisfaction**: Continuous improvement keeps users happy
+- **Market growth**: Innovation drives market growth
+- **Long-term success**: Innovation ensures long-term viability
+
+## Implementation in Code
+
+### Safety First
+```solidity
+// Borrower margin absorbs all losses
+require(collateralAmount >= loanAmount * 20 / 100, "Insufficient margin");
+
+// Automated liquidation when health factor < 1
+if (healthFactor < 1.0) {
+    liquidatePosition(borrower);
+}
+```
+
+### Transparency
+```solidity
+// Emit events for all actions
+event LoanCreated(address indexed borrower, uint256 amount, uint256 collateral);
+event TradeExecuted(address indexed wallet, address tokenIn, address tokenOut, uint256 amountIn, uint256 amountOut);
+event PositionLiquidated(address indexed borrower, uint256 reason);
+```
+
+### Automation
+```solidity
+// Automated liquidation trigger
+function checkLiquidation(address borrower) public {
+    if (isLiquidatable(borrower)) {
+        liquidatePosition(borrower);
+    }
+}
+```
+
+### Efficiency
+```solidity
+// 20/80 prefunding model
+function createLoan(uint256 loanAmount) public {
+    uint256 collateralAmount = loanAmount * 20 / 100;
+    uint256 poolAmount = loanAmount * 80 / 100;
+    
+    // Allocate funds from pool
+    allocatePoolFunds(borrower, poolAmount);
+}
+```
+
+## Benefits of These Principles
+
+### For Users
+- **Trust**: Principles build user confidence
+- **Fairness**: Equal treatment for all users
+- **Transparency**: Full visibility into operations
+- **Innovation**: Continuous improvement and evolution
+
+### For Ecosystem
+- **Growth**: Principles enable ecosystem growth
+- **Integration**: Composability enables integration
+- **Standards**: Principles set industry standards
+- **Innovation**: Open development enables innovation
+
+### For Protocol
+- **Sustainability**: Principles ensure long-term success
+- **Competitive advantage**: Superior principles attract users
+- **Network effects**: Principles create network effects
+- **Value creation**: Principles create value for all participants
+
+## Conclusion
+
+These core principles form the foundation of Invalend Protocol and guide all design decisions. They ensure that the protocol is safe, transparent, efficient, and fair while enabling innovation and growth.
+
+**Key Takeaways:**
+- **Safety first** protects all participants
+- **Transparency** builds trust and enables compliance
+- **Automation** ensures fairness and reduces costs
+- **Efficiency** maximizes value for all participants
+- **Decentralization** ensures resilience and censorship resistance
+- **Composability** enables ecosystem growth
+- **Fairness** builds user confidence
+- **Innovation** ensures long-term success
+
+---
+
+*Ready to understand the architecture? Check out our [Architecture](/docs/architecture) or explore the [Core Flow](/docs/core-flow).*
