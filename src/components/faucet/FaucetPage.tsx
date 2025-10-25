@@ -39,7 +39,7 @@ export const FaucetPage = () => {
           lineHeight: '1.6'
         }}>
           Get test USDC tokens for the Invalend protocol. This faucet allows you to mint 
-          1000 USDC tokens for testing purposes on Lisk Sepolia testnet.
+          1000 USDC tokens for testing purposes on Base Sepolia testnet.
         </p>
       </div>
 
@@ -122,7 +122,7 @@ export const FaucetPage = () => {
             <div className="text-xs text-[#A3A3A3] space-y-2 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
               <p>• Mint 1000 USDC tokens per transaction</p>
               <p>• Tokens are for testing purposes only</p>
-              <p>• No real value - Lisk Sepolia testnet</p>
+              <p>• No real value - Base Sepolia testnet</p>
               <p>• Use these tokens to test deposits and withdrawals</p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export const FaucetPage = () => {
       {/* Network Info */}
       <div className="bg-[#1E1E1E] rounded-lg p-4 text-center">
         <p className="text-sm text-[#A3A3A3] font-normal" style={{ fontFamily: 'Space Grotesk' }}>
-          <span className="text-[#06B6D4] font-normal">Network:</span> Lisk Sepolia Testnet
+          <span className="text-[#06B6D4] font-normal">Network:</span> Base Sepolia Testnet
         </p>
         <p className="text-xs text-[#A3A3A3] mt-1 font-normal" style={{ fontFamily: 'Space Grotesk' }}>
           Make sure your wallet is connected to the correct network
