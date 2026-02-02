@@ -26,7 +26,7 @@ export default function AppNavbar({ activeTab, onTabChange }: AppNavbarProps) {
   return (
     <>
       <nav 
-        className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A] border-b border-[rgba(6,182,212,0.15)]"
+        className="sticky top-0 left-0 right-0 z-50 bg-[#0A0A0A] border-b border-[rgba(6,182,212,0.15)]"
         role="navigation"
         aria-label="Application navigation"
       >
