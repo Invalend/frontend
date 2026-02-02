@@ -205,7 +205,7 @@ function Sidebar({ isMobileOpen, setIsMobileOpen }: SidebarProps) {
       )}
 
       {/* Desktop sidebar */}
-      <aside className="hidden lg:flex lg:flex-col lg:w-80 lg:fixed lg:inset-y-0 border-r z-30" style={{ 
+      <aside className="hidden lg:flex lg:flex-col lg:w-80 lg:sticky lg:top-0 lg:h-screen border-r z-30" style={{  
         background: '#0A0A0A', 
         borderColor: 'rgba(6, 182, 212, 0.15)' 
       }}>
@@ -236,7 +236,7 @@ export default function DocsLayout({
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen" style={{ background: '#0A0A0A' }}>
+    <div className="min-h-screen lg:flex" style={{ background: '#0A0A0A' }}>
       {/* Mobile header */}
       <div className="lg:hidden flex items-center justify-between p-4 border-b" style={{ 
         background: '#0A0A0A', 
@@ -260,7 +260,7 @@ export default function DocsLayout({
       <Sidebar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
 
       {/* Main content */}
-      <main className="lg:ml-80 min-h-screen" style={{ background: '#0A0A0A' }}>
+      <main className="flex-1 min-h-screen" style={{ background: '#0A0A0A' }}>
         <div className="max-w-4xl mx-auto px-4 py-8">
           {children}
         </div>

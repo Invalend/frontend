@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import { Provider } from "@/app/provider";
 import {Analytics} from "@vercel/analytics/next"
+import { Banner } from "@/components/common/Banner";
 
 import "./globals.css";
 
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${spaceGrotesk.variable} antialiased bg-primary text-primary`}>
         <Analytics />
+        <Banner />
         <Provider>
               {children}
         </Provider>

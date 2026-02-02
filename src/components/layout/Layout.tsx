@@ -295,7 +295,7 @@ export const Layout = () => {
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       <AppNavbar activeTab={activeTab} onTabChange={handleTabChange} />
-      <main id="main-content" className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 pt-20">
+      <main id="main-content" className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
         {renderActiveTab()}
       </main>
     </div>
